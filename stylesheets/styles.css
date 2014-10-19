@@ -32,7 +32,6 @@ body {
 	color: #232323;
 	background-color: #FBFAF7;
 	margin: 0;
-	line-height: 1.8em;
 	-webkit-font-smoothing: antialiased;
 
 }
@@ -40,10 +39,6 @@ body {
 h1, h2, h3, h4, h5, h6 {
   color:#232323;
   margin:36px 0 10px;
-}
-
-p, ul, ol, table, dl {
-  margin:0 0 22px;
 }
 
 h1, h2, h3 {
@@ -98,7 +93,6 @@ strong {
 }
 
 ul {
-  list-style: inside;
   padding-left: 25px;
 }
 
@@ -145,7 +139,6 @@ img {
   margin: 0 auto;
   max-width: 650px;
   padding: 5px;
-  margin: 10px 0 32px 0;
   border: 1px solid #ccc;
 }
 
@@ -205,7 +198,7 @@ td {
 
 
 /* Wrapper */
-.wrapper {
+.bigWrapper {
   width:960px;
 }
 
@@ -215,7 +208,7 @@ td {
 header {
 	background-color: #171717;
 	color: #FDFDFB;
-  width:170px;
+  width:260px;
   float:left;
   position:fixed;
 	border: 1px solid #000;
@@ -225,7 +218,7 @@ header {
 	-moz-border-radius-bottomright: 4px;
 	border-top-right-radius: 4px;
 	border-bottom-right-radius: 4px;
-	padding: 34px 25px 22px 50px;
+	padding: 15px;
 	margin: 30px 25px 0 0;
 	-webkit-font-smoothing: antialiased;
 }
@@ -297,15 +290,9 @@ header li:hover {
 
 a.buttons {
 	-webkit-font-smoothing: antialiased;
-	background: url(../images/arrow-down.png) no-repeat;
 	font-weight: normal;
 	text-shadow: rgba(0, 0, 0, 0.4) 0 -1px 0;
-	padding: 2px 2px 2px 22px;
 	height: 30px;
-}
-
-a.github {
-	background: url(../images/octocat-small.png) no-repeat 1px;
 }
 
 a.buttons:hover {
@@ -335,7 +322,7 @@ footer {
 
 @media print, screen and (max-width: 960px) {
 
-  div.wrapper {
+  div.bigWrapper {
     width:auto;
     margin:0;
   }
@@ -353,7 +340,7 @@ footer {
 	}
 
   header {
-    padding-right:320px;
+    padding-right:20px;
   }
 
   section {

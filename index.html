@@ -3,64 +3,341 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <title>Adil Yalcin by adilyalcin</title>
-
-    <link rel="stylesheet" href="stylesheets/styles.css">
-    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
-    <script src="javascripts/scale.fix.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <title>M. Adil Yalçın</title>
+
+    <link rel="stylesheet" href="./stylesheets/styles.css">
+    <link rel="stylesheet" href="./stylesheets/custom.css">
+    <link rel="stylesheet" href="./stylesheets/pygment_trac.css">
+    <link rel="stylesheet" href="./stylesheets/keshif.css">
+    <link rel="stylesheet" href="./stylesheets/lightbox.css">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
+
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript" src="./js/jquery-1.11.1.min.js" charset="utf-8"></script>
+    <script type="text/javascript" src="./js/d3.v3.min.js" charset="utf-8"></script>
+    <script type="text/javascript" src="./js/keshif.js" charset="utf-8"></script>
+    <script type="text/javascript" src="./js/lightbox.min.js" charset="utf-8"></script>
+    <script src="js/scale.fix.js"></script>
+
+<script type="text/javascript">
+
+var lesserControlMe = function(domID){
+  if($("#"+domID).attr("showLesser")===undefined){
+    $("#"+domID).attr("showLesser",true);
+  } else{
+    $("#"+domID).attr("showLesser",null);
+  }
+};
+
+$(document).ready( function(){
+  browser = new kshf.Browser({
+    domID : "#coursesKeshif",
+    categoryTextWidth: 110,
+    itemName: "Courses",
+    source: {
+        gdocId : '14sWz_REIk9CDud9yhbMiAb3Anz_8e5SgO_97CqYOxCc',
+        sheets : [ {name: "Courses",id:"Code"}, {name: "Publications"}, {name:"WorkExperience"}, {name:"Projects", id:"id"} ]
+    },
+    loadedCb: function(browser){
+      var cols = kshf.dt_ColNames.Publications;
+      var d3pubDom = d3.select("#publicationList").selectAll("div.pubItem").data(kshf.dt.Publications).enter()
+        .append("div").attr("class","pubItem").append("div").attr("class","pubItem-in");
+
+      var pubRightGroup = d3pubDom.append("span").attr("class","pub-rightGroup");
+      pubRightGroup.append("a").attr("target","_blank").attr("class",function(d){
+        if(d.data[cols.pdf]) return "pub-pdfLink fa fa-file-pdf-o";
+      }).attr("href",function(d){ return d.data[cols.pdf]; });
+      pubRightGroup.append("a").attr("target","_blank").attr("class","pub-doi").html("doi").attr("href",function(d){
+        return "http://dx.doi.org/"+d.data[cols.doi];
+      });
+
+      pubRightGroup.append("a").attr("target","_blank").attr("class",function(d){
+        if(d.data[cols.Video]) return "pub-videolink fa fa-youtube-play";
+      }).attr("href",function(d){return d.data[cols.Video];});
+
+      d3pubDom.append("div").attr("class","pub-title").html(function(d){ 
+        return d.data[cols.Title];
+      });
+      d3pubDom.append("div").attr("class","pub-authors").html(function(d){ 
+        return d.data[cols.Authors].replace(/\+/g," & ");
+      });
+      d3pubDom.append("div").attr("class","pub-venue").html(function(d){
+        var str="";
+        if(d.data[cols.URL]) str+=" <a href='"+d.data[cols.URL]+"' class='fa fa-external-link' target='_blank'></a>"
+        return d.data[cols.Venue]+" "+d.data[cols.Venue_more]+str;
+      });
+      d3pubDom.append("img").attr("class","pub-image").attr("src",function(d){return d.data[cols.image];});
+
+      d3pubDom.append("div").attr("class","pub-abstract").html(function(d){
+        if(d.data[cols.Abstract]===undefined) return;
+        return "<span style='font-weight:600'>Abstract:</span> "+d.data[cols.Abstract];
+      });
+
+
+      cols = kshf.dt_ColNames.WorkExperience;
+      var d3workDom = d3.select("#workList ul").selectAll("li.workItem").data(kshf.dt.WorkExperience).enter()
+        .append("li").attr("class",function(d,i){
+          return "workItem "+(i>3?"lesser":"");
+        });
+
+      d3workDom.append("span").attr("class","eduTime").html(function(d){
+        return d.data[cols.Time];
+      });
+      d3workDom.append("span").attr("class","work-company").html(function(d){
+        return "<span class='work-company-title'>"+d.data[cols.Company]+"</span> "
+          + " <a target='_blank' href='"+d.data[cols.URL]+"' class='fa fa-external-link'></a> "
+          + " - <span class='work-company-location'>"+d.data[cols.Location]+"</span>"
+          ;
+      });
+      d3workDom.append("div").attr("class","").html(function(d){
+        return "<span class='work-company-position'>"+d.data[cols.Position]+"</span> // "
+          + "<span class='work-company-project'>"+d.data[cols.Project]+"</span>";
+      });
+
+
+      cols = kshf.dt_ColNames.Projects;
+      var d3projectDom = d3.select("#projectList").selectAll("div.pubItem").data(kshf.dt.Projects).enter()
+        .append("div").attr("class","pubItem").append("div").attr("class","pubItem-in");
+
+      var pubRightGroup = d3projectDom.append("span").attr("class","pub-rightGroup");
+      pubRightGroup.append("a").attr("target","_blank").attr("class",function(d){
+        if(d.data[cols.URL]) return "pub-videolink fa fa-external-link";
+      }).attr("href",function(d){ return d.data[cols.URL]; });
+      pubRightGroup.append("a").attr("target","_blank").attr("class",function(d){
+        if(d.data[cols.Video]) return "pub-videolink fa fa-youtube-play";
+      }).attr("href",function(d){return d.data[cols.Video];});
+
+      d3projectDom.append("div").attr("class","pub-title").html(function(d){ 
+        return d.data[cols.Title];
+      });
+      d3projectDom.append("div").attr("class","pub-abstract").html(function(d){
+        return "<span style='font-weight:600'>Info:</span> "+d.data[cols.Info];
+      });
+
+
+      var d3ImageGroup = d3projectDom.append("div").attr("class","imageGroup").attr("align","center");
+
+      d3ImageGroup.selectAll("a.projectImage").data(function(d){
+        var r=new Array();
+        for(var i=0; i<d.data[cols.ImgCount]; i++){
+          r.push(d);
+        }        
+        return r;
+      }).enter()
+        .append("a").attr("class","projectImage").attr("rel","lightbox[base]")
+          .attr("href",function(d,i){ 
+            return "images/"+d.data[0]+"/"+(i+1)+".png";
+          }).append("img").attr("class","projectImg").attr("src",function(d,i){
+            return "images/"+d.data[0]+"/"+(i+1)+"sm.png";
+          });
+
+/*
+            <div align="center">
+      <a href="images/BaseEngine/1.png" rel="lightbox[base]" title="Base 1"><img src="images/BaseEngine/1sm.png" height="100"></a>
+      <a href="images/BaseEngine/2.png" rel="lightbox[base]" title="Base 2"><img src="images/BaseEngine/2sm.png" height="100"></a>
+      <a href="images/BaseEngine/3.png" rel="lightbox[base]" title="Base 3"><img src="images/BaseEngine/3sm.png" height="100"></a>
+      <a href="images/BaseEngine/4.png" rel="lightbox[base]" title="Base 4"><img src="images/BaseEngine/4sm.png" height="100"></a>
+      <a href="images/BaseEngine/5.png" rel="lightbox[base]" title="Base 5"><img src="images/BaseEngine/5sm.png" height="100"></a>
+      <a href="images/BaseEngine/6.png" rel="lightbox[base]" title="Base 6"><img src="images/BaseEngine/6sm.png" height="100"></a>
+
+            </div>
+*/
+
+
+
+    },
+    readyCb: function(browser){
+      browser.updateLayout();
+    },
+    facets: [
+      {
+        facetTitle: "Track",
+        sortingOpts : [{ func: function(a,b){
+          a= a.data[1];
+          b= b.data[1];
+          if(b==="Ph.D.") return -1;
+          if(a==="B.Sc.") return 1;
+          return 1;
+        }}]
+      },{
+        facetTitle: "Year"
+      }
+    ],
+    itemDisplay: {
+      sortColWidth: 35,
+      sortingOpts : [{
+          name:'Year'
+      }],
+      autoExpandMore: true,
+      displayType: 'list',
+      contentFunc : function(d){
+        return ""+
+          "<span class='course-code'>"+d.data[0]+"</span> " + d.data[1] + 
+          " <a class='fa fa-external-link' href='"+d.data[4]+"' target='_blank'></i>";
+      }
+    }
+  });
+
+
+});
+</script>
     <!--[if lt IE 9]>
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
   </head>
   <body>
-    <div class="wrapper">
-      <header>
-        <h1 class="header">Adil Yalcin</h1>
-        <p class="header">My Website</p>
+    <div class="bigWrapper">
+      <header style="text-align:center">
+        <h1 class="header">M. Adil Yalçın</h1>
+        <p class="header" style="padding-bottom: 1em; position:relative;">Ph.D. Student
+        <span style="position:absolute; right:0px"><a class="fa fa-file-pdf-o" target="_blank" href="./cv.pdf"> CV</a></span>
+</p>
 
+<span align="center" style="display: inline-block; vertical-align:top">
+  <span class="affil_block">
+    <a href="http://www.cs.umd.edu/hcil/" target="_blank" class='affil_image'>
+      <img src="./images/hcil.png" alt="" class="sidebar_img"></a>
+    <a href="http://www.cs.umd.edu/hcil/" target="_blank" class='affil_title'>
+      Human Computer Interaction Lab</a>
+    </span>
 
+  <span class="affil_block">
+    <a href="http://www.cs.umd.edu/" target="_blank" class='affil_title'>
+      Department of Computer Science</a>
+    <a href="http://www.cs.umd.edu/" target="_blank" class='affil_image'>
+      <img src="./images/umd_cs.png" alt="" class="sidebar_img"></a>
+    </a>
+    </span>
 
-        <ul>
-          <li><a class="buttons github" href="https://github.com/adilyalcin">GitHub Profile</a></li>
-        </ul>
+  <span class="affil_block">
+    <a href="http://www.umd.edu/" target="_blank" class='affil_image'>
+      <img src="./images/umd.gif" alt="" class="sidebar_img" style="border-radius:70px"></a>
+    <a href="http://www.umd.edu/" target="_blank" class='affil_title'>
+      University of Maryland College Park</a>
+    </span>
+  </span>
 
+<span align="center" style="display: inline-block; width:250px">
+  <span class="contact_group">Contact</span>
+  <div style="margin-left: 10px;">
+    <i class='fa fa-envelope'></i>  <span title="yalcin" style='font-style:italic; color:rgb(206, 175, 151);'>lastname</span>@umd.edu<br>
+
+    <a href="http://maps.google.com/maps?f=q&hl=en&geocode=&q=hornbake+library+college+park,+md&sll=38.987551,-76.941462&sspn=0.011758,0.020943&ie=UTF8&z=16&iwloc=addr&om=1;key=ABQIAAAAQGQWNTUFjpOpKlA-CmWA4xSltKEwBSd7efHWlZKE_5do-tXRRhRX-FCRXKzXKzF04RexKyw8xwiKFA" target="_blank"><i class='fa fa-map-marker'></i> 2117 Hornbake Building
+    University of Maryland, College Park, MD, 20742</a>
+    <br>
+    </div>
+
+  <span class='social_buttons'>
+    <a class="social_button fa fa-linkedin-square" target="_blank" href="http://www.linkedin.com/in/adilyalcin"> LinkedIn</a>
+    <a class="social_button fa fa-twitter-square" target="_blank" href="http://twitter.com/adilyalcin"> Twitter</a>
+    <a class="social_button fa fa-github-square" target="_blank" href="http://github.com/adilyalcin"> GitHub</a>
+    <a class="social_button fa fa-facebook-square" target="_blank" href="http://www.facebook.com/m.adil.yalcin"> Facebook</a>
+    <a class="social_button fa fa-vimeo-square" target="_blank" href="http://vimeo.com/adil"> Vimeo</a>
+  <!--  <a class="social_button fa fa-google-plus-square" target="_blank" href="https://plus.google.com/112655632378073880298/"> Google Plus</a>-->
+    <a class="social_button fa fa-lastfm-square" target="_blank" href="http://www.last.fm/user/ters_yon"> LastFM</a>
+  </span>
+</span>
       </header>
+
+      <!--
+<span class="rightBlock">
+
+<a class="twitter-timeline" href="https://twitter.com/adilyalcin" data-widget-id="523582564263419904"></a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+
+<iframe src="http://www.facebook.com/plugins/likebox.php?href=https%3A%2F%2Fwww.facebook.com%2Fbreaknchill&amp;width&amp;height=258&amp;colorscheme=dark&amp;show_faces=true&amp;header=false&amp;stream=false&amp;show_border=false&amp;appId=1496546683908545" scrolling="no" frameborder="0" style="border:none; overflow:hidden; height:258px;" allowTransparency="true"></iframe>
+
+<iframe src="http://www.facebook.com/plugins/likebox.php?href=https%3A%2F%2Fwww.facebook.com%2Fbreaknchill&amp;width&amp;height=62&amp;colorscheme=dark&amp;show_faces=false&amp;header=false&amp;stream=false&amp;show_border=false&amp;appId=1496546683908545" scrolling="no" frameborder="0" style="border:none; overflow:hidden; height:62px;" allowTransparency="true"></iframe>
+
+</span>
+      -->
       <section>
-        <h3>
-<a name="welcome-to-github-pages" class="anchor" href="#welcome-to-github-pages"><span class="octicon octicon-link"></span></a>Welcome to GitHub Pages.</h3>
 
-<p>This automatic page generator is the easiest way to create beautiful pages for all of your projects. Author your page content here using GitHub Flavored Markdown, select a template crafted by a designer, and publish. After your page is generated, you can check out the new branch:</p>
+<span class="section_welcome">
+<h3 class="myHeader"><a name="section_welcome" class="anchor" href="#section_welcome"></a>Welcome</h3>
 
-<pre><code>$ cd your_repo_root/repo_name
-$ git fetch origin
-$ git checkout gh-pages
-</code></pre>
+<p>How can we make rich visual data analysis easier to understand for a wide audience? My current studies focus on many aspects of this question. My solutions become part of <a href="http://www.keshif.me" target="_blank">Keshif</a>, an open-source, web-based, rich and easy-to-use faceted browsing library. Check out one of over 40 public <a href="http://www.keshif.me/demos.demo.html" target="_blank">demos</a> using various data collections.</p>
 
-<p>If you're using the GitHub for Mac, simply sync your repository and you'll see the new branch.</p>
+<p>I work with Prof. <a href="http://www.cs.umd.edu/~bederson" target='_blank'>Ben Bederson</a> for my Ph.D. thesis studies. I am a research assistant for Teaching and Learning Transformation Center (<a href="http://www.tltc.umd.edu" target='_blank'>TLTC &amp; UMD</a>), exploring data driven ways to improve teaching and learning. I am also a member of Human Computer Interaction Lab (<a href="http://www.cs.umd.edu/hcil" target='_blank'>HCIL</a>) and <a href="http://www.umiacs.umd.edu" target='_blank'>UMIACS</a>.</p>
 
-<h3>
-<a name="designer-templates" class="anchor" href="#designer-templates"><span class="octicon octicon-link"></span></a>Designer Templates</h3>
+<p>Formerly, I worked on high performance visual computing using GPUs, developed <a href="http://sourceforge.net/projects/openreng/" target='_blank'>OpenREng</a> (Open Rendering Engine for modern OpenGL), multi-resolution terrain rendering and physical deformation simulation, and general purpose programming on GPUs.</p>
 
-<p>We've crafted some handsome templates for you to use. Go ahead and continue to layouts to browse through them. You can easily go back to edit your page before publishing. After publishing your page, you can revisit the page generator and switch to another theme. Your Page content will be preserved if it remained markdown format.</p>
+<p>This web page is partially generated from data on GoogleDocs
+<a target='_blank' href="https://docs.google.com/spreadsheets/d/14sWz_REIk9CDud9yhbMiAb3Anz_8e5SgO_97CqYOxCc/edit#gid=707691410">spreadsheet</a>.</p>
 
-<h3>
-<a name="rather-drive-stick" class="anchor" href="#rather-drive-stick"><span class="octicon octicon-link"></span></a>Rather Drive Stick?</h3>
+</span>
 
-<p>If you prefer to not use the automatic generator, push a branch named <code>gh-pages</code> to your repository to create a page manually. In addition to supporting regular HTML content, GitHub Pages support Jekyll, a simple, blog aware static site generator written by our own Tom Preston-Werner. Jekyll makes it easy to create site-wide headers and footers without having to copy them across every page. It also offers intelligent blog support and other advanced templating features.</p>
+<span class="section-Education">
+<h3 class="myHeader"><a name="section_education" class="anchor" href="#section_education"></a>Education</h3>
+<ul>
 
-<h3>
-<a name="authors-and-contributors" class="anchor" href="#authors-and-contributors"><span class="octicon octicon-link"></span></a>Authors and Contributors</h3>
 
-<p>You can <a href="https://github.com/blog/821" class="user-mention">@mention</a> a GitHub username to generate a link to their profile. The resulting <code>&lt;a&gt;</code> element will link to the contributor's GitHub Profile. For example: In 2007, Chris Wanstrath (<a href="https://github.com/defunkt" class="user-mention">@defunkt</a>), PJ Hyett (<a href="https://github.com/pjhyett" class="user-mention">@pjhyett</a>), and Tom Preston-Werner (<a href="https://github.com/mojombo" class="user-mention">@mojombo</a>) founded GitHub.</p>
+  <li><span style="font-weight:700;">Ph.D. student</span> <span class='eduTime'>Sep. 2010 - Current</span>
+  Computer Science, University of Maryland, College Park, USA<br>
+  Advisor : <a href="http://www.cs.umd.edu/~bederson/" target="_blank">Ben Bederson</a></li>
 
-<h3>
-<a name="support-or-contact" class="anchor" href="#support-or-contact"><span class="octicon octicon-link"></span></a>Support or Contact</h3>
+  <li><span style="font-weight:700">Master of Science </span> <span class='eduTime'>June 2010</span>
+    <a href="http://www.cs.bilkent.edu.tr/" target="_blank">Computer Engineering</a>, 
+    <a href="http://www.cs.bilkent.edu.tr/" target="_blank">Bilkent University</a>, Turkey<br>
+    Thesis : Real-Time Simulation and Visualization of Deformations on Heightfields<br>
+    Advisor : <a href="http://www.art.bilkent.edu.tr/ozguc/" target="_blank">Bülent Özgüç</a>, 
+    Co-Advisor : <a href="http://www.cs.bilkent.edu.tr/~tcapin/" target="_blank">Tolga Çapın</a></li>
 
-<p>Having trouble with Pages? Check out the documentation at <a href="http://help.github.com/pages">http://help.github.com/pages</a> or contact <a href="mailto:support@github.com">support@github.com</a> and we’ll help you sort it out.</p>
+  <li><span style="font-weight:700">Bachelor of Science - </span> <span class='eduTime'>June 2008</span>
+    <a href="http://www.ceng.metu.edu.tr">Computer Engineering</a>, 
+    <a href="http://www.metu.edu.tr">Middle East Technical University</a>, Turkey
+<div class="post_date">Senior Project: <a href="projects.php#opsimus">OPSIMUS</a></div>
+    </li>
+</ul>
+</span>
+
+<h3 class="myHeader"><a name="section_publications" class="anchor" href="#section_publications"></a>Publications</h3>
+  <!-- <a href="http://scholar.google.com/citations?user=KSDzKvIAAAAJ" target="_blank">Google Scholar</a>-->
+  <div id="publicationList"></div>
+
+
+<h3 class="myHeader"><a name="section_workexperience" class="anchor" href="#section_workexperience"></a>Work Experience</h3>
+  <div id="workList">
+    <ul></ul>
+    <span class='lesserControl' onClick="lesserControlMe('workList')"></span>
+  </div>
+
+<!-- LAST FM ALBUM QUILT
+<div align="center">
+            <style type="text/css">table.lfmWidgetquilt_506c735520510a3e32d36b7271edfee2 td {margin:0 !important;padding:0 !important;border:0 !important;}table.lfmWidgetquilt_506c735520510a3e32d36b7271edfee2 tr.lfmHead a:hover {background:url(http://cdn.last.fm/widgets/images/en/header/quilt/album_horizontal_black.png) no-repeat 0 0 !important;}table.lfmWidgetquilt_506c735520510a3e32d36b7271edfee2 tr.lfmEmbed object {float:left;}table.lfmWidgetquilt_506c735520510a3e32d36b7271edfee2 tr.lfmFoot td.lfmConfig a:hover {background:url(http://cdn.last.fm/widgets/images/en/footer/black.png) no-repeat 0px 0 !important;;}table.lfmWidgetquilt_506c735520510a3e32d36b7271edfee2 tr.lfmFoot td.lfmView a:hover {background:url(http://cdn.last.fm/widgets/images/en/footer/black.png) no-repeat -85px 0 !important;}table.lfmWidgetquilt_506c735520510a3e32d36b7271edfee2 tr.lfmFoot td.lfmPopup a:hover {background:url(http://cdn.last.fm/widgets/images/en/footer/black.png) no-repeat -159px 0 !important;}</style>
+<table class="lfmWidgetquilt_506c735520510a3e32d36b7271edfee2" cellpadding="0" cellspacing="0" border="0" style="width:460px;"><tbody><tr class="lfmHead"><td><a title="Top albums" href="http://www.last.fm/user/ters_yon/charts" target="_blank" style="display:block;overflow:hidden;height:20px;width:460px;background:url(http://cdn.last.fm/widgets/images/en/header/quilt/album_horizontal_black.png) no-repeat 0 -20px;text-decoration:none;border:0;"></a></td></tr><tr class="lfmEmbed"><td><object type="application/x-shockwave-flash" data="http://cdn.last.fm/widgets/quilt/13.swf" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=7,0,0,0" id="lfmEmbed_1518206629" width="460" height="225"> <param name="movie" value="http://cdn.last.fm/widgets/quilt/13.swf"> <param name="flashvars" value="type=user&amp;variable=ters_yon&amp;file=topalbums&amp;bgColor=black&amp;theme=black&amp;lang=en&amp;widget_id=quilt_506c735520510a3e32d36b7271edfee2"> <param name="allowScriptAccess" value="always"> <param name="allowNetworking" value="all"> <param name="allowFullScreen" value="true"> <param name="quality" value="high"> <param name="bgcolor" value="000000"> <param name="wmode" value="transparent"> <param name="menu" value="true"> </object></td></tr><tr class="lfmFoot"><td style="background:url(http://cdn.last.fm/widgets/images/footer_bg/black.png) repeat-x 0 0;text-align:right;"><table cellspacing="0" cellpadding="0" border="0" style="width:460px;"><tbody><tr><td class="lfmConfig"><a href="http://www.last.fm/widgets/?url=user%2Fters_yon%2Fpersonal&amp;colour=black&amp;quiltType=album&amp;orient=horizontal&amp;height=large&amp;from=code&amp;widget=quilt" title="Get your own widget" target="_blank" style="display:block;overflow:hidden;width:85px;height:20px;float:right;background:url(http://cdn.last.fm/widgets/images/en/footer/black.png) no-repeat 0px -20px;text-decoration:none;border:0;"></a></td><td class="lfmView" style="width:74px;"><a href="http://www.last.fm/user/ters_yon" title="View ters_yon's profile" target="_blank" style="display:block;overflow:hidden;width:74px;height:20px;background:url(http://cdn.last.fm/widgets/images/en/footer/black.png) no-repeat -85px -20px;text-decoration:none;border:0;"></a></td><td class="lfmPopup" style="width:25px;"><a href="http://www.last.fm/widgets/popup/?url=user%2Fters_yon%2Fpersonal&amp;colour=black&amp;quiltType=album&amp;orient=horizontal&amp;height=large&amp;from=code&amp;widget=quilt&amp;resize=1" title="Load this quilt in a pop up" target="_blank" style="display:block;overflow:hidden;width:25px;height:20px;background:url(http://cdn.last.fm/widgets/images/en/footer/black.png) no-repeat -159px -20px;text-decoration:none;border:0;" onclick="window.open(this.href + '&amp;resize=0','lfm_popup','height=325,width=510,resizable=yes,scrollbars=yes'); return false;"></a></td></tr></tbody></table></td></tr></tbody></table>
+</div>
+
+<h3 class="myHeader"><a name="designer-templates" class="anchor" href="#designer-templates"></a>Research Interests</h3>
+
+Former:
+<ul>
+  <li>Visual computing and general purpose programming on graphics hardware</li>
+  <li>Real-time advanced rendering techniques / Graphics Engines (see <a href="http://sourceforge.net/apps/mediawiki/openreng/index.php">OpenREng</a> for details)</li>
+  <li>Physically-Based Simulation<br></li>
+  <li>Collision Detection</li>
+  <li>Terrain modelling and LoD structures</li>
+  <li>Interaction Techniques</li>
+  <li>Computer Animation</li>
+  </ul>
+-->
+
+<h3 class="myHeader"><a name="section_projects" class="anchor" href="#section_projects"></a>Other Projects</h3>
+  <div id="projectList"></div>
+
+<h3 class="myHeader"><a name="section_publications" class="anchor" href="#section_courses"></a>Courses Taken</h3>
+  
+  <div id="coursesKeshif" style="width: 100%; height: 200px"></div>
+
+
+<h3 class="myHeader"><a name="section_music" class="anchor" href="#section_music"></a>Music</h3>
+
+  <iframe width="100%" height="60" src="http://www.mixcloud.com/widget/iframe/?feed=http%3A%2F%2Fwww.mixcloud.com%2Fbreaknchill%2F&amp;mini=1&amp;embed_uuid=cb088297-15c1-4db8-8cc8-8cbb7b5a32e7&amp;replace=0&amp;hide_cover=1&amp;embed_type=widget_standard&amp;hide_tracklist=1" frameborder="0"></iframe>
+
       </section>
       <footer>
-        <p><small>Hosted on <a href="http://pages.github.com">GitHub Pages</a> using the Dinky theme</small></p>
+        <p><small>Hosted on <a href="http://pages.github.com">GitHub Pages</a> Modified Dinky theme</small></p>
       </footer>
     </div>
     <!--[if !IE]><script>fixScale(document);</script><![endif]-->
