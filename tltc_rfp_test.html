@@ -5,8 +5,13 @@
 <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/d3/3.4.13/d3.min.js"></script>
 <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.3/moment.js"></script>
 
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+<link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
+
 <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
 <link href='http://fonts.googleapis.com/css?family=Lato:300,400,700' rel='stylesheet' type='text/css'>
+
 
 <script type="text/javascript">
 
@@ -68,7 +73,15 @@ google.setOnLoadCallback(function() {
 			.attr("class","fa fa-info-circle rfpInfo")
 			.attr("title","Click for more info")
 			.attr("target","_blank")
-			.attr("href",function(d){ return d.URL; });
+			.attr("data-toggle","tooltip")
+//			.attr("data-viewport","#tltc-version")
+			.attr("data-placement","bottom")
+			.attr("title",function(d){ return d.Summary})
+			.attr("href",function(d){ return d.URL; })
+			.on("mouseover",function(d){
+				$(this).tooltip('show');
+			})
+			;
 
 		var dom_rfpTimeGroup = rfpBlocks.append("span").attr("class","rfpTimeGroup");
 		var x;
@@ -163,7 +176,7 @@ google.setOnLoadCallback(function() {
 	.rfpInfo{
 		margin-left: 4px;
 		color: gray;
-		text-decoration: none;
+		text-decoration: none !important;
 	}
 	.rfpTitle{
 		display: inline-block;
@@ -309,6 +322,10 @@ google.setOnLoadCallback(function() {
 		background-color: lightgray;
 		left: 5px;
 		z-index: -1;
+	}
+	.tooltip {
+		width: 300px;
+		font-weight: 300;
 	}
 
 </style>
