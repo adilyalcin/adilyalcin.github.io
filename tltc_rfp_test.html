@@ -1,0 +1,319 @@
+<html>
+<head>
+<script type="text/javascript" src="https://www.google.com/jsapi?autoload={'modules':[{'name':'visualization',
+       'version':'1','packages':['timeline']}]}"></script>
+<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/d3/3.4.13/d3.min.js"></script>
+<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.3/moment.js"></script>
+
+<link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+<link href='http://fonts.googleapis.com/css?family=Lato:300,400,700' rel='stylesheet' type='text/css'>
+
+<script type="text/javascript">
+
+google.setOnLoadCallback(function() {
+	new google.visualization.Query(
+		'https://docs.google.com/spreadsheet/tq?key=1UDeeIVxwr5Rpvf4l0WYF_uqpE67QG4mlrD4VxjZMzOc&headers=1&sheet=RFPdata')
+	.send( function(response){
+	    if(response.isError()) {
+	        console.log("Error: "+response.getMessage());
+	        return;
+	    }
+
+	    dataTable = response.getDataTable();
+	    var RFPdata = [];
+	    for(r=0; r<dataTable.getNumberOfRows() ; r++){
+	    	RFPdata.push({
+	    		'Name': dataTable.getValue(r,0),
+	    		'Announcement': dataTable.getValue(r,1),
+	    		'ProposalDate': dataTable.getValue(r,2),
+	    		'DecisionDate': dataTable.getValue(r,3),
+	    		'ProgramStart': dataTable.getValue(r,4),
+	    		'ProgramEnd':   dataTable.getValue(r,5),
+	    		'URL': dataTable.getValue(r,6),
+	    		'Categories': dataTable.getValue(r,7).split("<"),
+	    		'Summary': dataTable.getValue(r,8),
+	    	});
+	    }
+
+	    var vizSettings = {
+	    	width: 350,
+	    	padding: 5,
+	    };
+	    vizSettings.optimalTickCount = vizSettings.width/70;
+
+	    var timeScale = d3.time.scale.utc()
+	        .domain([
+	        	d3.min(RFPdata, function(d){ return d.Announcement;})-1000000000,
+	        	d3.max(RFPdata, function(d){ return d.ProgramEnd;})
+	        ])
+	        .range([0, vizSettings.width])
+	        .clamp(true);
+	    var timeTicks = timeScale.ticks(vizSettings.optimalTickCount);
+	    var tickFormat = timeScale.tickFormat(vizSettings.optimalTickCount);
+	    tickFormat = d3.time.format("%b'%y"); // use the best for current limits
+
+	    var vizRoot = d3.select("#tltc-version").style("width",vizSettings.width+"px").style("padding",vizSettings.padding+"px");
+
+	    var vizTitle = vizRoot.append("span").attr("class","vizTitle");
+		    vizTitle.append("span").attr("class","vizTitleText").text(" RFP Calendar");
+		    vizTitle.append("i").attr("class","fa fa-calendar");
+
+	    var rfpBlocks = vizRoot.selectAll("span.rfpBlock").data(RFPdata).enter().append("span").attr("class","rfpBlock")
+	    	.attr("show","ProposalDate");
+
+	    rfpBlocks.append("span").attr("class","rfpTitle")
+	    	.text(function(d){ return d.Name;})
+	    	.style("left",function(d){ return timeScale(d.Announcement)+"px"; })
+	    .append("a")
+			.attr("class","fa fa-info-circle rfpInfo")
+			.attr("title","Click for more info")
+			.attr("target","_blank")
+			.attr("href",function(d){ return d.URL; });
+
+		var dom_rfpTimeGroup = rfpBlocks.append("span").attr("class","rfpTimeGroup");
+		var x;
+
+		x = dom_rfpTimeGroup.append("span").attr("class","timePoint timePoint_Announcement")
+			.style("left",function(d){ return timeScale(d.Announcement)+"px"; });
+			x.append("span").attr("class","fa fa-bullhorn");
+			x.append("span").attr("class","dateText")
+				.html(function(d){ return "Announcement: <b>" + moment(d.Announcement).format("MMM Do, YY")+"</b>"; });
+
+		x = dom_rfpTimeGroup.append("span").attr("class","timePoint timePoint_ProposalDate")
+			.style("left",function(d){ return timeScale(d.ProposalDate)+"px"; });
+			x.append("span").attr("class","fa fa-bell");
+			x.append("span").attr("class","dateText").attr("show",true)
+				.html(function(d){ return "Proposal Date: <b>" + moment(d.ProposalDate).format("MMM Do, YY")+"</b>"; });
+
+		x = dom_rfpTimeGroup.append("span").attr("class","timePoint timePoint_DecisionDate")
+			.style("left",function(d){ return timeScale(d.DecisionDate)+"px"; });
+			x.append("span").attr("class","fa fa-trophy");
+			x.append("span").attr("class","dateText")
+				.html(function(d){ return "Decision Date: <b>" + moment(d.DecisionDate).format("MMM Do, YY")+"</b>"; });
+
+		x = dom_rfpTimeGroup.append("span").attr("class","timePoint timePoint_ProgramStart")
+			.style("left",function(d){ return timeScale(d.ProgramStart)+"px"; })
+			.style("width",function(d){ return (timeScale(d.ProgramEnd)-timeScale(d.ProgramStart))+"px"; })
+			.style("display",function(d){ return d.ProgramStart?null:"none"});
+			var y = x.append("span").style("position","relative").style("display","block").style("height","16px");
+				y.append("span").attr("class","timeBar")
+					.style("width",function(d){ return (timeScale(d.ProgramEnd)-timeScale(d.ProgramStart))+"px"; });
+			x.append("span").attr("class","dateText")
+				.html(function(d){
+					return "Program: <b>" + moment(d.ProgramStart).format("MMM Do, YY")+"</b> "+
+						"to <b>" + moment(d.ProgramEnd).format("MMM Do, YY")+"</b> ";
+				});
+
+		dom_rfpTimeGroup.selectAll(".timePoint").on("mouseover",function(d){
+			this.parentNode.parentNode.setAttribute("show",this.classList[1].substr(10));
+		});
+
+		var dom_timeScaleGroup = vizRoot.append("span").attr("class","timeScaleGroup");
+
+//		dom_timeScaleGroup.append("span").attr("class","fa fa-clock-o timeIcon");
+//		dom_timeScaleGroup.append("span").attr("class","fa fa-clock-o timeIcon").style("right","0px");
+		dom_timeScaleGroup.append("span").attr("class","fa fa-dot-circle-o nowIcon")
+			.style("left",function(d){ return timeScale(Date.now())+"px"; }).text(" Now")
+			.append("span").attr("class","nowBar");
+
+		dom_timeScaleGroup.selectAll("span.timeTick").data(timeTicks)
+			.enter()
+			.append("span").attr('class',"timeTick")
+			.style("left",function(d){ return timeScale(d);})
+			.text(function(d){ return tickFormat(d); });
+
+		var legendDom = vizRoot.append("span").attr("class","vizLegend").selectAll("i.fa").data([
+			["bullhorn","Announcement"],
+			["bell","ProposalDate"],
+			["trophy","DecisionDate"],
+		]).enter().append("span").attr("class","legendItem");
+		legendDom
+			.append("i")
+			.attr("class",function(d){ return "fa fa-"+d[0]+" timePoint_"+d[1];});
+		legendDom
+			.append("span")
+			.attr("class","legendText")
+			.html(function(d){ return d[1];});
+
+
+	});
+});
+
+</script>
+
+<style>
+	#tltc-version{
+		font-family: 'Lato', sans-serif;
+		font-weight: 300;
+		cursor: default;
+		margin-left: auto;
+		margin-right: auto;
+		position: relative;
+	}
+	.rfpBlock{
+		display: block;
+		height: 55px;
+		position: relative;
+		border-bottom: dotted 1px gray;
+		padding-top: 3px;
+	}
+	.rfpBlock:hover{
+		background-color: rgb(248, 247, 239);
+	}
+	.rfpInfo{
+		margin-left: 4px;
+		color: gray;
+		text-decoration: none;
+	}
+	.rfpTitle{
+		display: inline-block;
+		position: absolute;
+		cursor: default;
+		font-weight: 700;
+		font-size: 1.1em;
+		letter-spacing: 2px;
+		text-decoration: underline;
+	}
+	.rfpInfo:hover{
+		color: black;
+	}
+	.timeScaleGroup{
+		position: relative;
+		font-size: 0.7em;
+		height: 15px;
+		display: block;
+	}
+	.timeScaleGroup .timeTick {
+		position: absolute;
+		border-left: solid 1px gray;
+	}
+
+	.rfpTimeGroup{
+		display: block;
+		position: relative;
+		margin-top: 22px;
+	}
+
+	.timePoint{
+		display:block;
+		position: absolute;
+		margin-left: -5px;
+		cursor: pointer;
+	}
+	.timePoint_Announcement{
+		color: #FF9700;
+	}
+	.timePoint_ProposalDate{
+		color: #FF1B00;
+	}
+	.timePoint_DecisionDate{
+		color: #0C5AA6;
+	}
+	.timePoint_ProgramStart{
+		color: #53D687;
+		margin-left: 0px !important;
+	}
+	.programStart{
+		position: absolute;
+		left: 0px;
+	}
+	.programEnd{
+		position: absolute;
+		right: 0px;
+	}
+	.dateText{
+		color: black;
+		display: none;
+		font-size: 0.8em;
+		font-weight: 200;
+		white-space: nowrap;
+		cursor: default;
+	}
+	.timePoint .fa{ 
+		font-size: 1em;
+	}
+	.rfpBlock[show="Announcement"] .timePoint_Announcement .dateText{ display: block; }
+	.rfpBlock[show="Announcement"] .timePoint_Announcement .fa{ text-shadow: 1px 1px 2px black; }
+
+	.rfpBlock[show="ProposalDate"] .timePoint_ProposalDate .dateText{ display: block; }
+	.rfpBlock[show="ProposalDate"] .timePoint_ProposalDate .fa{ text-shadow: 1px 1px 2px black; }
+
+	.rfpBlock[show="DecisionDate"] .timePoint_DecisionDate .dateText{ display: block; }
+	.rfpBlock[show="DecisionDate"] .timePoint_DecisionDate .fa{ text-shadow: 1px 1px 2px black; }
+
+	.rfpBlock[show="ProgramStart"] .timePoint_ProgramStart .dateText{ display: block; }
+	.rfpBlock[show="ProgramStart"] .timePoint_ProgramStart .timeBar{ box-shadow: 1px 1px 2px black; }
+
+	.legendText{
+		font-size: 0.8em;
+		color: gray;
+		margin-left: 3px;
+	}
+	.vizLegend{
+		display: block;
+		text-align: center;
+		font-size: 0.9em;
+		margin-top: 10px;
+	}
+	.legendItem{
+		display: inline-block;
+		margin-right: 15px;
+	}
+	.vizTitle{
+		position: absolute;
+		right: 0px;
+		background-color: rgb(230, 235, 237);
+		border-radius: 10px;
+		padding: 0px 5px 3px 10px;
+		box-shadow: 1px 1px 1px rgb(144, 156, 160);
+		z-index: 10;
+	}
+	.vizTitleText{
+		font-variant: small-caps;
+		font-weight: 700;
+		margin-right: 5px;
+	}
+	.timeBar{
+		background-color: #DEF2E5;
+		border-radius: 30px;
+		height: 6px;
+		position: absolute;
+		top: 3px;
+		display: block;
+		border: solid 1px #A8B9AE;
+	}
+	.timeIcon{
+		color: gray;
+		position: absolute;
+		font-size: 1.1em;
+		margin: 1px;
+	}
+	.nowIcon{
+		color: gray;
+		position: absolute;
+		font-size: 1.1em;
+		margin: 1px;
+		top: 12px;
+		cursor: pointer;
+		font-weight: 200;
+	}
+	.nowIcon:hover{
+		color:black;
+	}
+	.nowIcon:hover .nowBar{
+		height: 175px;
+		display: block;
+		margin-top: -175px;
+		position: relative;
+		width: 1px;
+		background-color: lightgray;
+		left: 5px;
+		z-index: -1;
+	}
+
+</style>
+</head>
+	<body>
+		<div id="tltc-version"></div>
+	</body>
+</html>
