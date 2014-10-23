@@ -90,19 +90,19 @@ google.setOnLoadCallback(function() {
 			.style("left",function(d){ return timeScale(d.Announcement)+"px"; });
 			x.append("span").attr("class","fa fa-bullhorn");
 			x.append("span").attr("class","dateText")
-				.html(function(d){ return "Announcement: <b>" + moment(d.Announcement).format("MMM Do, YY")+"</b>"; });
+				.html(function(d){ return "Announcement: <b>" + moment(d.Announcement).format("MMM D, YYYY")+"</b>"; });
 
 		x = dom_rfpTimeGroup.append("span").attr("class","timePoint timePoint_ProposalDate")
 			.style("left",function(d){ return timeScale(d.ProposalDate)+"px"; });
 			x.append("span").attr("class","fa fa-bell");
 			x.append("span").attr("class","dateText").attr("show",true)
-				.html(function(d){ return "Proposal Date: <b>" + moment(d.ProposalDate).format("MMM Do, YY")+"</b>"; });
+				.html(function(d){ return "Proposal Date: <b>" + moment(d.ProposalDate).format("MMM D, YYYY")+"</b>"; });
 
 		x = dom_rfpTimeGroup.append("span").attr("class","timePoint timePoint_DecisionDate")
 			.style("left",function(d){ return timeScale(d.DecisionDate)+"px"; });
 			x.append("span").attr("class","fa fa-trophy");
 			x.append("span").attr("class","dateText")
-				.html(function(d){ return "Decision Date: <b>" + moment(d.DecisionDate).format("MMM Do, YY")+"</b>"; });
+				.html(function(d){ return "Decision Date: <b>" + moment(d.DecisionDate).format("MMM D, YYYY")+"</b>"; });
 
 		x = dom_rfpTimeGroup.append("span").attr("class","timePoint timePoint_ProgramStart")
 			.style("left",function(d){ return timeScale(d.ProgramStart)+"px"; })
@@ -113,8 +113,8 @@ google.setOnLoadCallback(function() {
 					.style("width",function(d){ return (timeScale(d.ProgramEnd)-timeScale(d.ProgramStart))+"px"; });
 			x.append("span").attr("class","dateText")
 				.html(function(d){
-					return "Program: <b>" + moment(d.ProgramStart).format("MMM Do, YY")+"</b> "+
-						"to <b>" + moment(d.ProgramEnd).format("MMM Do, YY")+"</b> ";
+					return "Program: <b>" + moment(d.ProgramStart).format("MMM D, YYYY")+"</b> "+
+						"to <b>" + moment(d.ProgramEnd).format("MMM D, YYYY")+"</b> ";
 				});
 
 		dom_rfpTimeGroup.selectAll(".timePoint").on("mouseover",function(d){
