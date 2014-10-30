@@ -1,20 +1,3 @@
-<html>
-<head>
-<script type="text/javascript" src="https://www.google.com/jsapi?autoload={'modules':[{'name':'visualization',
-       'version':'1','packages':['timeline']}]}"></script>
-<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/d3/3.4.13/d3.min.js"></script>
-<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.3/moment.js"></script>
-
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
-<link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
-
-<link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
-<link href='http://fonts.googleapis.com/css?family=Lato:300,400,700' rel='stylesheet' type='text/css'>
-
-
-<script type="text/javascript">
-
 google.setOnLoadCallback(function() {
 	new google.visualization.Query(
 		'https://docs.google.com/spreadsheet/tq?key=1UDeeIVxwr5Rpvf4l0WYF_uqpE67QG4mlrD4VxjZMzOc&headers=1&sheet=RFPdata')
@@ -43,8 +26,7 @@ google.setOnLoadCallback(function() {
 	    }
 
 	    var vizSettings = {
-	    	width: 800,
-	    	padding: 5,
+	    	width: 800
 	    };
 	    vizSettings.optimalTickCount = vizSettings.width/100;
 
@@ -59,37 +41,21 @@ google.setOnLoadCallback(function() {
 	    var tickFormat = timeScale.tickFormat(vizSettings.optimalTickCount);
 	    tickFormat = d3.time.format("%b %y"); // use the best for current limits
 
-	    var vizRoot = d3.select("#tltc-version").style("width","70%").style("padding",vizSettings.padding+"px");
+	    var vizRoot = d3.select("#tltc-version").style("width","70%").style("padding","5px 5px 10px 5px");
 
-	    var vizTitle = vizRoot.append("span").attr("class","vizTitle");
+	    var vizTitle = vizRoot.append("span").attr("class","vizTitle").append("a")
+		    .attr("target","_blank")
+		    .attr("href","https://docs.google.com/spreadsheets/d/1UDeeIVxwr5Rpvf4l0WYF_uqpE67QG4mlrD4VxjZMzOc")
+	    	;
 		    vizTitle.append("span").attr("class","vizTitleText").text(" RFP Calendar");
-		    vizTitle.append("a")
+		    vizTitle.append("span")
 		    	.attr("class","fa fa-calendar")
-		    	.attr("target","_blank")
-		    	.attr("href","https://docs.google.com/spreadsheets/d/1UDeeIVxwr5Rpvf4l0WYF_uqpE67QG4mlrD4VxjZMzOc")
 		    	;
 
 	    var rfpBlocks_g = vizRoot.append("span").attr("class","rfpBlocks");
 	    var rfpBlocks = rfpBlocks_g
 	    	.selectAll("span.rfpBlock").data(RFPdata).enter().append("span").attr("class","rfpBlock")
 	    	.attr("show","ProposalDate");
-
-/*	    rfpBlocks.append("span").attr("class","rfpTitle")
-	    	.text(function(d){ return d.Name;})
-	    	.style("left",function(d){ return timeScale(d.Announcement)+"px"; })
-	    .append("a")
-			.attr("class","fa fa-info-circle rfpInfo")
-			.attr("title","Click for more info")
-			.attr("target","_blank")
-			.attr("data-toggle","tooltip")
-//			.attr("data-viewport","#tltc-version")
-			.attr("data-placement","bottom")
-			.attr("title",function(d){ return d.Summary})
-			.attr("href",function(d){ return d.URL; })
-			.on("mouseover",function(d){
-				$(this).tooltip('show');
-			})
-			;*/
 
 	    rfpBlocks.append("a")
 		    .attr("href",function(d){ return d.URL; })
@@ -160,7 +126,7 @@ google.setOnLoadCallback(function() {
 
 		var dom_timeScaleRow= rfpBlocks_g.append("span").attr("class","timeScaleRow");
 
-		dom_timeScaleRow.append("span").attr("class","rfpTitleCell");
+		var dom_legendHolder = dom_timeScaleRow.append("span").attr("class","rfpTitleCell");
 
 		var dom_timeScaleGroup = dom_timeScaleRow.append("span").attr("class","timeScaleGroup");
 
@@ -171,7 +137,7 @@ google.setOnLoadCallback(function() {
 			.append("span")
 				.attr("class","nowBar")
 				.style("height",30*RFPdata.length+"px")
-				.style("margin-top","-"+(30*(RFPdata.length+0.5))+"px")
+				.style("margin-top","-"+(30*(RFPdata.length+0.8))+"px")
 				;
 
 		dom_timeScaleGroup.selectAll("span.timeTick").data(timeTicks)
@@ -181,11 +147,7 @@ google.setOnLoadCallback(function() {
 			.text(function(d){ return tickFormat(d); });
 
 
-		var dom_vizLegendRow= rfpBlocks_g.append("span").attr("class","vizLegendRow");
-
-		dom_vizLegendRow.append("span").attr("class","rfpTitleCell");
-
-		var legendDom = dom_vizLegendRow.append("span").attr("class","vizLegend").selectAll("i.fa").data([
+		var legendDom = dom_legendHolder.append("span").attr("class","vizLegend").selectAll("i.fa").data([
 			["bullhorn","Announcement"],
 			["bell","ProposalDate"],
 			["trophy","DecisionDate"],
@@ -196,217 +158,6 @@ google.setOnLoadCallback(function() {
 		legendDom
 			.append("span")
 			.attr("class","legendText")
-			.html(function(d){ return d[1]+" ..."	;});
-
-
+			.html(function(d){ return d[1];});
 	});
 });
-
-</script>
-
-<style>
-	#tltc-version a{
-		color: #333;
-	}
-	#tltc-version a:hover{
-		color: black;
-	}
-	#tltc-version{
-		font-family: 'Lato', sans-serif;
-		font-weight: 300;
-		cursor: default;
-		margin-top: 20px;
-		margin-left: auto;
-		margin-right: auto;
-		position: relative;
-		box-shadow: 0px 0px 3px black;
-	}
-	.rfpBlocks{
-		display: table;
-		width: 100%;
-	}
-	.rfpBlock{
-		display: table-row;
-		height: 30px;
-		position: relative;
-		border-bottom: dotted 1px gray;
-		margin-bottom: 3px;
-	}
-	.rfpBlock:hover{
-		background-color: rgb(248, 247, 239);
-	}
-	.rfpInfo{
-		margin-left: 4px;
-		color: gray;
-		text-decoration: none !important;
-	}
-	.rfpTitleCell{
-		display: table-cell;
-		text-align: right;
-		width: 340px;
-	}
-	.rfpTitle{
-		display: inline-block;
-/*		position: absolute; */
-		font-weight: 700;
-		font-size: 1.1em;
-		letter-spacing: 2px;
-		text-decoration: underline;
-	}
-	.rfpInfo:hover{
-		color: black;
-	}
-	.timeScaleGroup{
-		position: relative;
-		font-size: 0.7em;
-		height: 15px;
-		display: inline-block;
-		width: 100%;
-	}
-	.timeScaleGroup .timeTick {
-		position: absolute;
-		border-left: solid 1px gray;
-	}
-
-	.rfpTimeGroup{
-		display: table-cell;
-		position: relative;
-		width: auto;
-	}
-
-	.timePoint{
-		display:block;
-		position: absolute;
-		margin-left: -5px;
-		cursor: pointer;
-	}
-	.timePoint_Announcement{
-		color: #ddb848;
-	}
-	.timePoint_ProposalDate{
-		color: #FF1B00;
-	}
-	.timePoint_DecisionDate{
-		color: #ddb848;
-	}
-	.timePoint_ProgramStart{
-		margin-left: 0px !important;
-	}
-	.programStart{
-		position: absolute;
-		left: 0px;
-	}
-	.programEnd{
-		position: absolute;
-		right: 0px;
-	}
-	.dateText{
-		color: black;
-		display: none;
-		font-size: 0.9em;
-		font-weight: 200;
-		white-space: nowrap;
-		cursor: default;
-		margin-top: -1px;
-	}
-	.timePoint .fa{ 
-		font-size: 0.9em;
-	}
-	.rfpBlock[show="Announcement"] .timePoint_Announcement .dateText{ display: block; }
-	.rfpBlock[show="Announcement"] .timePoint_Announcement .fa{ text-shadow: 1px 1px 2px black; }
-
-	.rfpBlock[show="ProposalDate"] .timePoint_ProposalDate .dateText{ display: block; }
-	.rfpBlock[show="ProposalDate"] .timePoint_ProposalDate .fa{ text-shadow: 1px 1px 2px black; }
-
-	.rfpBlock[show="DecisionDate"] .timePoint_DecisionDate .dateText{ display: block; }
-	.rfpBlock[show="DecisionDate"] .timePoint_DecisionDate .fa{ text-shadow: 1px 1px 2px black; }
-
-	.rfpBlock[show="ProgramStart"] .timePoint_ProgramStart .dateText{ display: block; }
-	.rfpBlock[show="ProgramStart"] .timePoint_ProgramStart .timeBar{
-		/*box-shadow: 1px 1px 2px black;*/
-		border: solid 1px #ddb848;
-	}
-
-	.legendText{
-		font-size: 0.8em;
-		color: gray;
-		margin-left: 3px;
-	}
-	.vizLegend{
-		display: block;
-		text-align: left;
-		font-size: 0.9em;
-		margin-top: 10px;
-	}
-	.legendItem{
-		display: inline-block;
-		margin-right: 15px;
-	}
-	.vizTitle{
-		position: absolute;
-		right: 5px;
-		background-color: rgb(231, 231, 231);
-		border-radius: 10px;
-		padding: 0px 5px 3px 10px;
-		box-shadow: 1px 1px 1px rgb(144, 156, 160);
-		z-index: 10;
-	}
-	.vizTitleText{
-		font-variant: small-caps;
-		font-weight: 700;
-		margin-right: 5px;
-	}
-	.timeBar{
-		background-color: #FEFAED;
-		border-radius: 30px;
-		height: 6px;
-		position: absolute;
-		top: 5px;
-		display: block;
-		border: solid 1px #ddb848;
-	}
-	.timeIcon{
-		color: gray;
-		position: absolute;
-		font-size: 1.1em;
-		margin: 1px;
-	}
-	.nowIcon{
-		color: gray;
-		position: absolute;
-		font-size: 1.1em;
-		margin: 1px;
-		top: 12px;
-		cursor: pointer;
-		font-weight: 200;
-	}
-	.nowIcon:hover{
-		color:black;
-	}
-	.nowIcon .nowBar{
-		display: block;
-		position: relative;
-		width: 0px;
-		background-color: rgb(246, 82, 82);
-		left: 5px;
-		z-index: 10;
-		border-left: dashed 1px white;
-	}
-	.tooltip {
-		width: 300px;
-		font-weight: 300;
-	}
-
-	.timeScaleRow{
-		display: table-row;
-	}
-	.vizLegendRow{
-		display: table-row;
-	}
-</style>
-</head>
-	<body>
-		<div id="tltc-version"></div>
-
-	</body>
-</html>
