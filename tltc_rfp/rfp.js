@@ -41,7 +41,7 @@ google.setOnLoadCallback(function() {
 	    var tickFormat = timeScale.tickFormat(vizSettings.optimalTickCount);
 	    tickFormat = d3.time.format("%b %y"); // use the best for current limits
 
-	    var vizRoot = d3.select("#tltc-version").style("width","70%").style("padding","5px 5px 10px 5px");
+	    var vizRoot = d3.select("#tltc-version");
 
 	    var vizTitle = vizRoot.append("span").attr("class","vizTitle").append("a")
 		    .attr("target","_blank")
@@ -63,7 +63,7 @@ google.setOnLoadCallback(function() {
 		    .attr("class","rfpTitleCell")
 	    .append("span")
 	    	.attr("class","rfpTitle")
-	    	.text(function(d){ return d.Name;})
+	    	.html(function(d){ return "<span class='rfpTitleThe'>"+d.Name+"</span>";})
 //	    	.style("left",function(d){ return timeScale(d.Announcement)+"px"; })
 	    .append("span")
 			.attr("class","fa fa-info-circle rfpInfo")
@@ -83,40 +83,52 @@ google.setOnLoadCallback(function() {
 		x = dom_rfpTimeGroup.append("span").attr("class","timePoint timePoint_Announcement")
 			.style("left",function(d){ return (100*timeScale(d.Announcement)/vizSettings.width)+"%"; })
 			.style("display",function(d){ return d.Announcement?null:"none"})
+			.style("z-index",100)
 			;
 			x.append("span").attr("class","fa fa-bullhorn");
 			x.append("span").attr("class","dateText")
-				.html(function(d){ return "Announcement: <b>" + moment(d.Announcement).format("MMM D, YYYY")+"</b>"; });
+				.html(function(d){ return "<b>" + moment(d.Announcement).format("MMM D, 'YY")+"</b>"; });
 
 		x = dom_rfpTimeGroup.append("span").attr("class","timePoint timePoint_ProposalDate")
 			.style("left",function(d){ return (100*timeScale(d.ProposalDate)/vizSettings.width)+"%"; })
 			.style("display",function(d){ return d.ProposalDate?null:"none"})
+			.style("z-index",80)
 			;
 			x.append("span").attr("class","fa fa-bell");
 			x.append("span").attr("class","dateText").attr("show",true)
-				.html(function(d){ return "Proposal Date: <b>" + moment(d.ProposalDate).format("MMM D, YYYY")+"</b>"; });
+				.html(function(d){ return "<b>" + moment(d.ProposalDate).format("MMM D, 'YY")+"</b>"; });
 
 		x = dom_rfpTimeGroup.append("span").attr("class","timePoint timePoint_DecisionDate")
 			.style("left",function(d){ return (100*timeScale(d.DecisionDate)/vizSettings.width)+"%"; })
 			.style("display",function(d){ return d.DecisionDate?null:"none"})
+			.style("z-index",60)
 			;
 			x.append("span").attr("class","fa fa-trophy");
 			x.append("span").attr("class","dateText")
-				.html(function(d){ return "Decision Date: <b>" + moment(d.DecisionDate).format("MMM D, YYYY")+"</b>"; });
+				.html(function(d){ return "<b>" + moment(d.DecisionDate).format("MMM D, 'YY")+"</b>"; });
 
 		x = dom_rfpTimeGroup.append("span").attr("class","timePoint timePoint_ProgramStart")
 			.style("left",function(d){ return (100*timeScale(d.ProgramStart)/vizSettings.width)+"%"; })
 			.style("width","100%")
-			.style("display",function(d){ return d.ProgramStart?null:"none"});
+			.style("display",function(d){ return d.ProgramStart?null:"none"})
+			.style("z-index",40)
+			;
 
 			var y = x.append("span").style("position","relative").style("display","block").style("height","16px");
 				y.append("span").attr("class","timeBar")
 					.style("width",function(d){ 
-						return (100*(timeScale(d.ProgramEnd)-timeScale(d.ProgramStart))/vizSettings.width)+"%"; });
+						if(d.ProgramEnd)
+							return (100*(timeScale(d.ProgramEnd)-timeScale(d.ProgramStart))/vizSettings.width)+"%";
+						else
+							return 5+"px";
+					});
 			x.append("span").attr("class","dateText")
 				.html(function(d){
-					return "Program: <b>" + moment(d.ProgramStart).format("MMM D, YYYY")+"</b> "+
-						"to <b>" + moment(d.ProgramEnd).format("MMM D, YYYY")+"</b> ";
+					var str="Program: <b>" + moment(d.ProgramStart).format("MMM D, 'YY");
+					if(d.ProgramEnd){
+						str+=" - " + moment(d.ProgramEnd).format("MMM D, 'YY");
+					}
+					return str+"</b>";
 				});
 
 		dom_rfpTimeGroup.selectAll(".timePoint").on("mouseover",function(d){
@@ -136,8 +148,8 @@ google.setOnLoadCallback(function() {
 			.style("left",function(d){ return (100*timeScale(Date.now())/vizSettings.width)+"%"; }).text(" Now")
 			.append("span")
 				.attr("class","nowBar")
-				.style("height",30*RFPdata.length+"px")
-				.style("margin-top","-"+(30*(RFPdata.length+0.8))+"px")
+				.style("height",20*RFPdata.length+"px")
+				.style("margin-top","-"+(20*(RFPdata.length+1.5))+"px")
 				;
 
 		dom_timeScaleGroup.selectAll("span.timeTick").data(timeTicks)
