@@ -60,7 +60,7 @@ google.setOnLoadCallback(function() {
 	    rfpBlocks.append("a")
 		    .attr("href",function(d){ return d.URL; })
 		    .attr("target","_blank")
-		    .attr("class","rfpTitleCell")
+		    .attr("class","rfpColumn_Left")
 	    .append("span")
 	    	.attr("class","rfpTitle")
 	    	.html(function(d){ return "<span class='rfpTitleThe'>"+d.Name+"</span>";})
@@ -77,7 +77,7 @@ google.setOnLoadCallback(function() {
 			})
 			;
 
-		var dom_rfpTimeGroup = rfpBlocks.append("span").attr("class","rfpTimeGroup");
+		var dom_rfpTimeGroup = rfpBlocks.append("span").attr("class","rfpColumn_Right");
 		var x;
 
 		x = dom_rfpTimeGroup.append("span").attr("class","timePoint timePoint_Announcement")
@@ -124,7 +124,7 @@ google.setOnLoadCallback(function() {
 					});
 			x.append("span").attr("class","dateText")
 				.html(function(d){
-					var str="Program: <b>" + moment(d.ProgramStart).format("MMM D, 'YY");
+					var str="<b><span style='font-weight:500'>Program: </span>" + moment(d.ProgramStart).format("MMM D, 'YY");
 					if(d.ProgramEnd){
 						str+=" - " + moment(d.ProgramEnd).format("MMM D, 'YY");
 					}
@@ -138,7 +138,7 @@ google.setOnLoadCallback(function() {
 
 		var dom_timeScaleRow= rfpBlocks_g.append("span").attr("class","timeScaleRow");
 
-		var dom_legendHolder = dom_timeScaleRow.append("span").attr("class","rfpTitleCell");
+		var dom_legendHolder = dom_timeScaleRow.append("span").attr("class","rfpColumn_Left");
 
 		var dom_timeScaleGroup = dom_timeScaleRow.append("span").attr("class","timeScaleGroup");
 
@@ -149,7 +149,7 @@ google.setOnLoadCallback(function() {
 			.append("span")
 				.attr("class","nowBar")
 				.style("height",20*RFPdata.length+"px")
-				.style("margin-top","-"+(20*(RFPdata.length+1.5))+"px")
+				.style("margin-top","-"+(20*(RFPdata.length+0.1))+"px")
 				;
 
 		dom_timeScaleGroup.selectAll("span.timeTick").data(timeTicks)
@@ -160,9 +160,9 @@ google.setOnLoadCallback(function() {
 
 
 		var legendDom = dom_legendHolder.append("span").attr("class","vizLegend").selectAll("i.fa").data([
-			["bullhorn","Announcement"],
-			["bell","ProposalDate"],
-			["trophy","DecisionDate"],
+			["bullhorn","Announcement","Announcement"],
+			["bell","ProposalDate","Proposal"],
+			["trophy","DecisionDate","Decision"],
 		]).enter().append("span").attr("class","legendItem");
 		legendDom
 			.append("i")
@@ -170,6 +170,6 @@ google.setOnLoadCallback(function() {
 		legendDom
 			.append("span")
 			.attr("class","legendText")
-			.html(function(d){ return d[1];});
+			.html(function(d){ return d[2];});
 	});
 });
