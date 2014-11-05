@@ -26,7 +26,7 @@ time, mark, audio, video {
 /* Base text styles */
 
 body {
-  padding:10px 50px 0 0;
+  padding: 0px 50px 0 0;
   font-family:"Helvetica Neue", Helvetica, Arial, sans-serif;
 	font-size: 14px;
 	color: #232323;
@@ -92,10 +92,6 @@ strong {
   font-weight:700;
 }
 
-ul {
-  padding-left: 25px;
-}
-
 ol {
   list-style: decimal inside;
   padding-left: 20px;
@@ -130,25 +126,6 @@ hr {
   background:#ccc;
   height:1px;
   margin:0 0 24px;
-}
-
-/* Images */
-
-img {
-  position: relative;
-  margin: 0 auto;
-  max-width: 650px;
-  padding: 5px;
-  border: 1px solid #ccc;
-}
-
-p img {
-  display: inline;
-  margin: 0;
-  padding: 0;
-  vertical-align: middle;
-  text-align: center;
-  border: none;
 }
 
 /* Code blocks */
@@ -211,7 +188,6 @@ header {
   width:260px;
   float:left;
   position:fixed;
-	border: 1px solid #000;
 	-webkit-border-top-right-radius: 4px;
 	-webkit-border-bottom-right-radius: 4px;
 	-moz-border-radius-topright: 4px;
@@ -219,12 +195,8 @@ header {
 	border-top-right-radius: 4px;
 	border-bottom-right-radius: 4px;
 	padding: 15px;
-	margin: 30px 25px 0 0;
+	margin: 30px 25px 0px 0;
 	-webkit-font-smoothing: antialiased;
-}
-
-p.header {
-	font-size: 16px;
 }
 
 h1.header {
@@ -238,7 +210,7 @@ h1.header {
 
 
 h1.header, a.header, a.name, header a{
-	color: #fff;
+	color: inherit;
 }
 
 a.header {
@@ -249,44 +221,6 @@ a.name {
 	white-space: nowrap;
 }
 
-header ul {
-  list-style:none;
-  padding:0;
-}
-
-header li {
-	list-style-type: none;
-  width:132px;
-  height:15px;
-	margin-bottom: 12px;
-	line-height: 1em;
-	padding: 6px 6px 6px 7px;
-
-	background: #AF0011;
-	background: -moz-linear-gradient(top, #AF0011 0%, #820011 100%);
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f8f8f8), color-stop(100%,#dddddd));
-  background: -webkit-linear-gradient(top, #AF0011 0%,#820011 100%);
-  background: -o-linear-gradient(top, #AF0011 0%,#820011 100%);
-  background: -ms-linear-gradient(top, #AF0011 0%,#820011 100%);
-  background: linear-gradient(top, #AF0011 0%,#820011 100%);
-
-	border-radius:4px;
-  border:1px solid #0D0D0D;
-
-	-webkit-box-shadow: inset 0px 1px 1px 0 rgba(233,2,38, 1);
-	box-shadow: inset 0px 1px 1px 0 rgba(233,2,38, 1);
-
-}
-
-header li:hover {
-	background: #C3001D;
-	background: -moz-linear-gradient(top, #C3001D 0%, #950119 100%);
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f8f8f8), color-stop(100%,#dddddd));
-  background: -webkit-linear-gradient(top, #C3001D 0%,#950119 100%);
-  background: -o-linear-gradient(top, #C3001D 0%,#950119 100%);
-  background: -ms-linear-gradient(top, #C3001D 0%,#950119 100%);
-  background: linear-gradient(top, #C3001D 0%,#950119 100%);
-}
 
 a.buttons {
 	-webkit-font-smoothing: antialiased;
@@ -313,11 +247,11 @@ section {
 /* Footer */
 
 footer {
-  width:170px;
+  width:220px;
   float:left;
   position:fixed;
-  bottom:10px;
-	padding-left: 50px;
+  bottom:25px;
+	padding-left: 30px;
 }
 
 @media print, screen and (max-width: 960px) {
@@ -344,18 +278,12 @@ footer {
   }
 
   section {
-    padding:20px 84px 20px 50px;
+    padding: 0px 84px 20px 50px;
     margin:0 0 20px;
   }
 
   header a small {
     display:inline;
-  }
-
-  header ul {
-    position:absolute;
-    right:130px;
-    top:84px;
   }
 }
 
@@ -378,16 +306,9 @@ footer {
 		margin: 0 0 0 30px;
 	}
 
-  header ul, header p.view {
-    position:static;
-  }
 }
 
 @media print, screen and (max-width: 480px) {
-
-  header ul li.download {
-    display:none;
-  }
 
 	footer {
 		margin: 0 0 0 20px;
@@ -403,6 +324,5 @@ footer {
   body {
     padding:0.4in;
     font-size:12pt;
-    color:#444;
   }
 }
