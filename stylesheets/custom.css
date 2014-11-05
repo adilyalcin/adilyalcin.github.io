@@ -259,7 +259,7 @@ width:calc(100% - 10px);
 }
 #workList > ul {
   list-style-type: none;
-  height: 200px;
+  height: 160px;
   overflow: hidden;
 }
 #workList > ul > .workItem {
