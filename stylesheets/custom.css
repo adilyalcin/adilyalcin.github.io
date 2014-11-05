@@ -176,6 +176,7 @@ h3.myHeader {
   border-bottom-left-radius: 20px;
   box-shadow: 0 0 0 1px #af0011, 2px 2px 3px 0px rgba(10, 10, 0, 0.5);
   cursor: default;
+  page-break-inside: avoid;
 }
 .pubItem .pubItem-in {
   background-color: white;
@@ -434,5 +435,6 @@ img.projectImg {
   }
   .me_me_me {
     width: 300px;
+    text-align: left;
   }
 }
