@@ -1,0 +1,734 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>Keshif: A Simple, Rich, and General Purpose Facet-based Visualization Tool</title>
+
+		<meta name="description" content="Keshif: A Simple, Rich, and General Purpose Facet-based Visualization Tool">
+		<meta name="author" content="Mehmet Adil Yalcin">
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<link rel="stylesheet" href="css/reveal.min.css">
+		<link rel="stylesheet" href="css/theme/solarized.css" id="theme">
+
+		<!-- For syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+
+		<!-- KESHIF STUFF -->
+		<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+		<script type="text/javascript" src="./d3.v3.min.js" charset="utf-8"></script>
+		<script type="text/javascript" src="./keshif.js" charset="utf-8"></script>
+		<link rel="stylesheet" href="./keshif.css"/ type="text/css">
+
+		<!-- If the query includes 'print-pdf', include the PDF print sheet -->
+		<script>
+			if( window.location.search.match( /print-pdf/gi ) ) {
+				var link = document.createElement( 'link' );
+				link.rel = 'stylesheet';
+				link.type = 'text/css';
+				link.href = 'css/print/pdf.css';
+				document.getElementsByTagName( 'head' )[0].appendChild( link );
+			}
+		</script>
+
+<style type="text/css" media="screen">
+
+#demobox{
+        position:relative;
+}
+
+#demoimg {
+        cursor: pointer;
+}
+#demobox[loaded=true] #demoimg{
+        display: none;
+}
+
+#demobox[loaded=true] #clicktoLoad{
+        display: none;
+}
+
+#demobox #clicktoLoad {
+        cursor: pointer;
+        position: absolute;
+        top: 0px;
+        background-color: rgba(255,255,255,0);
+        width: 730px;
+        height: 400px;
+        display:none;
+}
+#demobox:hover[loaded=false] #clicktoLoad {
+        background-color: rgba(255,255,255,0.7);
+        display:block;
+        font-size: 3em;
+        border: 2px black solid;
+}
+#demobox #clicktoLoad span{ 
+        cursor: pointer;
+        line-height: 410px; 
+        vertical-align:middle; 
+        margin-left:auto;
+        margin-right:auto;
+        display:block;
+}
+
+div.listItem{
+    padding-bottom: 4px;
+}
+.iteminfo a{
+    color:#606060;
+    font-style:italic;
+}
+#livedemo {
+    margin: 0 auto;
+    width: 730px;
+    height: 500px;
+    line-height: initial;
+    font-family: Helvetica, Arial, sans-serif;
+	font-size: 12pt;
+	text-align: initial;
+}
+#demo_code{
+	display:none;
+}
+#demo_demo{
+    margin: 0 auto;
+    width: 800px;
+    height: 550px;
+    line-height: initial;
+    font-family: Helvetica, Arial, sans-serif;
+	font-size: 12pt;
+	text-align: initial;
+	border: 4px solid #657b83;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+}
+
+.iteminfo_0 span{
+    font-size: 0.7em;
+}
+
+img{
+	border:none !important;
+	margin: 0px !important;
+}
+
+img.no_shadow{
+	box-shadow: none !important;
+}
+
+#demobox[loaded=false] #livedemo{
+    display:none;
+}
+
+.authorname {
+	width: 300px;
+	font-size: 30em;
+	text-align: right;
+	display:inline-block;
+	vertical-align: top !important;
+}
+.authorlastname {
+	width: 300px;
+	font-size: 30em;
+	text-align: left;
+	display:inline-block;
+	vertical-align: top !important;
+}
+.authorname .email{
+	line-height:2.2em;
+	text-decoration: underline;
+}
+
+img.final_img{
+	border:none !important;
+	height:80px;
+	width: 80px;
+	margin: 20px 0px 0px 0px !important;
+	box-shadow: none !important;
+}
+
+span.user_num{
+	width:40px;
+	display: inline-block;
+	text-align: right;
+	font-weight: 700;
+}
+
+span.user_count{
+	font-size: 0.6em;
+}
+
+.reveal pre code{
+	max-height: 600px;
+}
+
+.final_page h3{
+	margin-bottom: 10px !important;
+}
+img.flipY{
+	-moz-transform: scaleY(-1);
+    -o-transform: scaleY(-1);
+    -webkit-transform: scaleY(-1);
+    transform: scaleY(-1);
+    filter: FlipV;
+    -ms-filter: "FlipV";
+}
+
+</style>
+
+
+<script type="text/javascript">
+var loaded=false;
+var loaded2=false;
+
+var showDemo = function(s){
+	if(s===true && loaded2===false){
+		loaded2=true;
+		node = document.getElementById("demo_demo");
+		while (node.hasChildNodes()) {
+		    node.removeChild(node.lastChild);
+		}
+		kshf.init({
+	        chartTitle: "Failed Bank List - FDIC, US",
+	        domID : "#demo_demo",
+	        categoryTextWidth:200,
+	        source : {
+	            gdocId : '0Ai6LdDWgaqgNdDJ2ZS11RE10SnBoX09PUC12TjhhR0E',
+	            sheets : [ {name:"Banks"},{name:"States"} ]
+	        },
+	        loadedCb: function(){
+	            kshf.cellToArray(kshf.dt.Banks, [7], /\//, false);
+	        },
+	        charts : [
+	            {   facetTitle: "State",
+	                catItemMap: "ST",
+	                catTableName: "States",
+	                timeTitle: "Closing Date"
+	            },{ facetTitle: "City"
+	            },{ facetTitle: "Acquiring Institution"
+	            },{ facetTitle: "Loss Share Type"
+	            }
+	        ],
+	        list : {
+	            sortColWidth: 75,
+	            sortOpts : [ {name: 'CERT'} ],
+	            textSearch: "Bank Name",
+	            content: "Bank Name"
+	        }
+	    });
+	}
+
+	d3.select('#demo_demo').style("display",s?"block":"none");
+	d3.select('#demo_code').style("display",(!s)?"block":"none");
+}
+</script>
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+				<section>
+					<h1>keshif</h1>
+					<h3>A Simple, Rich, and General Purpose Facet-based Visualization Tool</h3>
+					<p>
+<span class="authorname">
+	<a href="http://adilyalcin.me">M. Adil </a><br/>
+	<a href="http://adilyalcin.me">Anne </a><br/>
+	<a href="http://adilyalcin.me">Benjamin B. </a>
+</span>
+<span class="authorlastname">
+	<a href="http://adilyalcin.me"><b>Yalcin</b></a> <span class="fragment"> &lt; Me</span><br/>
+	<a href="http://adilyalcin.me"><b>Rose</b></a><br/>
+	<a href="http://adilyalcin.me"><b>Bederson</b></a><br/>
+	<small>@cs.umd.edu</small>
+</span>
+					</p>
+					<img src="img/hcil_logo.gif" class="no_shadow" style="float:left;" width="160" height="160">
+					<img src="img/umd_logo.svg" class="no_shadow" style="float:right;" width="160" height="160">
+					<div>
+						<br><small>Funded in part by</small> <br>
+						<img src="img/huawei_logo.png" class="no_shadow" width="80">
+					</div>
+
+					<aside class="notes">
+						Hi. everybody.
+						In this talk, I want to present you a new visualization tool that we developed in HCIL.
+						It's called Keshif: means Exploration in Turkish.
+
+						A quick question:
+						Do you have spreadsheets of a few hundred categorized items where you want to discover the basic patterns?
+
+						Before showing Keshif, I want to present our design guidelines and why we wanted to develop a new tool.
+					</aside>
+				</section>
+				<section data-background="./img/background.png" data-background-repeat="repeat">
+					<div class="fragment">
+					Improve through<br><br>
+					<h1>Simplicity</h1>
+
+					Make <b>common, visual</b> data analysis &amp; exploration<br/>
+					accessible to a <b>broader</b> audience.
+					</div>
+
+					<aside class="notes">
+						Wide range of visual analysis tools are available.						
+						The core visual representations and interactions are well explored.
+						But most of the tools developed still have limited applicability / impact.
+
+						High learning curve, domain-data tailored, customized features.
+
+						We wanted to take another route, and improve through simplicity.
+					</aside>
+				</section>
+
+				<section>
+
+				<div style="margin-bottom:30px !important; position:relative;">
+				<ul>
+					<li>10 types of visualizations/charts</li>
+					<li>customizable dashboards </li>
+					<li>low level API </li>
+					<li>complex data sources...</li>
+				</ul>
+				<img src="img/nope.png" style="position:absolute; height:200px; left: 330px; top: 10px; width:300px; opacity: 0.6" class="no_shadow">
+				</div>
+
+				<div class="fragment">
+				<br>
+				Visually effective &amp; <br> filterable<br> summaries of <br>
+				<h2>lists of things</h2>
+
+				</div>
+
+				<aside class="notes">
+					You would put a list of things in our tool, 
+					   and get immediate visually effective and filterable summary.
+					We decided to cross out features that didnt lead us to our goals.
+				</aside>
+				</section>
+
+
+				<section>
+					User-task goals based on “<b>The Five W’s</b>”:<br/>
+
+					<span style="text-align:left; padding:0px 0px 50px 0px; display: inline-block; width:500px !important;
+						margin-top: 50px !important"
+						align="center" width="600">
+						<img src="img/target.png" style="float:left; margin-right:40px !important" height="170" class="no_shadow">
+						<span style="display: inline-block">
+						<b>W</b>ho<br>
+						<b>W</b>hat<br>
+						<span style="color: rgb(178, 200, 207) !important"></span>
+						<b>W</b>here<br>
+						<b>W</b>hen<br>
+						<div style="border-top: double 10px rgb(101, 123, 131);"><b>W</b>hy</div>
+						</span>
+					</span><br/>
+
+					<div class="fragment">
+					Discover relationships between<br/>
+					<b>categorical</b> attributes &amp;<br> <b>temporal</b> attributes
+					</div>
+
+					<aside class="notes">
+						Once you have a list of things, what are the most basic questions you can ask?
+					</aside>
+
+				</section>
+
+
+
+				<section>
+
+				<div>
+				<span style="display: inline-block; vertical-align:top">
+				<span style="font-size:1.3em !important;">
+				<img src='img/up.svg' style="fill: rgb(101, 123, 131);" width="40" class="no_shadow"> Familiar: 
+				</span><br>
+				Based on <b>faceted browsing</b><br>
+				<img src='img/amazon_facet.png' style="fill: rgb(101, 123, 131);" width="150" class="no_shadow">
+				<br><br>
+				</span>
+
+				<span class="fragment" style="display: inline-block; vertical-align:top; margin-left: 50px">
+				<span style="font-size:1.3em !important;">
+				<img src='img/up.svg' style="fill: rgb(101, 123, 131);" width="40" class="flipY no_shadow"> Customizable:
+				</span><br>
+				Single, refined, scalable layout<br>
+
+				<img src="img/layout.png" width="300" style="padding-top:10px" class="no_shadow"><br/><br>
+				</span>
+				</div>
+					
+				<div class="fragment" style="position:relative !important; top:-10px !important">
+					<svg version="1.1" height="100px" style="margin: auto;" width="100px" title="Settings" xml:space="preserve" viewBox="0 0 2000 1000" style="left: 155px; display: block;"><path d="M736 96q0 -12 -10 -24l-319 -319q-10 -9 -23 -9q-12 0 -23 9l-320 320q-15 16 -7 35q8 20 30 20h192v1376q0 14 9 23t23 9h192q14 0 23 -9t9 -23v-1376h192q14 0 23 -9t9 -23zM1792 -32v-192q0 -14 -9 -23t-23 -9h-832q-14 0 -23 9t-9 23v192q0 14 9 23t23 9h832 q14 0 23 -9t9 -23zM1600 480v-192q0 -14 -9 -23t-23 -9h-640q-14 0 -23 9t-9 23v192q0 14 9 23t23 9h640q14 0 23 -9t9 -23zM1408 992v-192q0 -14 -9 -23t-23 -9h-448q-14 0 -23 9t-9 23v192q0 14 9 23t23 9h448q14 0 23 -9t9 -23zM1216 1504v-192q0 -14 -9 -23t-23 -9h-256 q-14 0 -23 9t-9 23v192q0 14 9 23t23 9h256q14 0 23 -9t9 -23z"></path></svg>
+					<span style="display: inline-block">
+					<b>Dynamic</b>, "<b>relevant first</b>" <br>
+					ordering for attributes
+					</span>
+					</div>
+
+				</section>
+
+<!--
+				<section id="demoslide">
+					<h2>Demo</h2>
+<div id="demobox" loaded="false" style="margin:8px" onclick="tada()">
+	<img id="demoimg" src="./img/demo.png" width="735">
+	<div id="clicktoLoad">
+		<span align="center"> Click to load</span>
+	</div>
+	<div id="livedemo"></div>
+</div>
+					<aside class="notes">
+						Oh hey, these are some notes. They'll be hidden in your presentation, but you can see them if you open the speaker notes window (hit 's' on your keyboard).
+					</aside>
+				</section>-->
+
+				<section>
+					<h3><a onclick="showDemo(true)">Demo</a> /
+						<a onclick="showDemo(false)">Sample Code</a> </h3>
+					<div id="demo_code">
+					<pre height="600"><code data-trim contenteditable>
+kshf.init({
+    chartTitle: "Failed Bank List - FDIC, US",
+    domID : "#chart_div4",
+    source : {
+        gdocId : '0Ai6LdDWgaqgNdDJ2ZS11RE10SnBoX09PUC12TjhhR0E',
+        sheets : [ {name:"Banks"},{name:"States"} ]
+    },
+    loadedCb: function(){
+        kshf.cellToArray(kshf.dt.Banks, [7], /\//, false);
+    },
+    charts : [
+        {   facetTitle: "State",
+            catTableName: "States",
+            catItemMap: "ST",
+            timeTitle: "Closing Date"
+        },{ facetTitle: "City"
+        },{ facetTitle: "Acquiring Institution"
+        },{ facetTitle: "Loss Share Type"
+        }
+    ],
+    list : {
+        sortOpts : [ {name: 'CERT'} ],
+        textSearch: "Bank Name",
+        content: "Bank Name"
+    }
+});
+					</code></pre>
+					</div>
+
+					<div id="demo_demo">
+						<div align="center" style="margin: 0 auto; width: 400px; ">
+						<br><br><br>
+<!--						<h2>Demo:</h2><h1><a href="http://adilyalcin.github.io/Keshif/demo/nobel.html" target="_blank">
+							Nobel Prize Winners</a></h1>-->
+							<br><br>
+						<h1>Demo</h1><br>
+						<h1><a href="http://adilyalcin.github.io/Keshif/demo/titanic.html" target="_blank">
+							Titanic Passengers</a></h1><br><br>
+
+						<h2>+20 More on the web!</h2>
+						</div>
+					</div>
+
+					<aside class="notes">
+						Show the data source.
+						Actually, it comes from a webpage!
+						Multiple values fo Loss Share Type field
+					</aside>
+				</section>
+
+				<section>
+					<img src="img/demo_nobel.png">
+				</section>
+				<section>
+					<img src="img/demo_flag.png">
+				</section>
+				<section>
+					<img src="img/demo_reddit.png">
+				</section>
+				<section>
+
+				<h2>Data Structure</h2>
+
+				<img src="img/table.svg" style="vertical-align:middle; height:150px;" class="no_shadow"><br>
+				<b><u>Tables</u></b>:
+				Simple, Flexible<br>
+				Support for multiple tables<br>
+				<small>1 primary item table + attribute info</small>
+				<br><br>
+
+				<div class="fragment">
+				<h3>Sources</h3>
+				<ul>
+					<li>Cloud (Google Spreadsheets)</li>
+					<li>Text files (csv)</li>
+					<li>JSON APIs</li>
+					<li>...</li>
+				</ul>
+				</div>
+				</section>
+
+				<section>
+					<h2>Technology</h2>
+					<u>Web Standards</u><br/>
+					<img src="img/tech.svg" class="no_shadow" width="450"><br/>
+					<img src="img/tech_svg.svg" class="no_shadow" width="100" style="position:relative; top:-50px"><br/>
+					<div  style="position:relative; top:-20px"><u>JS Libraries</u>
+					<div>
+					  <svg width="96" height="91" style="position:relative; top:0px;">
+					    <linearGradient id="logo-gradient-1" gradientUnits="userSpaceOnUse" x1="37.2417" y1="7.0552" x2="97.9669" y2="67.7803">
+					      <stop offset="0" stop-color="#F9A03C"></stop>
+					      <stop offset="1" stop-color="#F7974E"></stop>
+					    </linearGradient>
+					    <linearGradient id="logo-gradient-2" gradientUnits="userSpaceOnUse" x1="-8.0391" y1="17.2148" x2="45.724" y2="70.978">
+					      <stop offset="0" stop-color="#F9A03C"></stop>
+					      <stop offset="1" stop-color="#F7974E"></stop>
+					    </linearGradient>
+					    <linearGradient id="logo-gradient-3" gradientUnits="userSpaceOnUse" x1="11.9321" y1="36.5513" x2="66.3901" y2="91.0092">
+					      <stop offset="0" stop-color="#F9A03C"></stop>
+					      <stop offset="1" stop-color="#F7974E"></stop>
+					    </linearGradient>
+					    <linearGradient id="logo-gradient-4" gradientUnits="userSpaceOnUse" x1="1.6533" y1="-1.6533" x2="86.899" y2="83.5924">
+					      <stop offset="0" stop-color="#F26D58"></stop>
+					      <stop offset="1" stop-color="#F9A03C"></stop>
+					    </linearGradient>
+					    <linearGradient id="logo-gradient-5" gradientUnits="userSpaceOnUse" x1="45.2446" y1="-9.5483" x2="108.0998" y2="53.3068">
+					      <stop offset="0" stop-color="#B84E51"></stop>
+					      <stop offset="1" stop-color="#F68E48"></stop>
+					    </linearGradient>
+					    <linearGradient id="logo-gradient-6" gradientUnits="userSpaceOnUse" x1="6.6323" y1="64.3193" x2="49.6788" y2="107.3658">
+					      <stop offset="0" stop-color="#F9A03C"></stop>
+					      <stop offset="1" stop-color="#F7974E"></stop>
+					    </linearGradient>
+					    <path fill="url(#logo-gradient-1)" d="M95.82,65.857c0.043-0.418,0.074-0.84,0.098-1.264c0.029-0.502-30.211-29.194-30.211-29.194h-0.723C64.984,35.399,95.635,67.73,95.82,65.857z"></path>
+					    <path fill="url(#logo-gradient-2)" d="M31.302,55.904c-0.04,0.088-0.08,0.176-0.121,0.264c-0.043,0.092-0.087,0.184-0.131,0.275c-0.964,2.01,13.495,16.145,14.658,14.428c0.053-0.076,0.106-0.156,0.159-0.232c0.059-0.09,0.117-0.176,0.175-0.266C46.972,68.961,31.715,54.986,31.302,55.904z"></path>
+					    <path fill="url(#logo-gradient-3)" d="M51.734,75.781c-0.041,0.09-0.332,0.582-0.598,0.842c-0.045,0.09,14.115,14.133,14.115,14.133h1.275C66.527,90.756,53.234,76.375,51.734,75.781z"></path>
+					    <path fill="url(#logo-gradient-4)" d="M95.938,64.338c-0.662,14.68-12.807,26.418-27.645,26.418h-2.006L51.469,76.158c1.219-1.719,2.352-3.5,3.361-5.357h13.463c4.258,0,7.723-3.463,7.723-7.723c0-4.258-3.465-7.723-7.723-7.723h-7.967c0.607-3.209,0.939-6.518,0.939-9.903c0-3.437-0.338-6.793-0.967-10.053h4.949l30.604,30.155C95.887,65.15,95.916,64.746,95.938,64.338z M8.05,0H0v19.955h8.05c14.06,0,25.5,11.437,25.5,25.497c0,3.825-0.853,7.456-2.369,10.716l14.686,14.471c4.822-7.215,7.641-15.877,7.641-25.187C53.508,20.39,33.115,0,8.05,0z"></path>
+					    <path fill="url(#logo-gradient-5)" d="M68.293,0H35.695c7.962,4.861,14.555,11.754,19.047,19.955h13.551c4.258,0,7.723,3.463,7.723,7.723c0,4.259-3.465,7.722-7.723,7.722h-3.045l30.604,30.155c0.072-0.818,0.117-1.641,0.117-2.477c0-6.727-2.414-12.898-6.422-17.701c4.008-4.801,6.422-10.973,6.422-17.699C95.969,12.417,83.555,0,68.293,0z"></path>
+					    <path fill="url(#logo-gradient-6)" d="M66.287,90.756H35.928C42.039,86.982,47.322,82,51.469,76.158L66.287,90.756z M45.867,70.639L31.182,56.168C27.125,64.887,18.284,70.951,8.05,70.951H0v19.953h8.05C23.804,90.904,37.709,82.846,45.867,70.639z"></path>
+					  </svg>
+					  (Data Driven Documents)
+					</div>
+					</div>
+				</section>
+
+
+				<section>
+					<h2>User Study</h2>
+					<div class="fragment">
+					<span style="float:left"><b>Locations</b><br/>
+						<img src="img/i_pgcpls.png" width="400" class="no_shadow"></span>
+					<div class="fragment">
+						<span style="float:right">
+							<b style="font-size: 1.3em">17 users</b>
+							<div style="text-align:left;">
+								<div>
+									<img src="img/i_family.png" width="80" style="vertical-align: middle; box-shadow: none;"> 
+									<span class="user_num">40</span> : Mean age</div>
+								<b style="font-size: 1.3em; padding-left:150px; font-weight:500">Variety of skills</b>
+								<div style="margin-bottom: 20px">
+									<img src="img/i_grad.png" width="80" style="vertical-align: middle; box-shadow: none;"> 
+									<span class="user_num">3</span> : High school degrees</div>
+								<div><img src="img/i_speech.png" width="80" style="vertical-align: middle; box-shadow: none;"> 
+									<span class="user_num">3</span> : Non-native speakers</div>
+								<div><img src="img/i_computer.png" width="80" style="vertical-align: middle; box-shadow: none"> 
+									<span class="user_num">4</span> : Use &leq;5 hrs/week</div>
+								</div>
+	<!--						<li>3 versions: Full viz, No timeline, No visualization</li> -->
+						</span>
+					</div>
+					<div class="fragment" style="clear:left; clear:right; padding-top:30px;">
+					<b style="line-height:2em">Dataset: 183 flags/countries</b><br>
+					<img src='img/Flag_of_the_United_States.svg' style="height:50px;">
+					<img src='img/Flag_of_Canada.svg' style="height:50px;">
+					<img src='img/Flag_of_Finland.svg' style="height:50px;">
+					<img src='img/Flag_of_Turkey.svg' style="height:50px;">
+					<img src='img/Flag_of_South_Korea.svg' style="height:50px;">
+					<img src='img/Flag_of_Japan.svg' style="height:50px;"> . . .<br/>
+					</div>
+					</div>
+				</section>				
+				<section>	
+					<h2>Phase 1: Free Exploration</h2>			
+					
+					<img src='img/i_time.png' style="width:50px;" class="no_shadow"> 3 minutes</br>
+					No tutorials on the interface or dataset</br>
+					<b>User Goal</b>: Explore interface &amp; dataset</br>
+					<p class="fragment">
+					<br/><b>Result:</b><br/>
+					First filtering after ~1 minute<br/>
+					Users not motivated / Data not well-explored<br/>
+<!--					Sometimes distracted by pretty visuals of dataset (flags) <br/>
+					<img src='img/Flag_of_Belize.svg' style="height:50px;">
+					<img src='img/Flag_of_French_Polynesia.svg' style="height:50px;">
+					<img src='img/Flag_of_Kiribati.svg' style="height:50px;">
+					<img src='img/Flag_of_San_Marino.svg' style="height:50px;">
+					<img src='img/Flag_of_Sri_Lanka.svg' style="height:50px;">
+					<img src='img/Flag_of_the_Northern_Mariana_Islands.svg' style="height:50px;"><br/>
+					-->
+					</p>
+
+
+				</section>				
+				<section>	
+					<h2>Phase 2: Tasks</h2>
+<!--					24-36 questions per user</br>-->
+					<div style="padding-top: 20px">
+					<span style="display:block; padding-top: 20px">
+						<span style="display:inline-block" class="fragment">
+							<img src='img/t_case0.png' style="height:150px;"><br/>
+							<b>Full interface</b><br/>
+							<b>79%</b> correct<br/>
+							<span class="user_count">7 users</span>
+							</span>
+						<span style="display:inline-block" class="fragment">
+							<img src='img/t_case1.png' style="height:150px;"><br/>
+							<b>No Timeline</b><br/>
+							<b>67%</b> correct<br/>
+							<span class="user_count">6 users</span><br/>
+							</span>
+						<span style="display:inline-block" class="fragment">
+							<img src='img/t_case2.png' style="height:150px;"><br/>
+							<b>No Timeline &amp; Bars</b><br/>
+							<b>54%</b> correct<br/>
+							<span class="user_count">3 users</span><br/>
+							</span>
+					</span>
+					<div style="padding-top: 20px" class="fragment">
+					More Visuals -&gt;
+					Higher Performance</br>
+					</br><small>** Not statistically significant</small>
+					</div>
+					</div>
+				</section>
+				<section>
+					<h2>Web log analysis</h2>
+					<div style="padding-bottom:40px">
+						<img src='img/w_person.svg' style="height:240px; float:left">
+						<div style="text-align:left; margin-left: 272px">
+						<b style="text-decoration:underline">Anonymous users</b><br/> No target/tracked demographics<br/>
+						<div style="padding-top:20px">
+							<b style="text-decoration:underline">Public web page</b><br/> Non-controlled environment<br/>
+							Tracking only desktop browsers
+							</div>
+						</div>
+					</div>
+					<div style="padding-top:20px">
+						<b>Dataset</b>: 145 Publications<br/><br/>
+						<img src='img/w_pubs.jpg'>
+						</div>
+				</section>
+				<section>
+					<h2>Web log analysis</h2>
+
+					3 months<img src='img/i_time.png' width="35" class="no_shadow"> - 
+					3,500 unique visits<img src='img/w_click.png' width="35" class="no_shadow"> <br/>
+
+					<img src='img/w_distr.png' width="550" class="no_shadow" style="margin-top: 30px !important"><br/>
+
+					% of visits with interaction type <br/>
+					<span style="font-size: 0.8em">(among all active visits - 52% of total)</span>
+<!--					More engaged: First filtering in ~10 seconds! -->
+
+<!--					Simpler features are used more commonly<br/>
+					Richer features can be discovered by a part of users-->
+				</section>
+<!--				<section>
+					<section>
+						<h2>Fragment Styles</h2>
+						<p>There's a few styles of fragments, like:</p>
+						<p class="fragment grow">grow</p>
+						<p class="fragment shrink">shrink</p>
+						<p class="fragment roll-in">roll-in</p>
+						<p class="fragment fade-out">fade-out</p>
+						<p class="fragment highlight-red">highlight-red</p>
+						<p class="fragment highlight-green">highlight-green</p>
+						<p class="fragment highlight-blue">highlight-blue</p>
+						<p class="fragment current-visible">current-visible</p>
+						<p class="fragment highlight-current-blue">highlight-current-blue</p>
+					</section>
+				</section>-->
+
+				<section class="final_page">
+					<h3><img src="img/f_github.png" class="final_img"> Source Code</h3>
+					<a href="http://www.github.com/adilyalcin/keshif">github.com/adilyalcin/<b>keshif</b></a>
+					<h3><img src="img/f_home.png" class="final_img"> Project Home</h3>
+					<a href="http://www.cs.umd.edu/hcil/keshif">www.cs.umd.edu/hcil/<b>keshif</b></a>
+					<h3><img src="img/f_bang.png" class="final_img"> Contact</h3>
+					<a href="http://www.cs.umd.edu/hcil/keshif"><b>yalcin</b>@cs.umd.edu</a>
+
+					<img class="no_shadow" src="img/hcil_logo.gif" style="float:left;" width="160" height="160">
+					<img class="no_shadow" src="img/umd_logo.svg" style="float:right;" width="160" height="160">
+					
+					<br><br><h4>See you @ Demo session! (5-6PM)</h4>
+
+
+					<aside class="notes">
+						We believe Keshif is a step towards data analysis and exploration by a broader public
+							through refining user interface and visualization design.
+
+						There are more carefully designed features, so come see me at the demo session!
+					</aside>
+				</section>
+
+			</div>
+
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.min.js"></script>
+
+		<script>
+
+			// Full list of configuration options available here:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: false,
+				progress: true,
+				history: true,
+				center: true,
+				slideNumber: false,
+
+				theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+//				transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
+				transition: 'linear', // default/cube/page/concave/zoom/linear/fade/none
+
+				// Parallax scrolling
+				// parallaxBackgroundImage: 'https://s3.amazonaws.com/hakim-static/reveal-js/reveal-parallax-1.jpg',
+				// parallaxBackgroundSize: '2100px 900px',
+
+				// Optional libraries used to extend on reveal.js
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+					{ src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+				]
+			});
+
+			Reveal.addEventListener( 'slidechanged', function( event ) {
+				if(event.currentSlide.id==='demoslide'){
+					showDemo(true);
+//					tada();
+				}
+			    // event.previousSlide, event.currentSlide, event.indexh, event.indexv
+			} );
+
+		</script>
+
+	</body>
+</html>
