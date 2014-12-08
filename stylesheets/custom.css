@@ -13,12 +13,6 @@ my-phone::before {
 body {
   cursor: default;
 }
-@media (max-width: 960px) {
-  span.affil-group {
-    background-color: blue;
-    display: none !important;
-  }
-}
 span.affil-group {
   display: none !important;
   vertical-align: top;
@@ -303,12 +297,11 @@ width:calc(100% - 10px);
   content: "show less";
 }
 .rightBlock {
-  background-color: #171717;
+  display: none;
   color: #FDFDFB;
   width: 260px;
-  right: 0px;
+  left: 1000px;
   position: fixed;
-  border: 1px solid #000;
   -webkit-border-top-right-radius: 4px;
   -webkit-border-bottom-right-radius: 4px;
   -moz-border-radius-topright: 4px;
@@ -381,6 +374,9 @@ img.projectImg {
   #social_buttons {
     display: none;
   }
+  .rightBlock {
+    display: none;
+  }
   .no-print {
     display: none !important;
   }
@@ -438,5 +434,16 @@ img.projectImg {
   }
   section {
     padding-top: 0px;
+  }
+}
+@media (max-width: 960px) {
+  span.affil-group {
+    background-color: blue;
+    display: none !important;
+  }
+}
+@media (min-width: 1224px) {
+  .rightBlock {
+    display: block;
   }
 }
