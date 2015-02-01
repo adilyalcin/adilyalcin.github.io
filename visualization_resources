@@ -1,0 +1,483 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+  <script type="text/javascript">var switchTo5x=true;</script>
+  <meta charset="utf-8">
+  <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+  <script type="text/javascript" src="./js/d3.v3.min.js"></script>
+  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
+  <title>Visualization Resources</title>
+<style>
+
+html{
+  min-height: 100%;
+  background: url('img/treemap_big.png') no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+body{
+  min-height: 100%;
+  font-family: 'PT Sans Narrow', Calibri, 'Myriad Pro', Tahoma, Arial; 
+  color:#888;
+  padding:0;
+  margin:0;
+}
+
+.box {
+  width:670px;
+/*  background:#FFF;*/
+  margin:10px auto;
+  padding: 20px;
+}
+
+/*
+.background_img{
+  position:absolute;
+  top: 0px;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  width: 100%;
+  height: 600%;
+  opacity:0;
+  z-index: -1;
+  transition: opacity 1000ms linear;
+  background-repeat: no-repeat;
+  background-attachment:fixed;
+  background-position:center; 
+}
+.background_img[hey=true]{
+  opacity:1;
+  transition: opacity 1000ms linear;
+}*/
+
+#background_0{ background-image: url('img/treemap_big.png'); }
+
+.blabla{
+  width: 660px;
+  margin: 0px auto;
+  background-color: rgba(120, 120, 120, 0.7);
+  border-radius: 15px;
+  border: solid 0px rgb(183, 170, 136);
+  box-shadow: rgb(120, 120, 120) 0px 0px 20px 0px;
+  padding:5px;
+}
+
+
+.sound_source{
+  width: 660px;
+  margin: 0px auto;
+  background-color: rgba(255, 255, 255, 0.9);
+  border-radius: 15px;
+  border: solid 0px rgb(183, 170, 136);
+  box-shadow: rgb(255, 255, 255) 0px 0px 20px 0px;
+  margin-top: 20px;
+}
+.sound_source .title{
+  font-size: 20px;
+  font-variant: small-caps;
+  font-weight: bold;
+  letter-spacing: 0.2em;
+  color: black;
+  border-bottom: solid 2px black;
+}
+.sound_source .title span.titleText{
+  margin-left:20px;
+}
+.sound_source .content{
+  padding:10px;
+  color: black;
+}
+.sound_source .info{
+  margin: 5px 5px 5px 30px;
+  color: rgb(48, 48, 48);
+  font-size: 0.9em;
+}
+.sound_source a{
+  color: rgb(128, 121, 104);
+}
+
+/*Links*/
+a{ color:#36C;text-decoration:none;font-weight:normal;font-size:105%; }
+a:hover{text-decoration:underline;}
+
+/*Generic*/
+p {font-size:115%;}
+
+.main_title{
+  font-size: 2.0em;
+  font-weight: 900;
+  letter-spacing: 0.2em;
+  color: white;
+  text-shadow: 0 0 10px rgba(0,0,0,1);
+}
+
+.resource_name{
+  font-weight: 700;
+  color: black;
+}
+.resource_info_row{
+  padding-left: 20px;
+  quotes: "\201C""\201D""\2018""\2019";
+}
+.resource_info_row:before {
+  color: gray;
+  content: "\201C";
+  font-size: 2em;
+  line-height: 0.1em;
+  margin-right: 0.1em;
+  vertical-align: -0.4em;
+}
+.resource_author{
+  color: gray;
+  font-size: 0.9em;
+}
+.resource_author:before{
+  content: " - dataset by ";
+}
+.resource_author > .fa{
+  font-size: 0.9em;
+  padding-left: 5px;
+}
+.resource_name > .fa{
+  font-size: 0.9em;
+  padding-left: 5px;
+}
+.resource_head{
+  width: 20px;
+  display: inline-block;
+  font-size: 0.8em;
+  opacity: 0.7;
+}
+.resource_type{
+  display: inline-block;
+  width: 15px;
+}
+.resource_type_block{
+  display: block;
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+}
+.resource:hover .resource_head{
+  opacity: 1;
+  font-weight: 700;
+}
+.resource[type="Survey"] .resource_head{
+  color: red;
+}
+.resource[type="Blog"] .resource_head{
+  color: green;
+}
+
+#background_credit{
+  text-align: right;
+  position: fixed;
+  bottom: 10px;
+  right: 30px;
+  font-weight: 300;
+  font-size: 1.2em;
+  text-shadow: 1px 1px 5px black;
+  color: white;
+}
+#background_credit a{
+  color: white;
+}
+
+.type_info{
+  float: right;
+  font-variant: normal;
+  font-size: 0.9em;
+  font-weight: 300;
+  letter-spacing: 0em;
+  margin: 0px 5px;
+}
+
+</style>
+
+<script type="text/javascript">
+var bgImage=0;
+var bgMax = 0;
+
+function changeBgImage(){
+  bgImage++;
+  if(bgImage>bgMax) bgImage=0;
+  for(j=0;j<=bgMax; j++){
+    $("#background_"+j).attr("hey",(bgImage===j?"true":"false"));
+  }
+  setTimeout(changeBgImage,5000);
+}
+
+$(document).ready(function(){
+  var x = d3.select("#resource_list");
+  var resourceDOMS = x.selectAll("div.resource").data(resources).enter()
+    .append("div").attr("class","resource").attr("type",function(d){
+      return d.type;
+    });
+
+  resourceDOMS.append("span").attr("class","resource_head fa fa-eye");
+
+//  resourceDOMS.append("span").attr("class","resource_type")
+//    .append('span').attr("class","resource_type_block");
+
+  resourceDOMS.append("a").attr('target',"_blank").attr("href",function(d){
+    return "http://www.keshif.me/demo/"+d.demo+".html";
+  })
+    .append("span").attr("class","resource_name").text(function(d){ return d.name})
+    .append("span").attr("class","fa fa-external-link");
+
+  var ss=resourceDOMS.append("div").attr("class","resource_info_row");
+  
+  ss.append("span").attr("class","resource_descr").text(function(d){ return d.description;});
+
+  ss.append("span").attr("class","resource_author").text(function(d){ return d.source.Author;})
+    .append("a").attr("target","_blank").attr("href",function(d){return d.source.URL}).attr("class","fa fa-external-link");
+
+  setTimeout(changeBgImage,5000);
+});
+
+var resources = [
+/*{
+  name: "Input Devices - The Buxton Collection",
+  description: "Over the past 30 years, designer, writer, and researcher Bill Buxton has been collecting input and interactive devices whose design struck him as interesting, useful, or important. In the process, he has assembled a good collection of the history of pen computing, pointing devices, touch technologies, as well as an illustration of the nature of how new technologies emerge.",
+  demo: "buxton_collection",
+  itemCount: 239,
+  type: "Collection",
+  source:{
+    URL: "http://research.microsoft.com/en-us/um/people/bibuxton/buxtoncollection/default.aspx", 
+    Info: "Buxton Collection"
+  }
+},*/
+{
+  name: "Milestones In The History Of Thematic Cartography, Statistical Graphics, And Data Visualization",
+  description: "One goal is to provide a flexible, and useful multi-media resource, containing descriptions of events and developments, illustrative images, and links to related sources (web and in print) or more detailed commentaries. Another goal is to build a database which collects, catalogs, organizes, and illustrates these significant historical developments.",
+  demo: "visualization_milestones",
+  type: "Survey",
+  itemCount: 294,
+  source:{
+    URL: "http://www.datavis.ca/milestones/index.php",
+    Author: "Michael Friendly and Daniel J. Denis",
+    Info: ""
+  }
+/*},{
+  name: "",
+  description: "",
+  demo: "",
+  type: "",
+  itemCount: ,
+  source:{
+    URL: "",
+    Author: "",
+    Info: ""
+  }*/
+},{
+  name: "Multi-faceted Scientific Data Visualization",
+  description: "Data and model scenarios are becoming multi-faceted: data are often spatio-temporal and multi-variate; they stem from different data sources, from multiple simulation runs, or from multi-physics simulations of interacting phenomena. Also, data can be of different dimensionality or structured on various types of grids that need to be related or fused in the visualization...",
+  demo: "multiscivis",
+  type: "Survey",
+  itemCount: 159,
+  source:{
+    URL: "http://multivis.net/",
+    Author: "J. Kehrer, H. Hauser",
+    Info: "Visualization and visual analysis play important roles in exploring, analyzing and presenting scientific data. In many disciplines, data and model scenarios are becoming multi-faceted: data are often spatio-temporal and multi-variate; they stem from different data sources (multi-modal data), from multiple simulation runs (multi-run/ensemble data), or from multi-physics simulations of interacting phenomena (multi-model data resulting from coupled simulation models). Also, data can be of different dimensionality or structured on various types of grids that need to be related or fused in the visualization. This heterogeneity of data characteristics presents new opportunities as well as technical challenges for visualization research. Visualization and interaction techniques are thus often combined with computational analysis. In this survey, we study existing methods for visualization and interactive visual analysis of multi-faceted scientific data. Based on a thorough literature review, a categorization of approaches is proposed. We cover a wide range of fields and discuss to which degree the different challenges are matched with existing solutions for visualization and visual analysis. This leads to conclusions with respect to promising research directions, for instance, to pursue new solutions for multi-run and multi-model data as well as techniques that support a multitude of facets."
+  }
+},{
+  name: "Set Visualization",
+  description: "A variety of data analysis problems can be modelled by defining multiple sets over a collection of elements and analyzing the relations between these sets. Despite their simple concept, visualizing sets is a non-trivial problem due to the large number of possible relations between them...",
+  demo: "setvis",
+  type: "Survey",
+  itemCount: 47,
+  source:{
+    URL: "http://www.cvast.tuwien.ac.at/SetViz",
+    Author: "B. Alsallakh, L. Micallef, W. Aigner, H. Hauser, S. Miksch, P. Rodgers",
+    Info: "A variety of data analysis problems can be modelled by defining multiple sets over a collection of elements and analyzing the relations between these sets. Despite their simple concept, visualizing sets is a non-trivial problem due to the large number of possible relations between them. We provide a systematic overview of state-of-the-art techniques for visualizing different kinds of set relations. We classify these techniques into 7 main categories according to the visual representations they use and the tasks they support. We compare the categories to provide guidance for choosing an appropriate technique for a given problem. Finally, we identify challenges in this area that need further research and propose possible directions to address these challenges."
+  }
+},{
+  name: "Text Visualization",
+  description: "Text visualization has become a growing and increasingly important subfield of information visualization...",
+  demo: "textvis",
+  type: "Survey",
+  itemCount: 100,
+  source:{
+    URL: "http://textvis.lnu.se/",
+    Author: "ISOVIS Group",
+    Info: "Text visualization has become a growing and increasingly important subfield of information visualization. Thus, it is getting harder for researchers to look for related work with specific tasks or visual metaphors in mind. In this poster, we present an interactive visual survey of text visualization techniques that can be used for the purposes of search for related work, introduction to the subfield and gaining insight into research trends"
+  }
+},{
+  name: "Tree Visualization",
+  description: "The plethora of tree visualization techniques poses challenges to researchers and developers. Researchers, especially those new to the fi eld, have no way of knowing every tree visualization that has been published, even over just the last two decades...",
+  demo: "treevis",
+  type: "survey",
+  itemCount: 277,
+  source:{
+    URL: "http://vcg.informatik.uni-rostock.de/~hs162/treeposter/poster.html",
+    Paper: "http://vcg.informatik.uni-rostock.de/~hs162/pdf/treevisnet.pdf",
+    Author: "Hans-Jörg Schulz",
+    Info: ""
+  }
+},{
+  name: "Dynamic Graph Visualization",
+  description: "Dynamic graph visualization focuses on the challenge of representing the evolution of relationships between entities in readable, scalable, and effective diagrams.",
+  demo: "dyngraphvis",
+  itemCount: 148,
+  type: "Survey",
+  source:{
+    URL: "http://dynamicgraphs.fbeck.com/",
+    Author: "F. Beck, M. Burch, S. Diehl, D. Weiskop",
+    Paper: "http://www.visus.uni-stuttgart.de/uploads/tx_vispublications/eurovis14-star.pdf",
+    Info: "Dynamic graph visualization focuses on the challenge of representing the evolution of relationships between entities in readable, scalable, and effective diagrams. This work surveys the growing number of approaches in this discipline. We derive a hierarchical taxonomy of techniques by systematically categorizing and tagging publications. While static graph visualizations are often divided into node-link and matrix representations, we identify the representation of time as the major distinguishing feature for dynamic graph visualizations: either graphs are represented as animated diagrams or as static charts based on a timeline. Evaluations of animated approaches focus on dynamic stability for preserving the viewer’s mental map or, in general, compare animated diagrams to timeline-based ones. Finally, we identify and discuss challenges for future research."
+  }
+},{
+  name: "Visualization Tasks",
+  description: "The considerable previous work characterizing visualization usage has focused on low-level tasks or interactions and high-level tasks, leaving a gap between them that is not addressed. This gap leads to a lack of distinction between the ends and means of a task, limiting the potential for rigorous analysis. We contribute a multi-level typology of visualization tasks to address this gap, distinguishing why and how a visualization task is performed, as well as what the task inputs and outputs are.",
+  demo: "vis_tasks",
+  type: "Survey",
+  itemCount: 85,
+  source:{
+    URL: "http://ieeexplore.ieee.org/xpl/login.jsp?tp=&arnumber=6634168&url=http%3A%2F%2Fieeexplore.ieee.org%2Fiel7%2F2945%2F6634084%2F06634168.pdf%3Farnumber%3D6634168",
+    Author: "M. Brehmer, T. Munzner",
+    Paper: "http://www.cs.ubc.ca/labs/imager/tr/2013/MultiLevelTaskTypology/brehmer_infovis13.pdf",
+    Info: "The considerable previous work characterizing visualization usage has focused on low-level tasks or interactions and high-level tasks, leaving a gap between them that is not addressed. This gap leads to a lack of distinction between the ends and means of a task, limiting the potential for rigorous analysis. We contribute a multi-level typology of visualization tasks to address this gap, distinguishing why and how a visualization task is performed, as well as what the task inputs and outputs are. Our typology allows complex tasks to be expressed as sequences of interdependent simpler tasks, resulting in concise and flexible descriptions for tasks of varying complexity and scope. It provides abstract rather than domain-specific descriptions of tasks, so that useful comparisons can be made between visualization systems targeted at different application domains. This descriptive power supports a level of analysis required for the generation of new designs, by guiding the translation of domain-specific problems into abstract tasks, and for the qualitative evaluation of visualization usage. We demonstrate the benefits of our approach in a detailed case study, comparing task descriptions from our typology to those derived from related work. We also discuss the similarities and differences between our typology and over two dozen extant classification systems and theoretical frameworks from the literatures of visualization, human-computer interaction, information retrieval, communications, and cartography."
+  }
+},{
+  name: "Visual Comparison",
+  description: "Data analysis often involves the comparison of complex objects. With the ever increasing amounts and complexity of data, the demand for systems to help with these comparisons is also growing. Increasingly, information visualization tools support such comparisons explicitly, beyond simply allowing a viewer to examine each object individually...",
+  demo: "visual_comparison_survey",
+  type: "Survey",
+  itemCount: 171,
+  source:{
+    URL: "http://graphics.cs.wisc.edu/Papers/2011/GAWJHR11/",
+    Author: "M. Gleicher, D. Albers, R. Walker, I. Jusufi, C. D. Hansen, J. C. Roberts",
+    Info: "Data analysis often involves the comparison of complex objects. With the ever increasing amounts and complexity of data, the demand for systems to help with these comparisons is also growing. Increasingly, information visualization tools support such comparisons explicitly, beyond simply allowing a viewer to examine each object individually. In this paper, we argue that the design of information visualizations of complex objects can, and should, be studied in general, that is independently of what those objects are. As a first step in developing this general understanding of comparison, we propose a general taxonomy of visual designs for comparison that groups designs into three basic categories, which can be combined. To clarify the taxonomy and validate its completeness, we provide a survey of work in information visualization related to comparison. Although we find a great diversity of systems and approaches, we find that all designs are assembled from the building blocks of juxtaposition, superposition, and explicit encodings. This initial exploration shows the power of our model, and suggests future challenges in developing a general understanding of comparative visualization and facilitating the development of more comparative visualization tools.",
+  }
+},{
+  name: "Software Performance Visualization",
+  description: "Performance visualization comprises techniques that aid developers and analysts in improving the time and energy efficiency of their software...",
+  demo: "perfvis",
+  type: "Survey",
+  itemCount: 128,
+  source:{
+    URL: "http://idav.ucdavis.edu/~ki/STAR/",
+    Author: "K. E. Isaacs, A. Giménez1, I. Jusufi1, T. Gamblin, A. Bhatele, M. Schulz, B. Hamann, P-T Bremer",
+    Info: "Performance visualization comprises techniques that aid developers and analysts in improving the time and energy efficiency of their software. In this work, we discuss performance as it relates to visualization and survey existing approaches in performance visualization. We present an overview of what types of performance data can be collected and a categorization of the types of goals that performance visualization techniques can address. We develop a taxonomy for the contexts in which different performance visualizations reside and describe the state of the art research pertaining to each. Finally, we discuss unaddressed and future challenges in performancevisualization"
+  }
+},{
+  name: "Kantar Information Is Beautiful Awards - Showcases",
+  description: "The Kantar Information is Beautiful Awards celebrate excellence and beauty in data visualizations, infographics and information art. This visualization highlights the categories and winners, 2012 to 2014.",
+  demo: "infobeautyawards",
+  type: "Blog",
+  itemCount: 582,
+  source:{
+    URL: "http://www.informationisbeautifulawards.com/",
+    Info: "Kantar Information Is Beautiful Awards"
+  }
+},{
+  name: "Infosthetics - Posts in 2005-2010",
+  description: "---",
+  demo: "infosthetics",
+  type: "Blog",
+  itemCount: 1923,
+  source:{
+    URL: "http://infosthetics.com/",
+    URL2: "http://moritz.stefaner.eu/projects/5yrs-infosthetics/",
+    Author: "Andrew Vande Moere",
+    Info: "Inspired by Lev Manovich's definition of 'information aesthetics', this weblog explores the symbiotic relationship between creative design and the field of information visualization. More specifically, it collects projects that represent data or information in original or intriguing ways."
+  }
+},{
+  name: "Visualising Data - Resources",
+  description: "",
+  demo: "vis_resources",
+  type: "Blog",
+  itemCount: 273,
+  source:{
+    URL: "http://www.visualisingdata.com/index.php/resources/",
+    Author: "Andy Kirk"
+  }
+}
+];
+
+//]]>
+</script>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-50259943-1', 'odtudc.org');
+  ga('send', 'pageview');
+
+</script>
+
+</head>
+<body>
+<!--  <div id="background_0" class="background_img" hey="true"></div> -->
+
+  <div id="fb-root"></div>
+  <script>(function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "//connect.facebook.net/en_US/all.js#xfbml=1";
+    fjs.parentNode.insertBefore(js, fjs);
+  }(document, 'script', 'facebook-jssdk'));</script>
+
+  <div class="box">
+    <div class="blabla">
+      <span class="main_title" style="padding-left: 20px;">Visualization Resources</span>
+    </div>
+
+    <div class="sound_source" style="margin-top:5px;">
+      <div class="content">
+        Explore various techniques that convert data into visual forms to enable data-driven insights.
+      </div>
+    </div>
+
+    <div class="sound_source" style="margin-top:15px;">
+      <div class="title"><span class="titleText">Datasets</span>
+        <span class="type_info" style="color: green">Blogs</span>
+        <span class="type_info" style="color: red">Surveys</span>
+        </div>
+      <div class="content">
+        <div id="resource_list"></div>
+        </div>
+      </div>
+
+      <div class="sound_source" style="margin-top:15px;">
+        <div class="title"><span class="titleText">Note</span></div>
+        <div class="content">
+          The datasets are compiled by various authors, and are re-visualized using keshif.<br>
+          All rights for the datasets and images belong to their respective owners where applicable.
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+  <div id="background_credit">Background:<br>
+    <span style="font-weight:500">Blooming Business</span><br>
+     from <a href="https://treemapart.files.wordpress.com/2014/10/treemapart-project-booklet-20140915-mk.pdf" target="_blank">Treemap Art Project</a>, by <a href="https://www.cs.umd.edu/users/ben/" target="_blank">Ben Shneiderman</a></div>
+  <!-- AddThis Smart Layers BEGIN -->
+  <!-- Go to http://www.addthis.com/get/smart-layers to customize -->
+  <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-534742f736ae906e"></script>
+  <script type="text/javascript">
+    addthis.layers({
+      'theme' : 'transparent',
+      'share' : {
+        'position' : 'left',
+        'numPreferredServices' : 5
+      }, 
+      'follow' : {
+        'services' : [
+          {'service': 'facebook', 'id': 'odtumddc'}
+        ]
+      }   
+    });
+  </script>
+  <!-- AddThis Smart Layers END --></body>
+</html>
