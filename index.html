@@ -15,7 +15,7 @@
 
     <script type="text/javascript" src="https://www.google.com/jsapi"></script>
     <script type="text/javascript" src="./js/jquery-1.11.1.min.js" charset="utf-8"></script>
-    <script type="text/javascript" src="./js/d3.v3.min.js" charset="utf-8"></script>
+    <script type="text/javascript" src="./js/d3.3.5.5.min.js" charset="utf-8"></script>
     <script type="text/javascript" src="./js/keshif.js" charset="utf-8"></script>
     <script type="text/javascript" src="./js/lightbox.min.js" charset="utf-8"></script>
 
@@ -49,93 +49,90 @@ $(document).ready( function(){
           ]
     },
     loadedCb: function(browser){
-      var cols = kshf.dt_ColNames.Publications;
       var d3pubDom = d3.select("#publicationList").selectAll("div.pubItem").data(kshf.dt.Publications).enter()
         .append("div").attr("class","pubItem").append("div").attr("class","pubItem-in");
 
       var pubRightGroup = d3pubDom.append("span").attr("class","pub-rightGroup");
       pubRightGroup.append("a").attr("target","_blank").attr("class",function(d){
-        if(d.data[cols.pdf]) return "pub-pdfLink fa fa-file-pdf-o no-print";
-      }).attr("href",function(d){ return d.data[cols.pdf]; });
+        if(d.data.pdf) return "pub-pdfLink fa fa-file-pdf-o no-print";
+      }).attr("href",function(d){ return d.data.pdf; });
       pubRightGroup.append("a").attr("target","_blank").attr("class","pub-doi no-print").html("doi").attr("href",function(d){
-        return "http://dx.doi.org/"+d.data[cols.doi];
+        return "http://dx.doi.org/"+d.data.doi;
       });
 
       pubRightGroup.append("a").attr("target","_blank").attr("class",function(d){
-        if(d.data[cols.Video]) return "pub-videolink fa fa-youtube-play no-print";
-      }).attr("href",function(d){return d.data[cols.Video];});
+        if(d.data.Video) return "pub-videolink fa fa-youtube-play no-print";
+      }).attr("href",function(d){return d.data.Video;});
 
       d3pubDom.append("div").attr("class","pub-title").html(function(d){ 
-        return d.data[cols.Title];
+        return d.data.Title;
       });
       d3pubDom.append("div").attr("class","pub-authors").html(function(d){ 
-        return d.data[cols.Authors].replace(/\+/g," & ");
+        return d.data.Authors.replace(/\+/g," & ");
       });
       d3pubDom.append("div").attr("class","pub-venue").html(function(d){
         var str="";
-        if(d.data[cols.URL]) str+=" <a href='"+d.data[cols.URL]+"' class='fa fa-external-link no-print' target='_blank'></a>"
-        return d.data[cols.Venue]+" "+d.data[cols.Venue_more]+str;
+        if(d.data.URL) str+=" <a href='"+d.data.URL+"' class='fa fa-external-link no-print' target='_blank'></a>"
+        return d.data.Venue+" "+d.data.Venue_more+str;
       });
-      d3pubDom.append("img").attr("class","pub-image no-print").attr("src",function(d){return d.data[cols.image];});
+      d3pubDom.append("img").attr("class","pub-image no-print").attr("src",function(d){return d.data.image;});
 
       d3pubDom.append("div").attr("class","pub-abstract no-print").html(function(d){
-        if(d.data[cols.Abstract]===undefined || d.data[cols.Abstract]===null) return;
-        return "<span style='font-weight:600'>Abstract:</span> "+d.data[cols.Abstract];
+        if(d.data.Abstract===undefined || d.data.Abstract===null) return;
+        return "<span style='font-weight:600'>Abstract:</span> "+d.data.Abstract;
       });
 
       // Work experience
-      cols = kshf.dt_ColNames.WorkExperience;
       var d3workDom = d3.select("#workList ul").selectAll("li.workItem").data(kshf.dt.WorkExperience).enter()
         .append("li").attr("class",function(d,i){
           return "workItem "+(i>3?"lesser":"");
         });
         d3workDom.append("span").attr("class","work-time").html(function(d){
-          return d.data[cols.Time];
+          return d.data.Time;
         });
         d3workDom.append("span").attr("class","work-company").html(function(d){
-          return "<span class='work-company-title'>"+d.data[cols.Company]+"</span> "
-            + " <a target='_blank' href='"+d.data[cols.URL]+"' class='fa fa-external-link no-print'></a> "
-            + " - <span class='work-company-location'>"+d.data[cols.Location]+"</span>"
+          return "<span class='work-company-title'>"+d.data.Company+"</span> "
+            + " <a target='_blank' href='"+d.data.URL+"' class='fa fa-external-link no-print'></a> "
+            + " - <span class='work-company-location'>"+d.data.Location+"</span>"
             ;
         });
         d3workDom.append("div").attr("class","").html(function(d){
-          return "<span class='work-company-position'>"+d.data[cols.Position]
+          return "<span class='work-company-position'>"+d.data.Position
             +"</span> <i class='fa fa-magic' style='font-size: 0.7em'></i> "
-            + "<span class='work-company-project'>"+d.data[cols.Project]+"</span>";
+            + "<span class='work-company-project'>"+d.data.Project+"</span>";
         });
 
       // SOCIAL LINKS
       var d3SocialDom = d3.select("#social_buttons").selectAll("a.social_button").data(kshf.dt.Social).enter()
         .append("a")
-          .attr("class",function(d){return "social_button fa fa-"+d.data[0]+"-square";})
+          .attr("class",function(d){return "social_button fa fa-"+d.data.network+"-square";})
           .attr("target","_blank")
-          .attr("href",function(d){return d.data[1];})
+          .attr("href",function(d){return d.data.link;})
           .on("mouseover",function(d){
-            d3.select("#social_buttons .social-link").html(d.data[0]+ 
-              ": <a class='llll' href='"+d.data[1]+"' target='_blank'>" +d.data[2])+"</a>";
+            d3.select("#social_buttons .social-link").html(d.data.network+ 
+              ": <a class='llll' href='"+d.data.link+"' target='_blank'>" +d.data.handle)+"</a>";
           })
           ;
       d3.select("#social_buttons").append("span").attr("class","social-link").text("");
 
       // Projects!
-      cols = kshf.dt_ColNames.Projects;
       var d3projectDom = d3.select("#projectList").selectAll("div.pubItem").data(kshf.dt.Projects).enter()
         .append("div").attr("class","pubItem").append("div").attr("class","pubItem-in");
 
       var pubRightGroup = d3projectDom.append("span").attr("class","pub-rightGroup");
       pubRightGroup.append("a").attr("target","_blank").attr("class",function(d){
-        if(d.data[cols.URL]) return "pub-videolink fa fa-external-link no-print";
-      }).attr("href",function(d){ return d.data[cols.URL]; });
+        if(d.data.URL) return "pub-videolink fa fa-external-link no-print";
+      }).attr("href",function(d){ return d.data.URL; });
       pubRightGroup.append("a").attr("target","_blank").attr("class",function(d){
-        if(d.data[cols.Video]) return "pub-videolink fa fa-youtube-play no-print";
-      }).attr("href",function(d){return d.data[cols.Video];});
+        if(d.data.Video) return "pub-videolink fa fa-youtube-play no-print";
+      }).attr("href",function(d){return d.data.Video;});
 
       d3projectDom.append("div").attr("class","pub-title").html(function(d){ 
-        return d.data[cols.Title];
+        return d.data.Title;
       });
       d3projectDom.append("div").attr("class","pub-abstract").html(function(d){
         return "<span class='fa fa-info'></span> "
-          +d.data[cols.Info].replace("\n","<br>");
+          +d.data.Info.replace("\n","<br>");
       });
 
 
@@ -143,46 +140,39 @@ $(document).ready( function(){
 
       d3ImageGroup.selectAll("a.projectImage").data(function(d){
         var r=new Array();
-        for(var i=0; i<d.data[cols.ImgCount]; i++){
+        for(var i=0; i<d.data.ImgCount; i++){
           r.push(d);
         }        
         return r;
       }).enter()
         .append("a").attr("class","projectImage").attr("rel","lightbox[base]")
           .attr("href",function(d,i){ 
-            return "images/"+d.data[0]+"/"+(i+1)+".png";
+            return "images/"+d.data.id+"/"+(i+1)+".png";
           }).append("img").attr("class","projectImg").attr("src",function(d,i){
-            return "images/"+d.data[0]+"/"+(i+1)+"sm.png";
+            return "images/"+d.data.id+"/"+(i+1)+"sm.png";
           });
     },
-    readyCb: function(browser){
-      browser.updateLayout();
-    },
-    facets: [
+    readyCb: function(browser){ browser.updateLayout(); },
+    summaries: [
       {
-        facetTitle: "Track",
-        sortingOpts : [{ func: function(a,b){
+        title: "Track",
+        catSortBy: [{ func: function(a,b){
           a= a.data[1];
           b= b.data[1];
           if(b==="Ph.D.") return -1;
           if(a==="B.Sc.") return 1;
           return 1;
         }}]
-      },{
-        facetTitle: "Year"
-      }
+      },
+      "Year"
     ],
     itemDisplay: {
       sortColWidth: 35,
-      sortingOpts : [{
-          name:'Year'
-      }],
-      autoExpandMore: true,
-      displayType: 'list',
-      contentFunc : function(d){
+      sortingOpts: 'Year',
+      recordView: function(d){
         return ""+
-          "<span class='course-code'>"+d.data[0]+"</span> " + d.data[1] + 
-          " <a class='fa fa-external-link' href='"+d.data[4]+"' target='_blank'></i>";
+          "<span class='course-code'>"+d.data.Code+"</span> " + d.data["Course Name"] + 
+          " <a class='fa fa-external-link' href='"+d.data.Web+"' target='_blank'></i>";
       }
     }
   });
@@ -305,11 +295,11 @@ $(document).ready( function(){
   <i class='fa fa-smile-o'></i> Hi<span style='font-style:italic'>!</span></h3>-->
 
 <p>
-<span class='myQuestion'>How can we make rich visual analysis of structured data easy for a wide audience?</span><br>
+<span class='myQuestion'>How can we make rich visual analysis of structured data easier for a wider audience?</span><br>
 This question, and the many design, engineering and compuational challenges around it, are the driving force of my work. 
-My solutions become part of <a href="http://www.keshif.me" target="_blank">Keshif</a>,
-a visual exploratory data analysis tool, publicly available and built for the modern web.
-I am happy to call Human Computer Interaction Lab (<a href="http://www.cs.umd.edu/hcil" target='_blank'>HCIL</a>) my research home.
+My solutions commonly become part of <a href="http://www.keshif.me" target="_blank">Keshif</a>,
+a visual exploratory data analysis tool, built for the modern web.
+Human Computer Interaction Lab (<a href="http://www.cs.umd.edu/hcil" target='_blank'>HCIL</a>) is my home for research.
 </p>
 
 <p>
@@ -317,7 +307,7 @@ I am happy to call Human Computer Interaction Lab (<a href="http://www.cs.umd.ed
   <img src="./images/hcil.png" alt="" class="sidebar_img" style="float:right; margin-left: 5px;"></a>
 <!--<a href="http://www.tltc.umd.edu" target="_blank" class='affil_image'>
   <img src="./images/tltc_logo.jpg" alt="" class="sidebar_img" style="float:right;"></a>-->
-<p>Previously, I worked on high performance visual computing using GPUs, multi-resolution terrain rendering, physical deformation simulation, and developed <a href="http://sourceforge.net/projects/openreng/" target='_blank'>OpenREng</a> (OpenRenderingEngine).</p>
+<p>Previously, I worked on high performance visual computing using GPUs, 3D terrain rendering, physical deformation simulation, and developed <a href="http://sourceforge.net/projects/openreng/" target='_blank'>OpenREng</a> (OpenRenderingEngine).</p>
 
 </span>
 
@@ -374,7 +364,7 @@ I am happy to call Human Computer Interaction Lab (<a href="http://www.cs.umd.ed
     </span>
   <span class='skill-item'>
     <span class="skill-feel fa fa-book"></span>
-    <span class="skill-area">Data processing / Back End</span>
+    <span class="skill-area">Data Processing / Back End</span>
     <span class="skill-list">Java, Python, SQL, Matlab, Node.js, ...</span>
   </span>
   <span class='skill-item'>
@@ -429,13 +419,13 @@ Former:
 <span class="no-print"><a name="section_publications" class="anchor" href="#section_courses"></a>
   <h3 class="myHeader">
     <i class='fa fa-university'></i> Courses Taken</h3>  
-    <div id="coursesKeshif" style="width: 100%; height: 200px"></div>
+    <div id="coursesKeshif" style="width: 100%; height: 220px; font-size: 16px;"></div>
   </span>
 
 <span class="no-print"><a name="section_music" class="anchor" href="#section_music"></a>
   <h3 class="myHeader">
     <i class='fa fa-music'></i> Music</h3>
-    <!--<iframe width="100%" height="60" src="http://www.mixcloud.com/widget/iframe/?feed=http%3A%2F%2Fwww.mixcloud.com%2Fbreaknchill%2F&amp;mini=1&amp;embed_uuid=cb088297-15c1-4db8-8cc8-8cbb7b5a32e7&amp;replace=0&amp;hide_cover=1&amp;embed_type=widget_standard&amp;hide_tracklist=1" frameborder="0"></iframe>-->
+    <iframe width="100%" height="60" src="http://www.mixcloud.com/widget/iframe/?feed=http%3A%2F%2Fwww.mixcloud.com%2Fbreaknchill%2F&amp;mini=1&amp;embed_uuid=cb088297-15c1-4db8-8cc8-8cbb7b5a32e7&amp;replace=0&amp;hide_cover=1&amp;embed_type=widget_standard&amp;hide_tracklist=1" frameborder="0"></iframe>
   </span>
 
 
