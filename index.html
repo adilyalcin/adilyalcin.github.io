@@ -73,9 +73,15 @@ $(document).ready( function(){
       d3pubDom.append("div").attr("class","pub-venue").html(function(d){
         var str="";
         if(d.data.URL) str+=" <a href='"+d.data.URL+"' class='fa fa-external-link no-print' target='_blank'></a>"
-        return d.data.Venue+" "+d.data.Venue_more+str;
+        return "<b style='font-weight: 700;'>"+d.data.Venue+"</b> - "+d.data.Venue_more+str;
       });
       d3pubDom.append("img").attr("class","pub-image no-print").attr("src",function(d){return d.data.image;});
+
+      d3pubDom.append("div").attr("class","pub-webpage no-print").html(function(d){
+      	if(d.data.Website===undefined || d.data.Website===null) return;
+      	return "<span style='font-weight:700; font-style: italic;'>Website:</span> <a href='"+d.data.Website+
+      		"' target='_blank'>"+d.data.Website+"</a>";
+      });
 
       d3pubDom.append("div").attr("class","pub-abstract no-print").html(function(d){
         if(d.data.Abstract===undefined || d.data.Abstract===null) return;
