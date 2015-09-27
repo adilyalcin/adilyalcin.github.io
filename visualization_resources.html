@@ -3,7 +3,7 @@
 <head>
   <script type="text/javascript">var switchTo5x=true;</script>
   <meta charset="utf-8">
-  <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
   <script type="text/javascript" src="./js/d3.3.5.5.min.js"></script>
   <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
   <title>Visualization Resources</title>
@@ -113,6 +113,10 @@ p {font-size:115%;}
   letter-spacing: 0.2em;
   color: white;
   text-shadow: 0 0 10px rgba(0,0,0,1);
+}
+
+.resource{
+  margin-bottom: 10px;
 }
 
 .resource_name{
@@ -233,14 +237,22 @@ $(document).ready(function(){
   
   ss.append("span").attr("class","resource_descr").text(function(d){ return d.description;});
 
-  ss.append("span").attr("class","resource_author").text(function(d){ return d.source.Author;})
+  var sss=ss.filter(function(d){ return d.source;});
+
+  sss.append("span").attr("class","resource_author").text(function(d){ return d.source.Author;})
     .append("a").attr("target","_blank").attr("href",function(d){return d.source.URL}).attr("class","fa fa-external-link");
 
   setTimeout(changeBgImage,5000);
 });
 
 var resources = [
-/*{
+{
+  name: "http://keshif.me/demo/VisTools",
+  description: "The index of Data-Visualization Tools & Books, in one place.",
+  demo: "VisTools",
+  type: "Blog",
+  itemCount: 332
+},/*{
   name: "Input Devices - The Buxton Collection",
   description: "Over the past 30 years, designer, writer, and researcher Bill Buxton has been collecting input and interactive devices whose design struck him as interesting, useful, or important. In the process, he has assembled a good collection of the history of pen computing, pointing devices, touch technologies, as well as an illustration of the nature of how new technologies emerge.",
   demo: "buxton_collection",
@@ -262,17 +274,6 @@ var resources = [
     Author: "Michael Friendly and Daniel J. Denis",
     Info: ""
   }
-/*},{
-  name: "",
-  description: "",
-  demo: "",
-  type: "",
-  itemCount: ,
-  source:{
-    URL: "",
-    Author: "",
-    Info: ""
-  }*/
 },{
   name: "Multi-faceted Scientific Data Visualization",
   description: "Data and model scenarios are becoming multi-faceted: data are often spatio-temporal and multi-variate; they stem from different data sources, from multiple simulation runs, or from multi-physics simulations of interacting phenomena. Also, data can be of different dimensionality or structured on various types of grids that need to be related or fused in the visualization...",
@@ -386,16 +387,6 @@ var resources = [
     Author: "Andrew Vande Moere",
     Info: "Inspired by Lev Manovich's definition of 'information aesthetics', this weblog explores the symbiotic relationship between creative design and the field of information visualization. More specifically, it collects projects that represent data or information in original or intriguing ways."
   }
-},{
-  name: "Visualising Data - Resources",
-  description: "",
-  demo: "vis_resources",
-  type: "Blog",
-  itemCount: 273,
-  source:{
-    URL: "http://www.visualisingdata.com/index.php/resources/",
-    Author: "Andy Kirk"
-  }
 }
 ];
 
@@ -439,7 +430,7 @@ var resources = [
 
     <div class="sound_source" style="margin-top:15px;">
       <div class="title"><span class="titleText">Datasets</span>
-        <span class="type_info" style="color: green">Blogs</span>
+        <span class="type_info" style="color: green">Lists</span>
         <span class="type_info" style="color: red">Surveys</span>
         </div>
       <div class="content">
@@ -450,7 +441,7 @@ var resources = [
       <div class="sound_source" style="margin-top:15px;">
         <div class="title"><span class="titleText">Note</span></div>
         <div class="content">
-          The datasets are compiled by various authors, and are re-visualized using keshif.<br>
+          The datasets are compiled by various authors, and amade explorable by keshif.<br>
           All rights for the datasets and images belong to their respective owners where applicable.
         </div>
 
@@ -464,7 +455,7 @@ var resources = [
      from <a href="https://treemapart.files.wordpress.com/2014/10/treemapart-project-booklet-20140915-mk.pdf" target="_blank">Treemap Art Project</a>, by <a href="https://www.cs.umd.edu/users/ben/" target="_blank">Ben Shneiderman</a></div>
   <!-- AddThis Smart Layers BEGIN -->
   <!-- Go to http://www.addthis.com/get/smart-layers to customize -->
-  <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-534742f736ae906e"></script>
+  <script type="text/javascript" src="http://s7.addthis.com/js/300/addthis_widget.js#pubid=ra-534742f736ae906e"></script>
   <script type="text/javascript">
     addthis.layers({
       'theme' : 'transparent',
