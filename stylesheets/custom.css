@@ -389,6 +389,9 @@ img.projectImg {
   font-size: 0.8em;
   color: gray;
 }
+.only-print {
+  display: none;
+}
 @media print {
   #social_buttons {
     display: none;
@@ -398,6 +401,9 @@ img.projectImg {
   }
   .no-print {
     display: none !important;
+  }
+  .only-print {
+    display: inline;
   }
   section {
     font-size: 0.8em;
