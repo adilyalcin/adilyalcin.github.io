@@ -43,10 +43,11 @@ $(document).ready( function(){
         sheets : [
           {name: "Courses",id:"Code"},
           {name: "Publications"},
-          {name:"WorkExperience"},
-          {name:"Projects", id:"id"},
-          {name:"Social"}
-          ]
+          {name: "WorkExperience"},
+          {name: "Projects", id:"id"},
+          {name: "Social" },
+          {name: "Talks" }
+        ]
     },
     loadedCb: function(browser){
       var d3pubDom = d3.select("#publicationList").selectAll("div.pubItem").data(kshf.dt.Publications).enter()
@@ -117,8 +118,7 @@ $(document).ready( function(){
           .on("mouseover",function(d){
             d3.select("#social_buttons .social-link").html(d.data.network+ 
               ": <a class='llll' href='"+d.data.link+"' target='_blank'>" +d.data.handle)+"</a>";
-          })
-          ;
+          });
       d3.select("#social_buttons").append("span").attr("class","social-link").text("");
 
       // Projects!
@@ -141,6 +141,22 @@ $(document).ready( function(){
           +d.data.Info.replace("\n","<br>");
       });
 
+      // Talks
+      var d3talksDom = d3.select("#talkList").selectAll("div.talkItem").data(kshf.dt.Talks).enter()
+        .append("div").attr("class","talkItem").append("div").attr("class","talkItem-in");
+      d3talksDom.append("span").attr("class","talkType").html(function(d){
+        if(d.data.Type==="Talk") return "<i class='fa fa-comment'></i> Talk";
+        if(d.data.Type==="Poster") return "<i class='fa fa-desktop'></i> Poster";
+      });
+      d3talksDom.append("span").attr("class","talkDate").html(function(d){ 
+        return d3.time.format("%d %B, %Y")(d.data.Date)+" "+"<i class='fa fa-calendar'></i>";
+      });
+      d3talksDom.append("span").html(function(d){ 
+        return '<a target="_blank" href="'+d.data.Link+'">'+d.data.What+'</d>';
+      });
+      d3talksDom.append("span").html(function(d){ 
+        if(d.data.File) return '<a target="_blank" href="'+d.data.File+'"><i class="fa fa-file"></i></d>';
+      });
 
       var d3ImageGroup = d3projectDom.append("div").attr("class","imageGroup no-print").attr("align","center");
 
@@ -304,7 +320,10 @@ a visual data exploration tool for the web.
 Human Computer Interaction Lab (<a href="http://www.cs.umd.edu/hcil" target='_blank'>HCIL</a>) is my home for research.
 </p>
 
-<p>Previously, I worked on high performance visual computing using GPUs, 3D terrain rendering, animation of physical deformation, and developed <a href="http://sourceforge.net/projects/openreng/" target='_blank'>OpenREng</a> (OpenRenderingEngine).</p>
+<p>Previously, I worked on high performance visual computing using GPUs, 3D rendering, animation of physical deformations, and developed <a href="http://sourceforge.net/projects/openreng/" target='_blank'>OpenREng</a> (OpenRenderingEngine).</p>
+
+<div style='border: solid 1px #C30000; text-align: center; padding: 5px; margin: 10px;'>
+To work with me to build next-gen data products with human-centered design and research,<br> or for consulting opportunities, contact me at <my-email data-user="yalcin" data-domain="umd.edu" style='color: #C30000;'></my-email>.</div>
 
 </span>
 
@@ -389,29 +408,15 @@ Human Computer Interaction Lab (<a href="http://www.cs.umd.edu/hcil" target='_bl
     <span class='lesserControl no-print' onClick="lesserControlMe('workList')"></span>
   </div>
 
-<!-- LAST FM ALBUM QUILT
-<div align="center">
-            <style type="text/css">table.lfmWidgetquilt_506c735520510a3e32d36b7271edfee2 td {margin:0 !important;padding:0 !important;border:0 !important;}table.lfmWidgetquilt_506c735520510a3e32d36b7271edfee2 tr.lfmHead a:hover {background:url(http://cdn.last.fm/widgets/images/en/header/quilt/album_horizontal_black.png) no-repeat 0 0 !important;}table.lfmWidgetquilt_506c735520510a3e32d36b7271edfee2 tr.lfmEmbed object {float:left;}table.lfmWidgetquilt_506c735520510a3e32d36b7271edfee2 tr.lfmFoot td.lfmConfig a:hover {background:url(http://cdn.last.fm/widgets/images/en/footer/black.png) no-repeat 0px 0 !important;;}table.lfmWidgetquilt_506c735520510a3e32d36b7271edfee2 tr.lfmFoot td.lfmView a:hover {background:url(http://cdn.last.fm/widgets/images/en/footer/black.png) no-repeat -85px 0 !important;}table.lfmWidgetquilt_506c735520510a3e32d36b7271edfee2 tr.lfmFoot td.lfmPopup a:hover {background:url(http://cdn.last.fm/widgets/images/en/footer/black.png) no-repeat -159px 0 !important;}</style>
-<table class="lfmWidgetquilt_506c735520510a3e32d36b7271edfee2" cellpadding="0" cellspacing="0" border="0" style="width:460px;"><tbody><tr class="lfmHead"><td><a title="Top albums" href="http://www.last.fm/user/ters_yon/charts" target="_blank" style="display:block;overflow:hidden;height:20px;width:460px;background:url(http://cdn.last.fm/widgets/images/en/header/quilt/album_horizontal_black.png) no-repeat 0 -20px;text-decoration:none;border:0;"></a></td></tr><tr class="lfmEmbed"><td><object type="application/x-shockwave-flash" data="http://cdn.last.fm/widgets/quilt/13.swf" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=7,0,0,0" id="lfmEmbed_1518206629" width="460" height="225"> <param name="movie" value="http://cdn.last.fm/widgets/quilt/13.swf"> <param name="flashvars" value="type=user&amp;variable=ters_yon&amp;file=topalbums&amp;bgColor=black&amp;theme=black&amp;lang=en&amp;widget_id=quilt_506c735520510a3e32d36b7271edfee2"> <param name="allowScriptAccess" value="always"> <param name="allowNetworking" value="all"> <param name="allowFullScreen" value="true"> <param name="quality" value="high"> <param name="bgcolor" value="000000"> <param name="wmode" value="transparent"> <param name="menu" value="true"> </object></td></tr><tr class="lfmFoot"><td style="background:url(http://cdn.last.fm/widgets/images/footer_bg/black.png) repeat-x 0 0;text-align:right;"><table cellspacing="0" cellpadding="0" border="0" style="width:460px;"><tbody><tr><td class="lfmConfig"><a href="http://www.last.fm/widgets/?url=user%2Fters_yon%2Fpersonal&amp;colour=black&amp;quiltType=album&amp;orient=horizontal&amp;height=large&amp;from=code&amp;widget=quilt" title="Get your own widget" target="_blank" style="display:block;overflow:hidden;width:85px;height:20px;float:right;background:url(http://cdn.last.fm/widgets/images/en/footer/black.png) no-repeat 0px -20px;text-decoration:none;border:0;"></a></td><td class="lfmView" style="width:74px;"><a href="http://www.last.fm/user/ters_yon" title="View ters_yon's profile" target="_blank" style="display:block;overflow:hidden;width:74px;height:20px;background:url(http://cdn.last.fm/widgets/images/en/footer/black.png) no-repeat -85px -20px;text-decoration:none;border:0;"></a></td><td class="lfmPopup" style="width:25px;"><a href="http://www.last.fm/widgets/popup/?url=user%2Fters_yon%2Fpersonal&amp;colour=black&amp;quiltType=album&amp;orient=horizontal&amp;height=large&amp;from=code&amp;widget=quilt&amp;resize=1" title="Load this quilt in a pop up" target="_blank" style="display:block;overflow:hidden;width:25px;height:20px;background:url(http://cdn.last.fm/widgets/images/en/footer/black.png) no-repeat -159px -20px;text-decoration:none;border:0;" onclick="window.open(this.href + '&amp;resize=0','lfm_popup','height=325,width=510,resizable=yes,scrollbars=yes'); return false;"></a></td></tr></tbody></table></td></tr></tbody></table>
-</div>
-
-<h3 class="myHeader"><a name="designer-templates" class="anchor" href="#designer-templates"></a>Research Interests</h3>
-
-Former:
-<ul>
-  <li>Visual computing and general purpose programming on graphics hardware</li>
-  <li>Real-time advanced rendering techniques / Graphics Engines (see <a href="http://sourceforge.net/apps/mediawiki/openreng/index.php">OpenREng</a> for details)</li>
-  <li>Physically-Based Simulation<br></li>
-  <li>Collision Detection</li>
-  <li>Terrain modelling and LoD structures</li>
-  <li>Interaction Techniques</li>
-  <li>Computer Animation</li>
-  </ul>
--->
-
 <h3 class="myHeader"><a name="section_projects" class="anchor" href="#section_projects"></a>
-  <i class='fa fa-pencil'></i> Other Projects</h3>
+  <i class='fa fa-pencil'></i> Projects and Tools</h3>
   <div id="projectList"></div>
+
+<span class="no-print"><a name="section_talks" class="anchor" href="#section_courses"></a>
+  <h3 class="myHeader">
+    <i class='fa fa-comment'></i> Talks &amp; Posters</h3>  
+    <div id="talkList"></div>
+  </span>
 
 <span class="no-print"><a name="section_publications" class="anchor" href="#section_courses"></a>
   <h3 class="myHeader">

@@ -370,6 +370,25 @@ img.projectImg {
   font-style: italic;
   margin-bottom: 3px;
 }
+.talkDate {
+  display: inline-block;
+  width: 130px;
+  text-align: right;
+  padding-right: 5px;
+}
+.talkItem {
+  padding-bottom: 5px;
+}
+.talkItem .fa-file {
+  font-size: 0.8em;
+  margin: 3px;
+}
+.talkType {
+  display: inline-block;
+  width: 60px;
+  font-size: 0.8em;
+  color: gray;
+}
 @media print {
   #social_buttons {
     display: none;
