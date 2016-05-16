@@ -137,21 +137,29 @@ img.sidebar_img {
   border-bottom: solid 1px lightgray;
   margin-bottom: 2px;
   padding-bottom: 2px;
-  min-height: 51px;
+  min-height: 65px;
+  -webkit-transition: background-color 300ms ease-in-out;
+  -moz-transition: background-color 300ms ease-in-out;
+  -o-transition: background-color 300ms ease-in-out;
+  transition: background-color 300ms ease-in-out;
 }
 .edu-group > .edu-item .edu-img {
   float: left;
   width: 60px;
   border-width: 0px;
-  margin: 0px 5px 0px 0px;
+  margin: 5px;
   padding: 0px;
 }
 .edu-group > .edu-item .edu-time {
   float: right;
+  margin-right: 5px;
   font-weight: 700;
 }
+.edu-group > .edu-item:hover {
+  background-color: #ECEBE7;
+}
 h3.myHeader {
-  margin: 15px 0px 5px 0px;
+  margin: 15px 0px 0px 0px;
   font-size: 1.7em;
   text-align: center;
   border-bottom: 2px solid #686868;
@@ -329,6 +337,9 @@ img.projectImg {
 .section_welcome p {
   margin-bottom: 5px;
 }
+.skill-group {
+  margin-top: 5px;
+}
 .skill-group > .skill-item {
   display: block;
   margin-bottom: 3px;
@@ -366,9 +377,9 @@ img.projectImg {
   margin-bottom: 10px;
 }
 .myQuestion {
+  display: block;
   font-size: 1.2em;
-  font-style: italic;
-  margin-bottom: 3px;
+  border-bottom: solid 1px lightgray;
 }
 .talkDate {
   display: inline-block;
@@ -388,6 +399,20 @@ img.projectImg {
   width: 60px;
   font-size: 0.8em;
   color: gray;
+}
+.talkItem-in {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+}
+.talkItem-in > .talkTitle {
+  -webkit-box-flex: 1;
+  -moz-box-flex: 1;
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
 }
 .only-print {
   display: none;

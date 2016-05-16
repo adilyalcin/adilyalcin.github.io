@@ -151,7 +151,7 @@ $(document).ready( function(){
       d3talksDom.append("span").attr("class","talkDate").html(function(d){ 
         return d3.time.format("%d %B, %Y")(d.data.Date)+" "+"<i class='fa fa-calendar'></i>";
       });
-      d3talksDom.append("span").html(function(d){ 
+      d3talksDom.append("span").attr("class","talkTitle").html(function(d){ 
         return '<a target="_blank" href="'+d.data.Link+'">'+d.data.What+'</d>';
       });
       d3talksDom.append("span").html(function(d){ 
@@ -318,8 +318,8 @@ $(document).ready( function(){
   <i class='fa fa-smile-o'></i> Hi<span style='font-style:italic'>!</span></h3>-->
 
 <p>
-<span class='myQuestion'>Lowering the barriers in rich visual &amp; interactive data analysis for a broad audience</span><br>
-... is the driving motivation of my work. I target challenges in design, development, engineering, and computation.
+<span class='myQuestion'>Lowering the barriers in rich visual &amp; interactive data analysis for a broad audience</span>
+is the driving motivation of my work. I target challenges in design, development, engineering, and computation.
 Most of my solutions become part of <a href="http://www.keshif.me" target="_blank" style='font-weight: 900'>Keshif</a><span class='only-print'> (www.keshif.me)</span>,
 a visual data exploration tool for the web.
 Human Computer Interaction Lab (<a href="http://www.cs.umd.edu/hcil" target='_blank'>HCIL</a>) is my home for research.
@@ -327,8 +327,8 @@ Human Computer Interaction Lab (<a href="http://www.cs.umd.edu/hcil" target='_bl
 
 <p>Previously, I worked on high performance visual computing using GPUs, 3D rendering, animation of physical deformations, and developed <a href="http://sourceforge.net/projects/openreng/" target='_blank'>OpenREng</a> (OpenRenderingEngine).</p>
 
-<div class='no-print' style='border: solid 1px #C30000; text-align: center; padding: 5px; margin: 10px;'>
-To work with me to build next-gen data products with human-centered design and research,<br> or for consulting opportunities, contact me at <my-email data-user="yalcin" data-domain="umd.edu" style='color: #C30000;'></my-email>.</div>
+<div class='no-print' style='border: solid 1px #C30000; text-align: center; padding: 5px; margin: 10px; font-weight: 600;'>
+To work with me to build next-gen data products based on<br> human-centered design and research or for consulting, contact me at <i class='fa fa-envelope'></i> <my-email data-user="yalcin" data-domain="umd.edu" style='color: #C30000;'></my-email>.</div>
 
 </span>
 
@@ -344,7 +344,7 @@ To work with me to build next-gen data products with human-centered design and r
       <img src="./images/umd.gif" alt="" class="edu-img" style="border-radius:70px;"></a>
     <span style="font-weight:700;">Ph.D. Candidate</span><span class='edu-time'>Sep. 2010 - Current</span><br>
   Computer Science, University of Maryland, College Park, USA<br>
-  Thesis on Rapid Exploratory Data Analytics<br>
+  Thesis on Rapid Exploratory Visual Data Analytics (Keshif)<br>
   Advisors: <a href="https://sites.umiacs.umd.edu/elm/" target='_blank'>Niklas Elmqvist</a>, <a href="http://www.cs.umd.edu/~bederson/" target="_blank">Ben Bederson</a></span>
 
   <span class='edu-item'>
@@ -372,7 +372,7 @@ To work with me to build next-gen data products with human-centered design and r
 <h3 class="myHeader"><a name="section_education" class="anchor" href="#section_education"></a>
   <i class='fa fa-paint-brush'></i> Skills</h3>
 
-<span class='skill-group'>
+<div class='skill-group'>
   <span class='skill-item'>
     <span class="skill-feel fa fa-heart"></span>
     <span class="skill-area">User Interfaces / Visualization / Front End / Design</span>
@@ -397,7 +397,7 @@ To work with me to build next-gen data products with human-centered design and r
     <span class="skill-feel fa fa-magic"></span>
     <span class="skill-area">Goal</span>
     <span class="skill-list">Effective, simple solutions to complex challenges</span>
-</span>
+</div>
 
 <span>
   <h3 class="myHeader"><a name="section_publications" class="anchor" href="#section_publications"></a>
