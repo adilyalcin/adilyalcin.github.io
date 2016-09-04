@@ -196,11 +196,13 @@ h3.myHeader {
 }
 .pubItem .pub-image {
   -lh-property: 0;
-width:-webkit-calc(100% - 10px);
-width:-moz-calc(100% - 10px);
-width:calc(100% - 10px);
+max-width:-webkit-calc(100% - 10px);
+max-width:-moz-calc(100% - 10px);
+max-width:calc(100% - 10px);
 ;
-  margin: 10px 0px 0px 0px;
+  margin: 0 auto;
+  max-height: 200px;
+  display: block;
 }
 .pubItem .fieldName {
   font-weight: 200;

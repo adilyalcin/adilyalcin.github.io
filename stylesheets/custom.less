@@ -203,8 +203,10 @@ h3.myHeader{
     margin-bottom: 5px;
   }
   .pub-image{
-    .calc(width, ~'100% - 10px');
-    margin: 10px 0px 0px 0px;
+    .calc(max-width, ~'100% - 10px');
+    margin: 0 auto;
+    max-height: 200px;
+    display: block;
   }
   .fieldName{
     font-weight: 200;
