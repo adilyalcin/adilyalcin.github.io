@@ -1,459 +1,638 @@
-<!doctype html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-    <title>M. Adil Yalçın</title>
+<!DOCTYPE html>
+<html lang="en">
+<head>
 
-    <link rel="stylesheet" href="./stylesheets/styles.css">
-    <link rel="stylesheet" href="./stylesheets/custom.css">
-    <link rel="stylesheet" href="./stylesheets/pygment_trac.css">
-    <link rel="stylesheet" href="./stylesheets/keshif.css">
-    <link rel="stylesheet" href="./stylesheets/lightbox.css">
-    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
+  <!-- Basic Page Needs
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta charset="utf-8">
+  <title>M. Adil Yalçın - Visual Data Analysis and Exploration Consulting and Development, Keshif, LLC</title>
+  <meta name="description" content="">
+  <meta name="author" content="M. Adil Yalçın">
 
-    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
-    <script type="text/javascript" src="./js/jquery-1.11.1.min.js" charset="utf-8"></script>
-    <script type="text/javascript" src="./js/d3.3.5.5.min.js" charset="utf-8"></script>
-    <script type="text/javascript" src="./js/keshif.js" charset="utf-8"></script>
-    <script type="text/javascript" src="./js/lightbox.min.js" charset="utf-8"></script>
+  <!-- Mobile Specific Metas
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <script type="text/javascript" src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
-    
-    <script src="js/scale.fix.js"></script>
+  <!-- FONT
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link href="https://fonts.googleapis.com/css?family=Raleway:400,300,500,600,700" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Bitter:400,700&amp;subset=latin-ext" rel="stylesheet">
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" crossorigin="anonymous">
 
-<script type="text/javascript">
 
-var lesserControlMe = function(domID){
-  if($("#"+domID).attr("showLesser")===undefined){
-    $("#"+domID).attr("showLesser",true);
-  } else{
-    $("#"+domID).attr("showLesser",null);
-  }
-};
+  <!-- CSS
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link rel="stylesheet" href="css/normalize.css">
+  <link rel="stylesheet" href="css/skeleton_edit.css">
 
-$(document).ready( function(){
-  browser = new kshf.Browser({
-    domID : "#coursesKeshif",
-    categoryTextWidth: 110,
-    itemName: "Courses",
-    source: {
-        gdocId : '14sWz_REIk9CDud9yhbMiAb3Anz_8e5SgO_97CqYOxCc',
-        sheets : [
-          {name: "Courses",id:"Code"},
-          {name: "Publications"},
-          {name: "WorkExperience"},
-          {name: "Projects", id:"id"},
-          {name: "Social" },
-          {name: "Talks" }
-        ]
-    },
-    loadedCb: function(browser){
-      var d3pubDom = d3.select("#publicationList").selectAll("div.pubItem").data(kshf.dt.Publications).enter()
-        .append("div").attr("class","pubItem").append("div").attr("class","pubItem-in");
+  <!-- Favicon
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link rel="icon" type="image/png" href="images/favicon.png">
 
-      var pubRightGroup = d3pubDom.append("span").attr("class","pub-rightGroup");
-      pubRightGroup
-        .filter(function(d){ return d.data.pdf; })
-        .append("a").attr("target","_blank").attr("class",function(d){
-          return "pub-pdfLink fa fa-file-pdf-o no-print";
-        }).attr("href",function(d){ return d.data.pdf; });
-      pubRightGroup
-        .filter(function(d){ return d.data.doi; })
-        .append("a").attr("target","_blank").attr("class","pub-doi no-print").html("doi").attr("href",function(d){
-          return "http://dx.doi.org/"+d.data.doi;
-        });
-      pubRightGroup
-        .filter(function(d){ return d.data.Video; })
-        .append("a").attr("target","_blank").attr("class","pub-videolink fa fa-youtube-play no-print")
-          .attr("href",function(d){ return d.data.Video; });
+<style>
+.contact-line{
+  margin: 10px;
+  font-size: 1.4em;
+}
+h4, h3, h2{
+  font-family: 'Bitter';
+  letter-spacing: 0.05em;
+  font-weight: lighter;
+  margin-top: 2rem;
+}
+.service-icons{
+  display: block;
+  font-size: 2.5em;
+}
+.services > .column{ text-align: center; margin-top: 1em; }
+.domains > .column{ text-align: center; margin-top: 1em; }
 
-      d3pubDom.append("div").attr("class","pub-title"  ).html(function(d){ return d.data.Title; });
-      d3pubDom.append("div").attr("class","pub-authors").html(function(d){ return d.data.Authors.replace(/\+/g," & "); });
-      d3pubDom.append("div").attr("class","pub-venue"  ).html(function(d){
-        var str="";
-        if(d.data.URL) str+=" <a href='"+d.data.URL+"' class='fa fa-external-link no-print' target='_blank'></a>"
-        return "<b style='font-weight: 700;'>"+d.data.Venue+"</b> - "+d.data.Venue_more+str;
-      });
-      d3pubDom.append("img").attr("class","pub-image no-print").attr("src",function(d){return d.data.image;});
+.SectionAnchor{
+  position: relative;
+  top: -50px;
+  display: block;
+  height: 0px;
+}
 
-      d3pubDom.append("div").attr("class","pub-webpage no-print").html(function(d){
-      	if(d.data.Website===undefined || d.data.Website===null) return;
-      	return "<span style='font-weight:700; font-style: italic;'>Website:</span> <a href='"+d.data.Website+
-      		"' target='_blank'>"+d.data.Website+"</a>";
-      });
+.fixedHeader{
+  position: fixed;
+  top: 0px;
+  width: 100%;
+  height: 30px;
+  padding: 10px;
+  /* background-color: rgba(209, 212, 216, 0.6); */
+  background-color: rgb(152, 160, 171);
 
-      d3pubDom.append("div").attr("class","pub-abstract no-print").html(function(d){
-        if(d.data.Abstract===undefined || d.data.Abstract===null) return;
-        return "<span style='font-weight:600'>Abstract:</span> "+d.data.Abstract;
-      });
+  /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#d2d2dc+0,d2d2dc+100&1+0,0.63+100 */
+/*  background: -moz-linear-gradient(top, rgba(222,224,226,1) 70%, rgba(222,224,226,0.63) 100%); /* FF3.6-15 */
+  /*background: -webkit-linear-gradient(top, rgba(222,224,226,1) 70%,rgba(222,224,226,0.63) 100%); /* Chrome10-25,Safari5.1-6 */
+  /*background: linear-gradient(to bottom, rgba(222,224,226,1) 70%,rgba(222,224,226,0.63) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  /* filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#d2d2dc', endColorstr='#a1d2d2dc',GradientType=0 ); /* IE6-9 */
 
-      // Work experience
-      var d3workDom = d3.select("#workList ul").selectAll("li.workItem").data(kshf.dt.WorkExperience).enter()
-        .append("li").attr("class",function(d,i){
-          return "workItem "+(i>3?"lesser":"");
-        });
-        d3workDom.append("span").attr("class","work-time").html(function(d){
-          return d.data.Time;
-        });
-        d3workDom.append("span").attr("class","work-company").html(function(d){
-          return "<span class='work-company-title'>"+d.data.Company+"</span> "
-            + " <a target='_blank' href='"+d.data.URL+"' class='fa fa-external-link no-print'></a> "
-            + " - <span class='work-company-location'>"+d.data.Location+"</span>"
-            ;
-        });
-        d3workDom.append("div").attr("class","").html(function(d){
-          return "<span class='work-company-position'>"+d.data.Position
-            +"</span> <i class='fa fa-magic' style='font-size: 0.7em'></i> "
-            + "<span class='work-company-project'>"+d.data.Project+"</span>";
-        });
+  box-shadow: 0px 0px 20px gray;
+  z-index: 100;
+}
+.fixedHeader .row{  }
+a.sectionLink {
+  color: white;
+  font-family: 'Bitter';
+  padding: 0px 10px;
+  text-decoration: none;
+  font-size: 1.1em;
+  text-shadow: 0px 0px 3px black;
+  font-weight: 300;
+}
+a.sectionLink:hover {
+  color: orangered;
+}
 
-      // SOCIAL LINKS
-      var d3SocialDom = d3.select("#social_buttons").selectAll("a.social_button").data(kshf.dt.Social).enter()
-        .append("a")
-          .attr("class",function(d){return "social_button fa fa-"+d.data.network+"-square";})
-          .attr("target","_blank")
-          .attr("href",function(d){return d.data.link;})
-          .on("mouseover",function(d){
-            d3.select("#social_buttons .social-link").html(d.data.network+ 
-              ": <a class='llll' href='"+d.data.link+"' target='_blank'>" +d.data.handle)+"</a>";
-          });
-      d3.select("#social_buttons").append("span").attr("class","social-link").text("");
+.pubItem {
+    padding: 0px;
+    margin: 15px 5px 5px 5px;
+    background: #98a0ab;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    border-bottom-left-radius: 20px;
+    box-shadow: 0 0 0 1px #98a0ab, 2px 2px 3px 0px rgba(10, 10, 0, 0.5);
+    cursor: default;
+    page-break-inside: avoid;
+}
+.pubItem .pubItem-in {
+    background-color: white;
+    border-radius: 20px;
+    padding: 10px;
+}
+.pubItem .pub-rightGroup {
+    float: right;
+    text-align: right;
+    font-size: 0.7em;
+}
+.pubItem .pub-rightGroup > a{
+  text-decoration: none;
+}
+.pubItem .pub-rightGroup .pub-pdfLink {
+    font-size: 2em;
+}
+.pubItem .pub-rightGroup .pub-doi {
+    display: block;
+    clear: all;
+}
+.pubItem .pub-rightGroup .pub-videolink {
+    display: block;
+    font-size: 1.5em;
+}
+.pubItem .pub-title {
+    font-size: 1.3em;
+    font-weight: 700;
+}
+.pubItem .pub-authors {
+    font-size: 1.1em;
+    font-weight: 400;
+    margin-bottom: 5px;
+}
+.pubItem .pub-image {
+    -lh-property: 0;
+    max-width: -webkit-calc(100% - 10px);
+    max-width: -moz-calc(100% - 10px);
+    max-width: calc(100% - 10px);
+    margin: 0 auto;
+    max-height: 150px;
+    display: block;
+}
+.pubItem .pub-abstract {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    quotes: "\201C" "\201D" "\2018" "\2019";
+    margin: 0px;
+    font-weight: 300;
+    text-align: justify;
+    height: 1.2em;
+    font-size: 1em;
+}
+.pubItem .pub-abstract:hover{
+  overflow: visible;
+  white-space: normal;
+  height: auto;
+}
+.topSection{
+  background-image: url(./images/background.png);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  margin-top: 70px;
+  margin-bottom: 20px;
+}
 
-      // Projects!
-      var d3projectDom = d3.select("#projectList").selectAll("div.pubItem").data(kshf.dt.Projects).enter()
-        .append("div").attr("class","pubItem").append("div").attr("class","pubItem-in");
+.sectionWBack{
+  background-color: #edeef1;
+  box-shadow: 0px 0px 20px #c5c5c5, 0px 0px 5px #c5c5c5 inset;
+  padding: 10px;
+}
 
-      var pubRightGroup = d3projectDom.append("span").attr("class","pub-rightGroup");
-      pubRightGroup.append("a").attr("target","_blank").attr("class",function(d){
-        if(d.data.URL) return "pub-videolink fa fa-external-link no-print";
-      }).attr("href",function(d){ return d.data.URL; });
-      pubRightGroup.append("a").attr("target","_blank").attr("class",function(d){
-        if(d.data.Video) return "pub-videolink fa fa-youtube-play no-print";
-      }).attr("href",function(d){return d.data.Video;});
+h3, h4{
+  border-bottom: solid 1px lightgray;
+}
 
-      d3projectDom.append("div").attr("class","pub-title").html(function(d){ 
-        return d.data.Title;
-      });
-      d3projectDom.append("div").attr("class","pub-abstract").html(function(d){
-        return "<span class='fa fa-info'></span> "
-          +d.data.Info.replace("\n","<br>");
-      });
+.contactBox{
+  position: relative;
+  height: 500px;
+}
 
-      // Talks
-      var d3talksDom = d3.select("#talkList").selectAll("div.talkItem").data(kshf.dt.Talks).enter()
-        .append("div").attr("class","talkItem").append("div").attr("class","talkItem-in");
-      d3talksDom.append("span").attr("class","talkType").html(function(d){
-        if(d.data.Type==="Talk") return "<i class='fa fa-comment'></i> Talk";
-        if(d.data.Type==="Poster") return "<i class='fa fa-desktop'></i> Poster";
-      });
-      d3talksDom.append("span").attr("class","talkDate").html(function(d){ 
-        return d3.time.format("%d %B, %Y")(d.data.Date)+" "+"<i class='fa fa-calendar'></i>";
-      });
-      d3talksDom.append("span").attr("class","talkTitle").html(function(d){ 
-        return '<a target="_blank" href="'+d.data.Link+'">'+d.data.What+'</d>';
-      });
-      d3talksDom.append("span").html(function(d){ 
-        if(d.data.File) return '<a target="_blank" href="'+d.data.File+'"><i class="fa fa-file"></i></d>';
-      });
+.contactBox:after{
+  content: "";
+  background: url(image.jpg);
+  opacity: 0.5;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  position: absolute;
+  z-index: -1;   
+  background-image: url('http://keshif.me/AggreSet/img/landing.png');
+  background-size: cover;
+  opacity: 0.16;
+}
 
-      var d3ImageGroup = d3projectDom.append("div").attr("class","imageGroup no-print").attr("align","center");
+.clientImg{
+  display: block;
+  height: 100px;
+  margin: 0 auto;
+}
 
-      d3ImageGroup.selectAll("a.projectImage").data(function(d){
-        var r=new Array();
-        for(var i=0; i<d.data.ImgCount; i++){
-          r.push(d);
-        }        
-        return r;
-      }).enter()
-        .append("a").attr("class","projectImage").attr("rel","lightbox[base]")
-          .attr("href",function(d,i){ 
-            return "images/"+d.data.id+"/"+(i+1)+".png";
-          }).append("img").attr("class","projectImg").attr("src",function(d,i){
-            return "images/"+d.data.id+"/"+(i+1)+"sm.png";
-          });
-    },
-    readyCb: function(browser){ browser.updateLayout(); },
-    summaries: [
-      {
-        title: "Track",
-        catSortBy: [{ func: function(a,b){
-          a= a.data[1];
-          b= b.data[1];
-          if(b==="Ph.D.") return -1;
-          if(a==="B.Sc.") return 1;
-          return 1;
-        }}]
-      },
-      "Year"
-    ],
-    itemDisplay: {
-      sortColWidth: 35,
-      sortingOpts: 'Year',
-      recordView: function(d){
-        return ""+
-          "<span class='course-code'>"+d.data.Code+"</span> " + d.data["Course Name"] + 
-          " <a class='fa fa-external-link' href='"+d.data.Web+"' target='_blank'></i>";
-      }
-    }
-  });
+.talkDate{
+  display: inline-block;
+  width: 110px;
+  position: relative;
+}
+.talkDate .fa-calendar{
+  position: absolute;
+  right: 0px;
+  top: 3px;
+}
 
-});
-</script>
-  </head>
 
-  <body>
-    <div class="bigWrapper">
+</style>
 
-<header style="text-align:center">
-  <span class="me_me_me">
-    <div style='margin-bottom: 10px;'>
-    <img src='./img/me.png' 
-      style='width:100px; border-radius: 10px; display:block; margin: 0 auto;'
-      class='no-print'>
+</head>
+<body>
+
+  <div class='fixedHeader'>
+    <div class="container">
+      <div class="row">
+        <span style='font-size: 1.3em'>
+          <a href='#section-Services' class='sectionLink'>M. Adil <b>Yalçın</b> </a></span>
+        <a href='#section-Services' class='sectionLink'>SERVICES</a>
+        <a href='#section-AboutMe'  class='sectionLink'>ABOUT ME</a>
+        <a href='#section-Approach' class='sectionLink'>APPROACH</a>
+        <a href='#section-Domains'  class='sectionLink'>DOMAINS</a>
+        <a href='#section-Clients'  class='sectionLink'>CLIENTS</a>
+        <a href='#section-Contact'  class='sectionLink'>CONTACT</a>
+        <a href='./resume.html'     class='sectionLink' target='_blank'>RESUME</a>
       </div>
-    <h1 class="header">M. Adil Yalçın</h1>
-
-    <span class='tagline' style='font-size: 1.1em;'>
-      <span style='font-size: 1.2em'>Data Interface Designer</span>
-      <!-- Information <i class='fa fa-caret-right'></i> Visualization <i class='fa fa-caret-right'></i> Analytics -->
-      </span>
-    <span class='tagline'>
-      Ph.D. Candidate, Computer Science <span class='no-print'><br></span>
-      University of Maryland, College Park
-      </span>
-
-    <!--<span style="position:absolute; right:0px">
-      <a class="fa fa-file-pdf-o" target="_blank" href="./cv.pdf"> CV</a>
-      </span>-->
-    </p>
-    </span>
-
-  <!-- Affiliations -->
-  <span align="center" class="affil-group">
-
-    <span class="affil_block">
-      <a href="http://www.cs.umd.edu/hcil/" target="_blank" class='affil_image'>
-        <img src="./images/hcil.png" alt="" class="sidebar_img"></a>
-      <a href="http://www.cs.umd.edu/hcil/" target="_blank" class='affil_title'>
-        Human Computer Interaction Lab</a>
-      </span>
-
-    <span class="affil_block">
-      <a href="http://www.cs.umd.edu/" target="_blank" class='affil_title'>
-        Department of Computer Science</a>
-      <a href="http://www.cs.umd.edu/" target="_blank" class='affil_image'>
-        <img src="./images/umd_cs.png" alt="" class="sidebar_img"></a>
-      </a>
-      </span>
-
-    <span class="affil_block">
-      <a href="http://www.umd.edu/" target="_blank" class='affil_image'>
-        <img src="./images/umd.gif" alt="" class="sidebar_img" style="border-radius:70px"></a>
-      <a href="http://www.umd.edu/" target="_blank" class='affil_title'>
-        Uni. of Maryland - College Park</a>
-      </span>
-
-  </span>
-
-  <img class="qr_code" src="images/qr.png">
-
-  <!-- Contact Info -->
-  <span class="contact-group">
-    <span class="contact-header">Contact</span>
-
-    <ul class='fa-ul'>
-      <li class="contact-item">
-        <span class='fa fa-li fa-home contact-icon'></span>
-        www.<a href="http://adilyalcin.me" target='_blank'>adilyalcin.me</a>
-      </li>
-
-      <li class="contact-item">
-        <span class='fa fa-li fa-envelope contact-icon'></span>
-        <my-email data-user="yalcin" data-domain="umd.edu"></my-email>
-        </li>
-
-      <li class="contact-item">
-        <a href="http://maps.google.com/maps?f=q&hl=en&geocode=&q=hornbake+library+college+park,+md&sll=38.987551,-76.941462&sspn=0.011758,0.020943&ie=UTF8&z=16&iwloc=addr&om=1;key=ABQIAAAAQGQWNTUFjpOpKlA-CmWA4xSltKEwBSd7efHWlZKE_5do-tXRRhRX-FCRXKzXKzF04RexKyw8xwiKFA" target="_blank">
-          <span class='fa fa-li fa-map-marker contact-icon'></span>
-          <span>2117 Hornbake Building, University of Maryland, College Park, MD 20742</span></a>
-        </li>
-      </ul>
-
-      <span style="text-align:center; display: block">
-        <span id='social_buttons'>
-<!--          <a class="social_button fa fa-linkedin-square" target="_blank" href="http://www.linkedin.com/in/adilyalcin"> </a>
-          <a class="social_button fa fa-twitter-square" target="_blank" href="http://twitter.com/adilyalcin"> </a>
-          <a class="social_button fa fa-github-square" target="_blank" href="http://github.com/adilyalcin"> </a>
-          <a class="social_button fa fa-facebook-square" target="_blank" href="http://www.facebook.com/m.adil.yalcin"> </a>
-          <a class="social_button fa fa-vimeo-square" target="_blank" href="http://vimeo.com/adil"> </a>
-        <!--  <a class="social_button fa fa-google-plus-square" target="_blank" href="https://plus.google.com/112655632378073880298/"> Google Plus</a>
-          <a class="social_button fa fa-lastfm-square" target="_blank" href="http://www.last.fm/user/ters_yon"> </a>-->
-          
-          </span>
-        </span>
-
-  </span>
-</header>
-
-<span class="rightBlock">
-
-<a class="twitter-timeline" href="https://twitter.com/adilyalcin" data-widget-id="523582564263419904">Tweets by @adilyalcin</a>
-</span>
-
-      <section>
-
-<span class="section_welcome"><a name="section_welcome" class="anchor" href="#section_welcome"></a>
-
-<p>
-<span class='myQuestion'>Lowering the barriers in rich visual &amp; interactive data analysis for a broad audience</span>
-is the driving motivation of my work. I target challenges in design, development, engineering, and computation.
-Human Computer Interaction Lab (<a href="http://www.cs.umd.edu/hcil" target='_blank'>HCIL</a>) is my current home for research.<br>
-Most of my solutions become part of <a href="http://www.keshif.me" target="_blank" style='font-weight: 900'>Keshif</a><span class='only-print'> (www.keshif.me)</span>,
-an out-of-the-box visual data exploration environment for the web.<br>
-</p>
-
-<!-- <p class='no-print'>Previously, I worked on high performance visual computing using GPUs, 3D rendering, animation of physical deformations, and developed <a href="http://sourceforge.net/projects/openreng/" target='_blank'>OpenREng</a> (OpenRenderingEngine).</p> -->
-
-<div style='border: solid 1px #C30000; text-align: center; padding: 5px; margin: 10px; font-weight: 600;'>
-To <u>work with me</u> to build next-gen data analytics solutions based on human-centered design and research, or for consulting, contact me at <i class='fa fa-envelope'></i> <my-email data-user="yalcin" data-domain="umd.edu" style='color: #C30000;'></my-email>
-or <a href='https://www.linkedin.com/in/adilyalcin' target='_blank' class='fa fa-linkedin-square'></a>
-<span class='only-print'> (linkedin.com/in/adilyalcin)</span>
-.<br>
-<span style='font-weight: 300;'>*I am a green card holder and do not need visa sponshorship.</span>
-
-</div>
-
-</span>
-
-<span class="section-Education">
-<h3 class="myHeader"><a name="section_education" class="anchor" href="#section_education"></a>
-  <i class='fa fa-graduation-cap'></i>
-  Education</h3>
-
-<span class="edu-group">
-
-  <span class='edu-item'>
-    <a href="http://www.umd.edu/" target="_blank">
-      <img src="./images/umd.gif" alt="" class="edu-img" style="border-radius:70px;"></a>
-    <span style="font-weight:700;">Ph.D. Candidate</span><span class='edu-time'>Sep. 2010 - Dec. 2016 (Expected)</span><br>
-  Computer Science, University of Maryland, College Park, USA <br>
-  Thesis: <b style='font-weight: 500'>Towards Rapid, Effective and Flexible Visual Data Exploration</b><br>
-  Advisors: <a href="https://sites.umiacs.umd.edu/elm/" target='_blank'>Niklas Elmqvist</a>, <a href="http://www.cs.umd.edu/~bederson/" target="_blank">Ben Bederson</a></span>
-
-  <span class='edu-item'>
-    <a href="http://www.bilkent.edu.tr/" target="_blank">
-      <img src="./images/bilkent.png" alt="" class="edu-img"></a>
-    <span style="font-weight:700">Master of Science</span><span class='edu-time'>June 2010</span><br>
-    Computer Engineering,
-    <a href="http://www.cs.bilkent.edu.tr/" target="_blank">Bilkent University</a>, Ankara, Turkey<br>
-    Thesis: Real-Time Simulation and Visualization of Deformations on Heightfields<br>
-    Advisor: <a href="http://www.art.bilkent.edu.tr/ozguc/" target="_blank">Bülent Özgüç</a>, 
-    Co-Advisor: <a href="http://www.cs.bilkent.edu.tr/~tcapin/" target="_blank">Tolga Çapın</a></span>
-
-  <span class='edu-item'>
-    <a href="http://www.odtu.edu.tr/" target="_blank">
-      <img src="./images/metu.png" alt="" class="edu-img" style="float: left;"></a>
-    <span style="font-weight:700">Bachelor of Science</span><span class='edu-time'>June 2008</span><br>
-    Computer Engineering, 
-    <a href="http://www.ceng.metu.edu.tr">Middle East Technical University</a>, Ankara, Turkey
-<div class="post_date">Senior Project: Operational Simulation System - OPSIMUS</div>
-    </span>
-</span>
-</span>
-
-<span class="section-skills">
-<h3 class="myHeader"><a name="section_education" class="anchor" href="#section_education"></a>
-  <i class='fa fa-paint-brush'></i> Skills</h3>
-
-<div class='skill-group'>
-  
-  <span class='skill-item'>
-    <span class="skill-feel fa fa-magic"></span>
-    <span class="skill-area">Goal</span>
-    <span class="skill-list"><span style='font-weight: 700 !important;'>Effective, simple solutions to complex challenges</span></span>
-    </span>
-  <span class='skill-item'>
-    <span class="skill-feel fa fa-heart"></span>
-    <span class="skill-area">User Interfaces / Visualization / Front End / Design</span>
-    <span class="skill-list">JavaScript, HTML5, CSS3, d3, Photoshop, Tableau</span>
-    </span>
-  <span class='skill-item'>
-    <span class="skill-feel fa fa-wrench"></span>
-    <span class="skill-area">Development</span>
-    <span class="skill-list">SublimeText, less, Version control (git/svn)</span>
-    </span>
-  <span class='skill-item'>
-    <span class="skill-feel fa fa-book"></span>
-    <span class="skill-area">Data Processing / Back End</span>
-    <span class="skill-list">Node.js, SQL, Python, Java, Matlab</span>
-    </span>
-  <span class='skill-item'>
-    <span class="skill-feel fa fa-thumbs-up"></span>
-    <span class="skill-area">Computer Graphics, Simulation</span>
-    <span class="skill-list">C++, C, OpenGL / GLSL, OpenCL / Cuda, Lua</span>
-    </span>
-</div>
-
-<span>
-  <h3 class="myHeader"><a name="section_publications" class="anchor" href="#section_publications"></a>
-    <i class='fa fa-file-text'></i> Publications</h3>
-    <!-- <a href="http://scholar.google.com/citations?user=KSDzKvIAAAAJ" target="_blank">Google Scholar</a>-->
-    <div id="publicationList"></div>
-  </span>
-
-<h3 class="myHeader"><a name="section_workexperience" class="anchor" href="#section_workexperience"></a>
-  <i class='fa fa-briefcase'></i> Work Experience</h3>
-  <div id="workList">
-    <ul></ul>
-    <span class='lesserControl no-print' onClick="lesserControlMe('workList')"></span>
+    </div>
   </div>
 
-<h3 class="myHeader"><a name="section_projects" class="anchor" href="#section_projects"></a>
-  <i class='fa fa-pencil'></i> Projects and Tools</h3>
-  <div id="projectList"></div>
+  <!-- Primary Page Layout
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <div class='topSection'><div class="container" >
 
-<span class="no-print"><a name="section_talks" class="anchor" href="#section_courses"></a>
-  <h3 class="myHeader">
-    <i class='fa fa-comment'></i> Talks &amp; Posters</h3>  
-    <div id="talkList"></div>
-  </span>
+    <div class="row">
+      <div style='height: 5em; width: 100%'></div>
+      <h1 style="font-family: 'Bitter'; background: rgba(255,255,255,0.8);">M. Adil <b>Yalçın</b>, 
+        <span style='font-size: 0.8em;'>Ph.D. </span>
+        <span style='font-size: 0.6em;'>- Founder of Keshif, LLC <img src='images/favicon.png' 
+            style='height: 1.4em; position: relative; top: 10px;'>
 
-<span class="no-print"><a name="section_publications" class="anchor" href="#section_courses"></a>
-  <h3 class="myHeader">
-    <i class='fa fa-university'></i> Courses Taken</h3>  
-    <div id="coursesKeshif" style="width: 100%; height: 220px; font-size: 16px;"></div>
-  </span>
+        </span> </h1>
 
-<span class="no-print"><a name="section_music" class="anchor" href="#section_music"></a>
-  <h3 class="myHeader">
-    <i class='fa fa-music'></i> Music</h3>
-    <iframe width="100%" height="60" src="http://www.mixcloud.com/widget/iframe/?feed=http%3A%2F%2Fwww.mixcloud.com%2Fbreaknchill%2F&amp;mini=1&amp;embed_uuid=cb088297-15c1-4db8-8cc8-8cbb7b5a32e7&amp;replace=0&amp;hide_cover=1&amp;embed_type=widget_standard&amp;hide_tracklist=1" frameborder="0"></iframe>
-  </span>
+      <div style='font-size: 1.45em; letter-spacing: 1px;   background: rgba(255,255,255,0.8);'>
+        I offer consulting and development to help organizations and individuals transform their data to knowledge and action, as quickly and effectively as possible. <a href='#section-Contact'>Contact</a>
+        </div><br>
 
-
-      </section>
-      <footer class="no-print">
-        <a href="javascript:window.print()" style='font-size: 1.6em'><span class='fa fa-print'></span> Print Resume / PDF</a></br>
-
-        <small style='margin-top: 1em; display: block;'>
-          Data: <a target='_blank' href="https://docs.google.com/spreadsheets/d/14sWz_REIk9CDud9yhbMiAb3Anz_8e5SgO_97CqYOxCc"><span class='fa fa-table'></span> spreadsheet</a>
-          | Code: <a href="http://github.com/adilyalcin/adilyalcin.github.io"><span class='fa fa-github'></span></a>       
-        </small>
-      </footer>
+      <div style='font-size: 1.3em;    background: rgba(255,255,255,0.8);'>
+        I am the creator &amp; designer of <a href='http://www.keshif.me' target='_blank' 
+          style='font-weight: 700; font-size: 1.3em'>Keshif</a>, the next-generation web-based rapid data exploration platform.
+        </div>
     </div>
-    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
-		          <script type="text/javascript">
-            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
-            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
-          </script>
-          <script type="text/javascript">
-            try {
-              var pageTracker = _gat._getTracker("UA-54042831-1");
-            pageTracker._trackPageview();
-            } catch(err) {}
-          </script>
 
-  </body>
+    <a name='section-Services' class='SectionAnchor'></a>
+    <div class="row" style='margin-top: 100px;'>
+      <h3>Services</h3>
+    </div>
+    <div class="row services">
+      <div class="one-third column">
+        <i class='fa fa-search service-icons'></i>
+        Identify data sources with impact potential
+      </div>
+      <div class="one-third column">
+        <i class='fa fa-binoculars service-icons'></i>
+        Analyze domain requirements
+
+      </div>
+      <div class="one-third column">
+        <i class='fa fa-line-chart service-icons'></i>
+        <b>Create exploratory, analytical and interactive data visualizations</b>
+      </div>
+    </div>
+    <div class="row services">
+      <div class="one-third column">
+        <i class='fa fa-cloud-upload service-icons'></i>
+        Integrate and deploy solutions
+      </div>
+      <div class="one-third column">
+        <i class='fa fa-book service-icons'></i>
+        Provide training for data visualization and analysis
+      </div>
+      <div class="one-third column">
+        <i class='fa fa-forward service-icons'></i>
+        <b>Inspire advances in strategic organizational data-driven culture</b>
+      </div>
+    </div>
+
+  </div></div>
+
+  <div class='sectionWBack'>
+
+  <div class="container">
+    <a name='section-AboutMe' class='SectionAnchor'></a>
+
+    <div class="row">
+      <h3>About me</h3>
+      <ul>
+        <li><b style='font-size: 1.3em'>Ph.D.</b> (expected, 2016 Dec.), 
+          
+          <a href='http://hcil.umd.edu' target='_blank'>Human-Computer Interaction Lab</a>, 
+          
+          <a href='http://cs.umd.edu' target='_blank'>Computer Science</a>, 
+          
+          <a href='http://umd.edu' target='_blank'>UMD College Park</a>
+          <!--<img style='height: 2em' src='images/hcil.png'>
+          <img style='height: 2em' src='images/umd_cs.png'>
+          <img style='height: 2em' src='images/umd.gif'> -->
+          </li>
+        <li><b>Strong research and development experience
+          on data visualization, design, visual analysis, and cognition</b>. 
+          <a href='#publications'>See publications</a></li>
+        <li>Highly skilled in interface design, modern web development, data design and services.</li>
+        <li>Significant experience in d3.js and various visualization design and analysis tools.</li>
+        <li>M.Sc. in Computer Engineering from 
+          <a href='http://www.cs.bilkent.edu.tr' target='_blank'>Bilkent University</a>. 
+          - 
+          B.Sc. in Computer Engineering from 
+          <a href='https://ceng.metu.edu.tr/' target='_blank'>METU</a>.</li>
+        <li>I also like to <a href='#section-Talks' style='font-weight: bolder;'>give talks</a>, 
+          <a href='http://www.twitter.com/adilyalcin' target='_blank'>tweet</a>, and 
+          <a href='http://www.mixcloud.com/breaknchill' target='_blank'>DJ</a>.
+          </li>
+      </ul>
+    </div>
+  </div></div>
+
+  <div class="container">
+    <a name='section-Approach' class='SectionAnchor'></a>
+
+    <div class="row">
+      <h3>Approach</h3>
+      <ul>
+        <li>I collaborate with domain experts to transfer the best visual analytics approaches, and to advance next-generation standards.</li>
+        <li>I aim to improve speed, accuracy, and depth of data analysis - all together.</li>
+        <li>I apply human-centered design principles, strengthen existing workflows, and bridge the gap from technology to desired outcomes.</li>
+        <li>I produce rapid, high-quality prototypes with iterative refinements to sharpen analysis focus.</li>
+        <li>I create custom visualization and interface design to compliment data exploration process with Keshif.</li>
+        <li style='font-style: italic'>'The best design is invisible; the viewer should not see your design. They should only see your content.' - Edward Tufte </li>
+      </ul>
+    </div>
+
+    <a name='section-Domains' class='SectionAnchor'></a>
+  </div>
+
+  <div class='sectionWBack' style='padding-bottom: 20px'>
+
+  <div class='container'>
+    <div class='row'>
+      <h3>Targeted Domains</h3>
+      I enable high-impact and precise visual data exploration and analysis in the following domains.
+    </div>
+    <div class="row domains">
+      <div class="one-third column">
+        <i class='fa fa-briefcase service-icons'></i>
+        Business intelligence
+      </div>
+      <div class="one-third column">
+        <i class='fa fa-university service-icons'></i>
+        Open data and government
+      </div>
+      <div class="one-third column">
+        <i class='fa fa-newspaper-o service-icons'></i>
+        Journalism and transparency
+      </div>
+    </div>
+    <div class="row domains">
+      <div class="one-third column">
+        <i class='fa fa-globe service-icons'></i>
+        International development
+      </div>
+      <div class="one-third column">
+        <i class='fa fa-table service-icons'></i>
+        Data-driven research methods
+      </div>
+      <div class="one-third column">
+        <i class='fa fa-gavel service-icons'></i>
+        Data-driven policy making
+      </div>
+    </div>
+    <div class="row domains">
+      <div class="one-third column">
+        <i class='fa fa-sitemap service-icons'></i>
+        Non-profit organizations and associations
+      </div>
+      <div class="one-third column">
+        <i class='fa fa-asterisk service-icons'></i>
+        <i> Open to contributing to new domains!</i>
+      </div>
+    </div>
+  </div>
+  </div>
+
+
+  <div class='container'>
+
+    <a name='section-Clients' class='SectionAnchor'></a>
+
+    <div class='row'>
+      <h3>Clients &amp; Collaborators</h3>
+    </div>
+    <div class="row" style='text-align: center'>
+      <div class="three columns">
+        <a href='http://start.umd.edu' target='_blank'>
+          <img src='http://keshif.me/demo/img/index/logo_START.jpg' class='clientImg'>
+          National Consortium for the Study of Terrorism and Responses to Terrorism (START)</a>
+      </div>
+      <div class="three columns">
+        <a href='http://www.undp.org/' target='_blank'>
+        <img src='https://upload.wikimedia.org/wikipedia/commons/thumb/e/e9/Logo_of_the_United_Nations_%28B%26W%29.svg/600px-Logo_of_the_United_Nations_%28B%26W%29.svg.png' class='clientImg'>
+          United Nations Development Program (UNDP)</a>
+      </div>
+      <div class="three columns">
+        <img src='http://keshif.me/demo/img/index/logo_SESYNC.png' class='clientImg'>
+        <a href='http://www.sesync.org/' target='_blank'>
+          National Socio-Environmental Synthesis Center (SESYNC)</a>
+      </div>
+      <div class="three columns">
+        <img src='http://keshif.me/demo/img/index/logo_DataCommunityDC.png' class='clientImg'>
+        <a href='http://www.datacommunitydc.org' target='_blank'>
+          Data Community DC</a>
+      </div>
+    </div>
+
+    <a name='section-Contact' class='SectionAnchor'></a>
+
+    <div class="row">
+      <div class="one-half column">
+        <h3><i class='fa fa-map-marker' style='font-size: 0.7em; '></i> Location</h3>
+        <div style='text-align: center'>
+          <div style='border-radius: 200px; overflow: hidden; height:340px; width: 340px; border: solid 2px lightgray; width: 340px; box-shadow: 3px 3px 20px lightgray; margin: 0 auto; pointer-events: none;'>
+            <iframe src="https://www.google.com/maps/embed?pb=!1m10!1m8!1m3!1d141986.3396572246!2d-77.0626378213983!3d38.90035444374414!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sus!4v1477768160090" width="350" height="350" frameborder="0" style="border:0" allowfullscreen></iframe>
+            </div>
+            <br>
+          <b>Washington, DC area</b><br>
+          Open for remote collaboration
+          </div>
+      </div>
+
+      <div class="one-half column contactBox">
+        
+        <h3></a>Contact</h3>
+        <b style='font-size: 1.3em; margin-left: 10px; display: block;'>
+        Do you have data?<br>
+        Do you need to understand it better?<br>
+        Let's chat!</b>
+
+        <div class='contact-line' style='font-size: 2em;'><i class='fa fa-envelope'></i> 
+          adil <i class='fa fa-at'></i> keshif.me</div><br>
+        <div class='contact-line'><i class='fa fa-twitter'></i>
+          <a href='https://twitter.com/adilyalcin' target='_blank'>@adilyalcin</a> &amp;
+          <a href='https://twitter.com/keshifme' target='_blank'>@keshifme</a>
+          </div>
+        <div class='contact-line'><i class='fa fa-linkedin-square'></i> 
+          <a href='https://www.linkedin.com/in/adilyalcin' target='_blank'>linkedin.com/in/adilyalcin</a>
+          </div>
+        <div class='contact-line'><i class='fa fa-github'></i>
+          <a href='https://github.com/adilyalcin' target='_blank'>github.com/adilyalcin</a>
+          </div>
+      </div>
+    </div>
+
+    <a name='section-Publications' class='SectionAnchor'></a>
+
+    <div class='row' style='margin-top: 50px;'>
+      <h4><i class='fa fa-file-text' style='font-size: 0.7em; '></i> Selected Publications</h4>
+      </div>
+    <div class='row'>
+      <div class="one-half column pubItem">
+        <div class="pubItem-in">
+          <span class="pub-rightGroup">
+            <a target="_blank" class="pub-pdfLink fa fa-file-pdf-o no-print" href="http://www.umiacs.umd.edu/~elm/projects/aggreset/aggreset.pdf"></a>
+            <a target="_blank" class="pub-doi no-print" href="http://dx.doi.org/10.1109/TVCG.2015.2467051">doi</a>
+            <a target="_blank" class="pub-videolink fa fa-youtube-play no-print" href="https://www.youtube.com/watch?v=rcqozpaaGhM"></a>
+            </span>
+          <div class="pub-title">
+            AggreSet: Rich and Scalable Set Exploration using Visualizations of Element Aggregations</div>
+          <img class="pub-image no-print" src="./academic/AggreSet.png">
+          <div class="pub-authors">M. Adil Yalçın &amp; Niklas Elmqvist &amp; Ben Bederson</div>
+          <div class="pub-venue">
+            IEEE Transactions on Visualization and Computer Graphics 
+            <a href="http://ieeevis.org/year/2015/info/vis-welcome/welcome" class="fa fa-external-link no-print" target="_blank"></a>
+            </div>
+          <div class="pub-webpage no-print">
+            <span style="font-weight:700; font-style: italic;">Website:</span>
+            <a href="http://www.keshif.me/AggreSet" target="_blank">http://www.keshif.me/AggreSet</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="one-half column pubItem"><div class="pubItem-in">
+          <span class="pub-rightGroup">
+            <a target="_blank" class="pub-pdfLink fa fa-file-pdf-o no-print" href="./academic/Cognitive Stages in Visual Data Exploration.pdf"></a>
+            <a target="_blank" class="pub-doi no-print" href="http://dx.doi.org/10.1145/2993901.2993902">doi</a>
+            </span>
+          <div class="pub-title">Cognitive Stages in Visual Data Exploration</div>
+          <img class="pub-image no-print" src="./academic/Cognitive Stages in Visual Data Exploration.png">
+          <div class="pub-authors">M. Adil Yalçın &amp; Niklas Elmqvist &amp; Ben Bederson</div>
+          <div class="pub-venue">
+            Beyond Time and Errors: Novel Evaluation Methods for Visualization at IEEE VIS 2016 
+            <a href="http://beliv.cs.univie.ac.at/" class="fa fa-external-link no-print" target="_blank"></a>
+            </div>
+          <div class="pub-webpage no-print"></div>
+          </div>
+        </div>
+      </div>
+      <div class='row'>
+        <div class="one-half column pubItem"><div class="pubItem-in">
+          <span class="pub-rightGroup">
+            <a target="_blank" class="pub-pdfLink fa fa-file-pdf-o no-print" href="./academic/KeshifInPractice.pdf"></a>
+            </span>
+          <div class="pub-title">Keshif: Out-of-the-Box Visual and Interactive Data Exploration Environment</div>
+          <img class="pub-image no-print" src="./academic/KeshifInPractice.png">
+          <div class="pub-authors">M. Adil Yalçın &amp; Niklas Elmqvist &amp; Ben Bederson</div>
+          <div class="pub-venue">
+            Visualization In Practice Workshop at IEEEVIS 
+            <a href="http://visinpractice.org/#" class="fa fa-external-link no-print" target="_blank"></a>
+            </div>
+          <div class="pub-webpage no-print"></div>
+          </div>
+        </div>
+
+        <div class="one-half column pubItem"><div class="pubItem-in">
+          <span class="pub-rightGroup"></span>
+          <div class="pub-title">Information Visualization (Chapter)</div>
+          <div class="pub-authors">M. Adil Yalçın &amp; Catherine Plaisant</div>
+          <div class="pub-venue">
+            In <b style="font-weight: 700;">Big Data and Social Sciences</b> - CRC Publishing 
+            <a href="http://www.bigdatasocialscience.com/" class="fa fa-external-link no-print" target="_blank"></a>
+            </div>
+          <img class="pub-image no-print">
+          <div class="pub-webpage no-print"></div>
+          </div>
+        </div>
+<!--
+        <div class="pubItem"><div class="pubItem-in">
+          <span class="pub-rightGroup">
+            <a target="_blank" class="pub-pdfLink fa fa-file-pdf-o no-print" href="./academic/PixelPie.pdf"></a>
+            <a target="_blank" class="pub-doi no-print" href="http://dx.doi.org/10.1145/2492045.2492047">doi</a>
+            <a target="_blank" class="pub-videolink fa fa-youtube-play no-print" href="http://youtu.be/G94y3YRqSHk"></a>
+            </span>
+          <div class="pub-title">PixelPie: Maximal Poisson-disk Sampling with Rasterization</div>
+          <div class="pub-authors">Cheuk Yiu Ip &amp; M. Adil Yalçın &amp; David Luebke &amp; Amitabh Varshney</div>
+          <div class="pub-venue">
+            <b style="font-weight: 700;">HPG '13</b> 
+            - Proceedings of the 5th High-Performance Graphics Conference 
+            <a href="http://highperformancegraphics.org/" class="fa fa-external-link no-print" target="_blank"></a>
+            </div>
+          <img class="pub-image no-print" src="./academic/Pixelpie.png">
+          <div class="pub-webpage no-print">
+            <span style="font-weight:700; font-style: italic;">Website:</span>
+            <a href="http://www.cs.umd.edu/gvil/projects/pixelpie.shtml" target="_blank">http://www.cs.umd.edu/gvil/projects/pixelpie.shtml</a>
+            </div>
+          <div class="pub-abstract no-print">
+            <span style="font-weight:600">Abstract:</span>
+            We present PixelPie, a highly parallel geometric formulation of the Poisson-disk sampling problem on the graphics pipeline. Traditionally, generating a distribution by throwing darts and removing conflicts has been viewed as an inherently sequential process. In this paper, we present an efficient Poisson-disk sampling algorithm that uses rasterization in a highly parallel manner. Our technique is an iterative two step process. The first step of each iteration involves rasterization of random darts at varying depths. The second step involves culling conflicted darts. Successive iterations identify and fill in the empty regions to obtain maximal distributions. Our approach maps well to the parallel and optimized graphics functions on the GPU and can be easily extended to perform importance sampling. Our implementation can generate Poisson-disk samples at the rate of nearly 7 million samples per second on a GeForce GTX 580 and is significantly faster than the state-of-the-art maximal Poisson-disk sampling techniques.
+            </div>
+          </div>
+        </div>
+        -->
+    </div>
+
+    <a name='section-Talks' class='SectionAnchor'></a>
+
+    <div class='row'>
+      <h4><i class='fa fa-comment' style='font-size: 0.7em; '></i> Talks</h4>
+      <div class="talkItem">
+        <span class="talkDate">06 Oct., 2016 <i class="fa fa-calendar"></i></span>
+        <span class="talkTitle"><a target="_blank" href="http://www.start.umd.edu/publication/start-annual-meeting-2016-quick-fire-presentation-unconventional-weapons-and-technology">Revealing Trends and Outliers in Global Terrorism and Radicalization through Rapid Visual Data Exploration with Keshif</a></span>
+        <span><a target="_blank" href="https://www.start.umd.edu/pubs/START_AnnualMeeting2016_QuickFire3.pdf"><i class="fa fa-file"></i></a></span>
+        </div>
+     
+      <div class="talkItem">
+        <span class="talkDate">26 Jul., 2016 <i class="fa fa-calendar"></i></span>
+        <span class="talkTitle"><a target="_blank" href="http://www.meetup.com/data-visualization-dc/">DataVisualization DC Meetup Invited Talk</a></span><span></span>
+        </div>
+
+      <div class="talkItem">
+        <span class="talkDate">07 Jul., 2016 <i class="fa fa-calendar"></i></span>
+        <span class="talkTitle"><a target="_blank" href="https://www.invincea.com">Invincea Invited Talk</a></span><span></span>
+        </div>
+
+      <div class="talkItem">
+        <span class="talkDate">26 May, 2016 <i class="fa fa-calendar"></i></span>
+        <span class="talkTitle"><a target="_blank" href="http://hcil.umd.edu/soh">HCIL Annual Symposium 2016</a></span><span></span>
+        </div>
+
+      <div class="talkItem">
+        <span class="talkDate">22 Apr., 2016 <i class="fa fa-calendar"></i></span>
+        <span class="talkTitle"><a target="_blank" href="https://www.techchange.org/online-courses/technology-for-data-visualization-and-analysis/">TechChange - Technology for Data Visualization Guest Lecture</a></span><span></span>
+        </div>
+
+      <div class="talkItem">
+        <span class="talkDate">09 Mar, 2016 <i class="fa fa-calendar"></i></span>
+        <span class="talkTitle"><a target="_blank" href="null">MedStar Tableau User Lab</a></span><span></span>
+        </div>
+
+      <div class="talkItem">
+        <span class="talkDate">20 Feb., 2016 <i class="fa fa-calendar"></i></span>
+        <span class="talkTitle"><a target="_blank" href="http://www.verigazeteciligi.com/izmirde-acik-veri-ve-veri-gazeteciligi-atolyesi-cevrim-ici-ders-bolumu-12-19-subat/">İzmir Yerel Medya ve Sivil Toplum İçin Veri Gazeteciliği Atölyesi (Data Journalism Workshop)</a></span>
+        <span><a target="_blank" href="http://adilyalcin.me/Sunum-KeshifVeriGazeteciligi"><i class="fa fa-file"></i></a></span>
+        </div>
+
+      <div class="talkItem">
+        <span class="talkDate">15 Jan., 2016 <i class="fa fa-calendar"></i></span>
+        <span class="talkTitle"><a target="_blank" href="https://www.eventbrite.com/e/baltimore-tableau-users-group-tug-january-meeting-tickets-19083317717">Baltimore Tableau User Group </a></span><span></span>
+        </div>
+
+      <div class="talkItem">
+        <span class="talkDate">14 Jan., 2016 <i class="fa fa-calendar"></i></span>
+        <span class="talkTitle"><a target="_blank" href="http://www.meetup.com/Washington-Viz-ards/events/226949060/">Washington DC Viz-Ards Meetup</a></span><span></span>
+        </div>
+
+      <div class="talkItem">
+        <span class="talkDate">18 Jun., 2015 <i class="fa fa-calendar"></i></span>
+        <span class="talkTitle"><a target="_blank" href="http://www.meetup.com/Transportation-Techies/events/222624278/">Metro Hack Night III</a></span><span></span>
+        </div>
+
+      <div class="talkItem">
+        <span class="talkDate">29 May, 2014 <i class="fa fa-calendar"></i></span>
+        <span class="talkTitle"><a target="_blank" href="http://www.cs.umd.edu/hcil/about/events/symposium2014/symposium.shtml">HCIL Annual Symposium 2014</a></span><span></span>
+        </div>
+
+    </div>
+
+    <div style='height: 100px;'></div>
+
+
+  </div>
+
+<!-- End Document
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+</body>
 </html>

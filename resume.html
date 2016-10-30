@@ -1,0 +1,461 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <title>M. Adil Yalçın</title>
+
+    <link rel="stylesheet" href="./stylesheets/styles.css">
+    <link rel="stylesheet" href="./stylesheets/custom.css">
+    <link rel="stylesheet" href="./stylesheets/pygment_trac.css">
+    <link rel="stylesheet" href="./stylesheets/keshif.css">
+    <link rel="stylesheet" href="./stylesheets/lightbox.css">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
+
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript" src="./js/jquery-1.11.1.min.js" charset="utf-8"></script>
+    <script type="text/javascript" src="./js/d3.3.5.5.min.js" charset="utf-8"></script>
+    <script type="text/javascript" src="./js/keshif.js" charset="utf-8"></script>
+    <script type="text/javascript" src="./js/lightbox.min.js" charset="utf-8"></script>
+
+    <link rel="icon" type="image/png" href="images/favicon.png">
+
+    <script type="text/javascript" src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+    
+    <script src="js/scale.fix.js"></script>
+
+<script type="text/javascript">
+
+var lesserControlMe = function(domID){
+  if($("#"+domID).attr("showLesser")===undefined){
+    $("#"+domID).attr("showLesser",true);
+  } else{
+    $("#"+domID).attr("showLesser",null);
+  }
+};
+
+$(document).ready( function(){
+  browser = new kshf.Browser({
+    domID : "#coursesKeshif",
+    categoryTextWidth: 110,
+    itemName: "Courses",
+    source: {
+        gdocId : '14sWz_REIk9CDud9yhbMiAb3Anz_8e5SgO_97CqYOxCc',
+        sheets : [
+          {name: "Courses",id:"Code"},
+          {name: "Publications"},
+          {name: "WorkExperience"},
+          {name: "Projects", id:"id"},
+          {name: "Social" },
+          {name: "Talks" }
+        ]
+    },
+    loadedCb: function(browser){
+      var d3pubDom = d3.select("#publicationList").selectAll("div.pubItem").data(kshf.dt.Publications).enter()
+        .append("div").attr("class","pubItem").append("div").attr("class","pubItem-in");
+
+      var pubRightGroup = d3pubDom.append("span").attr("class","pub-rightGroup");
+      pubRightGroup
+        .filter(function(d){ return d.data.pdf; })
+        .append("a").attr("target","_blank").attr("class",function(d){
+          return "pub-pdfLink fa fa-file-pdf-o no-print";
+        }).attr("href",function(d){ return d.data.pdf; });
+      pubRightGroup
+        .filter(function(d){ return d.data.doi; })
+        .append("a").attr("target","_blank").attr("class","pub-doi no-print").html("doi").attr("href",function(d){
+          return "http://dx.doi.org/"+d.data.doi;
+        });
+      pubRightGroup
+        .filter(function(d){ return d.data.Video; })
+        .append("a").attr("target","_blank").attr("class","pub-videolink fa fa-youtube-play no-print")
+          .attr("href",function(d){ return d.data.Video; });
+
+      d3pubDom.append("div").attr("class","pub-title"  ).html(function(d){ return d.data.Title; });
+      d3pubDom.append("div").attr("class","pub-authors").html(function(d){ return d.data.Authors.replace(/\+/g," & "); });
+      d3pubDom.append("div").attr("class","pub-venue"  ).html(function(d){
+        var str="";
+        if(d.data.URL) str+=" <a href='"+d.data.URL+"' class='fa fa-external-link no-print' target='_blank'></a>"
+        return "<b style='font-weight: 700;'>"+d.data.Venue+"</b> - "+d.data.Venue_more+str;
+      });
+      d3pubDom.append("img").attr("class","pub-image no-print").attr("src",function(d){return d.data.image;});
+
+      d3pubDom.append("div").attr("class","pub-webpage no-print").html(function(d){
+      	if(d.data.Website===undefined || d.data.Website===null) return;
+      	return "<span style='font-weight:700; font-style: italic;'>Website:</span> <a href='"+d.data.Website+
+      		"' target='_blank'>"+d.data.Website+"</a>";
+      });
+
+      d3pubDom.append("div").attr("class","pub-abstract no-print").html(function(d){
+        if(d.data.Abstract===undefined || d.data.Abstract===null) return;
+        return "<span style='font-weight:600'>Abstract:</span> "+d.data.Abstract;
+      });
+
+      // Work experience
+      var d3workDom = d3.select("#workList ul").selectAll("li.workItem").data(kshf.dt.WorkExperience).enter()
+        .append("li").attr("class",function(d,i){
+          return "workItem "+(i>3?"lesser":"");
+        });
+        d3workDom.append("span").attr("class","work-time").html(function(d){
+          return d.data.Time;
+        });
+        d3workDom.append("span").attr("class","work-company").html(function(d){
+          return "<span class='work-company-title'>"+d.data.Company+"</span> "
+            + " <a target='_blank' href='"+d.data.URL+"' class='fa fa-external-link no-print'></a> "
+            + " - <span class='work-company-location'>"+d.data.Location+"</span>"
+            ;
+        });
+        d3workDom.append("div").attr("class","").html(function(d){
+          return "<span class='work-company-position'>"+d.data.Position
+            +"</span> <i class='fa fa-magic' style='font-size: 0.7em'></i> "
+            + "<span class='work-company-project'>"+d.data.Project+"</span>";
+        });
+
+      // SOCIAL LINKS
+      var d3SocialDom = d3.select("#social_buttons").selectAll("a.social_button").data(kshf.dt.Social).enter()
+        .append("a")
+          .attr("class",function(d){return "social_button fa fa-"+d.data.network+"-square";})
+          .attr("target","_blank")
+          .attr("href",function(d){return d.data.link;})
+          .on("mouseover",function(d){
+            d3.select("#social_buttons .social-link").html(d.data.network+ 
+              ": <a class='llll' href='"+d.data.link+"' target='_blank'>" +d.data.handle)+"</a>";
+          });
+      d3.select("#social_buttons").append("span").attr("class","social-link").text("");
+
+      // Projects!
+      var d3projectDom = d3.select("#projectList").selectAll("div.pubItem").data(kshf.dt.Projects).enter()
+        .append("div").attr("class","pubItem").append("div").attr("class","pubItem-in");
+
+      var pubRightGroup = d3projectDom.append("span").attr("class","pub-rightGroup");
+      pubRightGroup.append("a").attr("target","_blank").attr("class",function(d){
+        if(d.data.URL) return "pub-videolink fa fa-external-link no-print";
+      }).attr("href",function(d){ return d.data.URL; });
+      pubRightGroup.append("a").attr("target","_blank").attr("class",function(d){
+        if(d.data.Video) return "pub-videolink fa fa-youtube-play no-print";
+      }).attr("href",function(d){return d.data.Video;});
+
+      d3projectDom.append("div").attr("class","pub-title").html(function(d){ 
+        return d.data.Title;
+      });
+      d3projectDom.append("div").attr("class","pub-abstract").html(function(d){
+        return "<span class='fa fa-info'></span> "
+          +d.data.Info.replace("\n","<br>");
+      });
+
+      // Talks
+      var d3talksDom = d3.select("#talkList").selectAll("div.talkItem").data(kshf.dt.Talks).enter()
+        .append("div").attr("class","talkItem").append("div").attr("class","talkItem-in");
+      d3talksDom.append("span").attr("class","talkType").html(function(d){
+        if(d.data.Type==="Talk") return "<i class='fa fa-comment'></i> Talk";
+        if(d.data.Type==="Poster") return "<i class='fa fa-desktop'></i> Poster";
+      });
+      d3talksDom.append("span").attr("class","talkDate").html(function(d){ 
+        return d3.time.format("%d %B, %Y")(d.data.Date)+" "+"<i class='fa fa-calendar'></i>";
+      });
+      d3talksDom.append("span").attr("class","talkTitle").html(function(d){ 
+        return '<a target="_blank" href="'+d.data.Link+'">'+d.data.What+'</d>';
+      });
+      d3talksDom.append("span").html(function(d){ 
+        if(d.data.File) return '<a target="_blank" href="'+d.data.File+'"><i class="fa fa-file"></i></d>';
+      });
+
+      var d3ImageGroup = d3projectDom.append("div").attr("class","imageGroup no-print").attr("align","center");
+
+      d3ImageGroup.selectAll("a.projectImage").data(function(d){
+        var r=new Array();
+        for(var i=0; i<d.data.ImgCount; i++){
+          r.push(d);
+        }        
+        return r;
+      }).enter()
+        .append("a").attr("class","projectImage").attr("rel","lightbox[base]")
+          .attr("href",function(d,i){ 
+            return "images/"+d.data.id+"/"+(i+1)+".png";
+          }).append("img").attr("class","projectImg").attr("src",function(d,i){
+            return "images/"+d.data.id+"/"+(i+1)+"sm.png";
+          });
+    },
+    readyCb: function(browser){ browser.updateLayout(); },
+    summaries: [
+      {
+        title: "Track",
+        catSortBy: [{ func: function(a,b){
+          a= a.data[1];
+          b= b.data[1];
+          if(b==="Ph.D.") return -1;
+          if(a==="B.Sc.") return 1;
+          return 1;
+        }}]
+      },
+      "Year"
+    ],
+    itemDisplay: {
+      sortColWidth: 35,
+      sortingOpts: 'Year',
+      recordView: function(d){
+        return ""+
+          "<span class='course-code'>"+d.data.Code+"</span> " + d.data["Course Name"] + 
+          " <a class='fa fa-external-link' href='"+d.data.Web+"' target='_blank'></i>";
+      }
+    }
+  });
+
+});
+</script>
+  </head>
+
+  <body>
+    <div class="bigWrapper">
+
+<header style="text-align:center">
+  <span class="me_me_me">
+    <div style='margin-bottom: 10px;'>
+    <img src='./img/me.png' 
+      style='width:100px; border-radius: 10px; display:block; margin: 0 auto;'
+      class='no-print'>
+      </div>
+    <h1 class="header">M. Adil Yalçın</h1>
+
+    <span class='tagline' style='font-size: 1.1em;'>
+      <span style='font-size: 1.2em'>Data Interface Designer</span>
+      <!-- Information <i class='fa fa-caret-right'></i> Visualization <i class='fa fa-caret-right'></i> Analytics -->
+      </span>
+    <span class='tagline'>
+      Ph.D. Candidate, Computer Science <span class='no-print'><br></span>
+      University of Maryland, College Park
+      </span>
+
+    <!--<span style="position:absolute; right:0px">
+      <a class="fa fa-file-pdf-o" target="_blank" href="./cv.pdf"> CV</a>
+      </span>-->
+    </p>
+    </span>
+
+  <!-- Affiliations -->
+  <span align="center" class="affil-group">
+
+    <span class="affil_block">
+      <a href="http://www.cs.umd.edu/hcil/" target="_blank" class='affil_image'>
+        <img src="./images/hcil.png" alt="" class="sidebar_img"></a>
+      <a href="http://www.cs.umd.edu/hcil/" target="_blank" class='affil_title'>
+        Human-Computer Interaction Lab</a>
+      </span>
+
+    <span class="affil_block">
+      <a href="http://www.cs.umd.edu/" target="_blank" class='affil_title'>
+        Department of Computer Science</a>
+      <a href="http://www.cs.umd.edu/" target="_blank" class='affil_image'>
+        <img src="./images/umd_cs.png" alt="" class="sidebar_img"></a>
+      </a>
+      </span>
+
+    <span class="affil_block">
+      <a href="http://www.umd.edu/" target="_blank" class='affil_image'>
+        <img src="./images/umd.gif" alt="" class="sidebar_img" style="border-radius:70px"></a>
+      <a href="http://www.umd.edu/" target="_blank" class='affil_title'>
+        Uni. of Maryland - College Park</a>
+      </span>
+
+  </span>
+
+  <img class="qr_code" src="images/qr.png">
+
+  <!-- Contact Info -->
+  <span class="contact-group">
+    <span class="contact-header">Contact</span>
+
+    <ul class='fa-ul'>
+      <li class="contact-item">
+        <span class='fa fa-li fa-home contact-icon'></span>
+        www.<a href="http://adilyalcin.me" target='_blank'>adilyalcin.me</a>
+      </li>
+
+      <li class="contact-item">
+        <span class='fa fa-li fa-envelope contact-icon'></span>
+        <my-email data-user="yalcin" data-domain="umd.edu"></my-email>
+        </li>
+
+      <li class="contact-item">
+        <a href="http://maps.google.com/maps?f=q&hl=en&geocode=&q=hornbake+library+college+park,+md&sll=38.987551,-76.941462&sspn=0.011758,0.020943&ie=UTF8&z=16&iwloc=addr&om=1;key=ABQIAAAAQGQWNTUFjpOpKlA-CmWA4xSltKEwBSd7efHWlZKE_5do-tXRRhRX-FCRXKzXKzF04RexKyw8xwiKFA" target="_blank">
+          <span class='fa fa-li fa-map-marker contact-icon'></span>
+          <span>2117 Hornbake Building, University of Maryland, College Park, MD 20742</span></a>
+        </li>
+      </ul>
+
+      <span style="text-align:center; display: block">
+        <span id='social_buttons'>
+<!--          <a class="social_button fa fa-linkedin-square" target="_blank" href="http://www.linkedin.com/in/adilyalcin"> </a>
+          <a class="social_button fa fa-twitter-square" target="_blank" href="http://twitter.com/adilyalcin"> </a>
+          <a class="social_button fa fa-github-square" target="_blank" href="http://github.com/adilyalcin"> </a>
+          <a class="social_button fa fa-facebook-square" target="_blank" href="http://www.facebook.com/m.adil.yalcin"> </a>
+          <a class="social_button fa fa-vimeo-square" target="_blank" href="http://vimeo.com/adil"> </a>
+        <!--  <a class="social_button fa fa-google-plus-square" target="_blank" href="https://plus.google.com/112655632378073880298/"> Google Plus</a>
+          <a class="social_button fa fa-lastfm-square" target="_blank" href="http://www.last.fm/user/ters_yon"> </a>-->
+          
+          </span>
+        </span>
+
+  </span>
+</header>
+
+<span class="rightBlock">
+
+<a class="twitter-timeline" href="https://twitter.com/adilyalcin" data-widget-id="523582564263419904">Tweets by @adilyalcin</a>
+</span>
+
+      <section>
+
+<span class="section_welcome"><a name="section_welcome" class="anchor" href="#section_welcome"></a>
+
+<p>
+<span class='myQuestion'>Lowering the barriers in rich visual &amp; interactive data analysis for a broad audience</span>
+is the driving motivation of my work. I target challenges in design, development, engineering, and computation.
+Human Computer Interaction Lab (<a href="http://www.cs.umd.edu/hcil" target='_blank'>HCIL</a>) is my current home for research.<br>
+Most of my solutions become part of <a href="http://www.keshif.me" target="_blank" style='font-weight: 900'>Keshif</a><span class='only-print'> (www.keshif.me)</span>,
+an out-of-the-box visual data exploration environment for the web.<br>
+</p>
+
+<!-- <p class='no-print'>Previously, I worked on high performance visual computing using GPUs, 3D rendering, animation of physical deformations, and developed <a href="http://sourceforge.net/projects/openreng/" target='_blank'>OpenREng</a> (OpenRenderingEngine).</p> -->
+
+<div style='border: solid 1px #C30000; text-align: center; padding: 5px; margin: 10px; font-weight: 600;'>
+To <u>work with me</u> to build next-gen data analytics solutions based on human-centered design and research, or for consulting, contact me at <i class='fa fa-envelope'></i> <my-email data-user="yalcin" data-domain="umd.edu" style='color: #C30000;'></my-email>
+or <a href='https://www.linkedin.com/in/adilyalcin' target='_blank' class='fa fa-linkedin-square'></a>
+<span class='only-print'> (linkedin.com/in/adilyalcin)</span>
+.<br>
+<span style='font-weight: 300;'>*I am a green card holder and do not need visa sponshorship.</span>
+
+</div>
+
+</span>
+
+<span class="section-Education">
+<h3 class="myHeader"><a name="section_education" class="anchor" href="#section_education"></a>
+  <i class='fa fa-graduation-cap'></i>
+  Education</h3>
+
+<span class="edu-group">
+
+  <span class='edu-item'>
+    <a href="http://www.umd.edu/" target="_blank">
+      <img src="./images/umd.gif" alt="" class="edu-img" style="border-radius:70px;"></a>
+    <span style="font-weight:700;">Ph.D. Candidate</span><span class='edu-time'>Sep. 2010 - Dec. 2016 (Expected)</span><br>
+  Computer Science, University of Maryland, College Park, USA <br>
+  Thesis: <b style='font-weight: 500'>Towards Rapid, Effective and Flexible Visual Data Exploration</b><br>
+  Advisors: <a href="https://sites.umiacs.umd.edu/elm/" target='_blank'>Niklas Elmqvist</a>, <a href="http://www.cs.umd.edu/~bederson/" target="_blank">Ben Bederson</a></span>
+
+  <span class='edu-item'>
+    <a href="http://www.bilkent.edu.tr/" target="_blank">
+      <img src="./images/bilkent.png" alt="" class="edu-img"></a>
+    <span style="font-weight:700">Master of Science</span><span class='edu-time'>June 2010</span><br>
+    Computer Engineering,
+    <a href="http://www.cs.bilkent.edu.tr/" target="_blank">Bilkent University</a>, Ankara, Turkey<br>
+    Thesis: Real-Time Simulation and Visualization of Deformations on Heightfields<br>
+    Advisor: <a href="http://www.art.bilkent.edu.tr/ozguc/" target="_blank">Bülent Özgüç</a>, 
+    Co-Advisor: <a href="http://www.cs.bilkent.edu.tr/~tcapin/" target="_blank">Tolga Çapın</a></span>
+
+  <span class='edu-item'>
+    <a href="http://www.odtu.edu.tr/" target="_blank">
+      <img src="./images/metu.png" alt="" class="edu-img" style="float: left;"></a>
+    <span style="font-weight:700">Bachelor of Science</span><span class='edu-time'>June 2008</span><br>
+    Computer Engineering, 
+    <a href="http://www.ceng.metu.edu.tr">Middle East Technical University</a>, Ankara, Turkey
+<div class="post_date">Senior Project: Operational Simulation System - OPSIMUS</div>
+    </span>
+</span>
+</span>
+
+<span class="section-skills">
+<h3 class="myHeader"><a name="section_education" class="anchor" href="#section_education"></a>
+  <i class='fa fa-paint-brush'></i> Skills</h3>
+
+<div class='skill-group'>
+  
+  <span class='skill-item'>
+    <span class="skill-feel fa fa-magic"></span>
+    <span class="skill-area">Goal</span>
+    <span class="skill-list"><span style='font-weight: 700 !important;'>Effective, simple solutions to complex challenges</span></span>
+    </span>
+  <span class='skill-item'>
+    <span class="skill-feel fa fa-heart"></span>
+    <span class="skill-area">User Interfaces / Visualization / Front End / Design</span>
+    <span class="skill-list">JavaScript, HTML5, CSS3, d3, Photoshop, Tableau</span>
+    </span>
+  <span class='skill-item'>
+    <span class="skill-feel fa fa-wrench"></span>
+    <span class="skill-area">Development</span>
+    <span class="skill-list">SublimeText, less, Version control (git/svn)</span>
+    </span>
+  <span class='skill-item'>
+    <span class="skill-feel fa fa-book"></span>
+    <span class="skill-area">Data Processing / Back End</span>
+    <span class="skill-list">Node.js, SQL, Python, Java, Matlab</span>
+    </span>
+  <span class='skill-item'>
+    <span class="skill-feel fa fa-thumbs-up"></span>
+    <span class="skill-area">Computer Graphics, Simulation</span>
+    <span class="skill-list">C++, C, OpenGL / GLSL, OpenCL / Cuda, Lua</span>
+    </span>
+</div>
+
+<span>
+  <h3 class="myHeader"><a name="section_publications" class="anchor" href="#section_publications"></a>
+    <i class='fa fa-file-text'></i> Publications</h3>
+    <!-- <a href="http://scholar.google.com/citations?user=KSDzKvIAAAAJ" target="_blank">Google Scholar</a>-->
+    <div id="publicationList"></div>
+  </span>
+
+<h3 class="myHeader"><a name="section_workexperience" class="anchor" href="#section_workexperience"></a>
+  <i class='fa fa-briefcase'></i> Work Experience</h3>
+  <div id="workList">
+    <ul></ul>
+    <span class='lesserControl no-print' onClick="lesserControlMe('workList')"></span>
+  </div>
+
+<h3 class="myHeader"><a name="section_projects" class="anchor" href="#section_projects"></a>
+  <i class='fa fa-pencil'></i> Projects and Tools</h3>
+  <div id="projectList"></div>
+
+<span class="no-print"><a name="section_talks" class="anchor" href="#section_courses"></a>
+  <h3 class="myHeader">
+    <i class='fa fa-comment'></i> Talks &amp; Posters</h3>  
+    <div id="talkList"></div>
+  </span>
+
+<span class="no-print"><a name="section_publications" class="anchor" href="#section_courses"></a>
+  <h3 class="myHeader">
+    <i class='fa fa-university'></i> Courses Taken</h3>  
+    <div id="coursesKeshif" style="width: 100%; height: 220px; font-size: 16px;"></div>
+  </span>
+
+<span class="no-print"><a name="section_music" class="anchor" href="#section_music"></a>
+  <h3 class="myHeader">
+    <i class='fa fa-music'></i> Music</h3>
+    <iframe width="100%" height="60" src="http://www.mixcloud.com/widget/iframe/?feed=http%3A%2F%2Fwww.mixcloud.com%2Fbreaknchill%2F&amp;mini=1&amp;embed_uuid=cb088297-15c1-4db8-8cc8-8cbb7b5a32e7&amp;replace=0&amp;hide_cover=1&amp;embed_type=widget_standard&amp;hide_tracklist=1" frameborder="0"></iframe>
+  </span>
+
+
+      </section>
+      <footer class="no-print">
+        <a href="javascript:window.print()" style='font-size: 1.6em'><span class='fa fa-print'></span> Print Resume / PDF</a></br>
+
+        <small style='margin-top: 1em; display: block;'>
+          Data: <a target='_blank' href="https://docs.google.com/spreadsheets/d/14sWz_REIk9CDud9yhbMiAb3Anz_8e5SgO_97CqYOxCc"><span class='fa fa-table'></span> spreadsheet</a>
+          | Code: <a href="http://github.com/adilyalcin/adilyalcin.github.io"><span class='fa fa-github'></span></a>       
+        </small>
+      </footer>
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+		          <script type="text/javascript">
+            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+          </script>
+          <script type="text/javascript">
+            try {
+              var pageTracker = _gat._getTracker("UA-54042831-1");
+            pageTracker._trackPageview();
+            } catch(err) {}
+          </script>
+
+  </body>
+</html>
