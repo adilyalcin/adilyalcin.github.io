@@ -211,6 +211,21 @@ h3, h4{
   top: 3px;
 }
 
+.topLink{
+  color: white;
+  text-decoration: none;
+  display: inline-block;
+  margin: 0px 3px;
+  font-size: 1.8em;
+  position: relative;
+  height: 30px;
+}
+.topLink:hover{
+  top: -5px;
+  border-bottom: solid 2px white;
+  color: white;
+  text-shadow: 0px 0px 3px lightgray;
+}
 
 </style>
 
@@ -220,9 +235,10 @@ h3, h4{
   <div class='fixedHeader'>
     <div class="container">
       <div class="row">
-        <span style='font-size: 1.3em'>
+        <span style='font-size: 1.3em;'>
           <img src='images/favicon.png' style='height: 35px; position: absolute; top: -1px;left: -30px;'>
-          <a href='#section-Services' class='sectionLink'>M. Adil <b>Yalçın</b> </a></span>
+          <a href='#section-Services' class='sectionLink' style='display: none;'>M. Adil <b>Yalçın</b> </a>
+          </span>
         <a href='#section-Services' class='sectionLink'>SERVICES</a>
         <a href='#section-AboutMe'  class='sectionLink'>ABOUT ME</a>
         <a href='#section-Approach' class='sectionLink'>APPROACH</a>
@@ -230,6 +246,11 @@ h3, h4{
         <a href='#section-Clients'  class='sectionLink'>CLIENTS</a>
         <a href='#section-Contact'  class='sectionLink'>CONTACT</a>
         <a href='./resume.html'     class='sectionLink' target='_blank'>RESUME</a>
+        <span>
+          <a href='https://www.linkedin.com/in/adilyalcin'  class='fa fa-linkedin-square topLink'></a>
+          <a href='https://twitter.com/adilyalcin'  class='fa fa-twitter-square topLink'></a>
+          <a href='https://github.com/adilyalcin'  class='fa fa-github-square topLink'></a>
+          </span>
       </div>
     </div>
   </div>
