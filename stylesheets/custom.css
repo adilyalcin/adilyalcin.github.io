@@ -439,7 +439,7 @@ img.projectImg {
   header,
   section {
     padding: 0px;
-    margin: 0px;
+    margin: 1em;
   }
   header {
     color: black;
@@ -455,6 +455,7 @@ img.projectImg {
     border-top-right-radius: 0px;
     border-bottom-left-radius: 0px;
     box-shadow: 0px 0px 0px white;
+    border-bottom: solid 1px lightgray;
   }
   .pubItem .pubItem-in {
     background-color: white;
