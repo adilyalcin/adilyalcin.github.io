@@ -94,7 +94,7 @@ $(document).ready( function(){
       // Work experience
       var d3workDom = d3.select("#workList ul").selectAll("li.workItem").data(kshf.dt.WorkExperience).enter()
         .append("li").attr("class",function(d,i){
-          return "workItem "+(i>3?"lesser":"");
+          return "workItem "+(i>13?"lesser":"");
         });
         d3workDom.append("span").attr("class","work-time").html(function(d){
           return d.data.Time;
@@ -218,7 +218,8 @@ $(document).ready( function(){
     <h1 class="header">M. Adil Yalçın</h1>
 
     <span class='tagline' style='font-size: 1.1em;'>
-      <span style='font-size: 1.2em'>Visual Data Analyst, Consultant, Developer </span>
+      <div style='font-size: 1.3em'><b>Founder &amp; CEO, Keshif</b></div>
+        Senior Visual Data Analyst, Consultant, Developer
       <!-- Information <i class='fa fa-caret-right'></i> Visualization <i class='fa fa-caret-right'></i> Analytics -->
       </span>
     <span class='tagline'>
@@ -309,30 +310,19 @@ $(document).ready( function(){
 <span class="section_welcome"><a name="section_welcome" class="anchor" href="#section_welcome"></a>
 
 <p>
+  <span class="no-print">
   <span class='myQuestion'>Lowering the barriers in rich visual &amp; interactive data analysis for a broad audience
-    </span>
-  is the driving motivation of my work. I am the designer and developer of 
+    </span>is the driving motivation of my work. </span>
+  I am the senior designer and developer of 
     <a href="http://www.keshif.me" target="_blank" style='font-weight: 900'>Keshif</a><span class='only-print'> (www.keshif.me)</span>,
-  the next generation out-of-the-box rapid visual data exploration environment. 
+  the next generation out-of-the-box rapid visual data exploration platform. 
+  I have over seven years of professional research experience with over 10 publications, including book chapters, and papers in renowned journals and conferences.
+  After 4 years of development and research on Keshif at <a href="http://www.cs.umd.edu/hcil/" target="_blank" style="font-weight: 500">Human-Computer Interaction Lab</a>, I currently serve as the CEO / CTO / Founder of <i>Keshif, LLC</i>.
   <br>
   </p>
 
 <!-- <p class='no-print'>Previously, I worked on high performance visual computing using GPUs, 3D rendering, animation of physical deformations, and developed <a href="http://sourceforge.net/projects/openreng/" target='_blank'>OpenREng</a> (OpenRenderingEngine).</p> -->
 
-<div style='border: solid 1px #C30000; text-align: center; padding: 5px; margin: 10px; font-weight: 600;'>
-
-  I offer professional data analysis services, consulting and development through 
-    <a href='http://www.adilyalcin.me' target='_blank' style='font-weight: 500'>Keshif, LLC</a>. 
-    <br>
-  My solutions are based on innovative human-centered design, research, and engineering.
-  <br>
-  You can reach me at <i class='fa fa-envelope'></i> <my-email data-user="adil" data-domain="keshif.me" style='color: #C30000;'></my-email>
-  or <a href='https://www.linkedin.com/in/adilyalcin' target='_blank' class='fa fa-linkedin-square'></a>
-  <span class='only-print'> (linkedin.com/in/adilyalcin)</span>.
-  <span style='font-weight: 300;'>(I am a green card holder.)</span>
-  </div>
-
-</span>
 
 <span class="section-Education">
 <h3 class="myHeader"><a name="section_education" class="anchor" href="#section_education"></a>
@@ -344,25 +334,25 @@ $(document).ready( function(){
   <span class='edu-item'>
     <a href="http://www.umd.edu/" target="_blank">
       <img src="./images/umd.gif" alt="" class="edu-img" style="border-radius:70px;"></a>
-    <span style="font-weight:700;">Doctor of Philosophy</span><span class='edu-time'>December 2016</span><br>
-  Computer Science, University of Maryland, College Park, USA <br>
+    <span style="font-weight:700;">Ph.D. - Doctor of Philosophy</span><span class='edu-time'>Dec. 2016</span><br>
+  Computer Science, <a href="http://www.umd.edu/" target="_blank">University of Maryland, College Park</a>, MD, USA <br>
   Thesis: <b style='font-weight: 500'>A Systematic and Minimalist Approach to Lower Barriers in Visual Data Exploration</b><br>
   Advisors: <a href="https://sites.umiacs.umd.edu/elm/" target='_blank'>Niklas Elmqvist</a>, <a href="http://www.cs.umd.edu/~bederson/" target="_blank">Ben Bederson</a></span>
 
   <span class='edu-item'>
     <a href="http://www.bilkent.edu.tr/" target="_blank">
       <img src="./images/bilkent.png" alt="" class="edu-img"></a>
-    <span style="font-weight:700">Master of Science</span><span class='edu-time'>June 2010</span><br>
+    <span style="font-weight:700">M.Sc. - Master of Science</span><span class='edu-time'>June 2010</span><br>
     Computer Engineering,
     <a href="http://www.cs.bilkent.edu.tr/" target="_blank">Bilkent University</a>, Ankara, Turkey<br>
     Thesis: Real-Time Simulation and Visualization of Deformations on Heightfields<br>
-    Advisor: <a href="http://www.art.bilkent.edu.tr/ozguc/" target="_blank">Bülent Özgüç</a>, 
-    Co-Advisor: <a href="http://www.cs.bilkent.edu.tr/~tcapin/" target="_blank">Tolga Çapın</a></span>
+    Advisors: <a href="http://www.art.bilkent.edu.tr/ozguc/" target="_blank">Bülent Özgüç</a>, 
+    <a href="http://www.cs.bilkent.edu.tr/~tcapin/" target="_blank">Tolga Çapın</a></span>
 
   <span class='edu-item'>
     <a href="http://www.odtu.edu.tr/" target="_blank">
       <img src="./images/metu.png" alt="" class="edu-img" style="float: left;"></a>
-    <span style="font-weight:700">Bachelor of Science</span><span class='edu-time'>June 2008</span><br>
+    <span style="font-weight:700">B.Sc. - Bachelor of Science</span><span class='edu-time'>June 2008</span><br>
     Computer Engineering, 
     <a href="http://www.ceng.metu.edu.tr">Middle East Technical University</a>, Ankara, Turkey
 <div class="post_date">Senior Project: Operational Simulation System - OPSIMUS</div>
