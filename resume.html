@@ -46,6 +46,7 @@ $(document).ready( function(){
           {name: "Courses",id:"Code"},
           {name: "Publications"},
           {name: "WorkExperience"},
+          {name: "ConsultingExperience"},
           {name: "Projects", id:"id"},
           {name: "Social" },
           {name: "Talks" }
@@ -76,7 +77,8 @@ $(document).ready( function(){
       d3pubDom.append("div").attr("class","pub-venue"  ).html(function(d){
         var str="";
         if(d.data.URL) str+=" <a href='"+d.data.URL+"' class='fa fa-external-link no-print' target='_blank'></a>"
-        return "<b style='font-weight: 700;'>"+d.data.Venue+"</b> - "+d.data.Venue_more+str;
+        return "<b style='font-weight: 700;'>"+d.data.Venue+"</b> - "+d.data.Venue_more+" ("+
+          d.data.Year+")"+str;
       });
       d3pubDom.append("img").attr("class","pub-image no-print").attr("src",function(d){return d.data.image;});
 
@@ -111,6 +113,22 @@ $(document).ready( function(){
             + "<span class='work-company-project'>"+d.data.Project+"</span>";
         });
 
+        // Consulting experience
+        var d3workDom = d3.select("#consultingList ul").selectAll("li.workItem").data(kshf.dt.ConsultingExperience).enter()
+          .append("li").attr("class","workItem");
+          d3workDom.append("span").attr("class","work-time").html(function(d){
+            return d.data.Time;
+          });
+          d3workDom.append("span").attr("class","work-company").html(function(d){
+            return "<span class='work-company-title'>"+d.data.Client+"</span> "
+              + " <a target='_blank' href='"+d.data.URL+"' class='fa fa-external-link no-print'></a> "
+              + " - <span class='work-company-location'>"+d.data.Location+"</span>"
+              ;
+          });
+          d3workDom.append("div").attr("class","").html(function(d){
+            return "<i class='fa fa-magic' style='font-size: 0.7em'></i> "
+              + "<span class='work-company-project'>"+d.data.Info+"</span>";
+          });
       // SOCIAL LINKS
       var d3SocialDom = d3.select("#social_buttons").selectAll("a.social_button").data(kshf.dt.Social).enter()
         .append("a")
@@ -334,7 +352,7 @@ $(document).ready( function(){
   <span class='edu-item'>
     <a href="http://www.umd.edu/" target="_blank">
       <img src="./images/umd.gif" alt="" class="edu-img" style="border-radius:70px;"></a>
-    <span style="font-weight:700;">Ph.D. - Doctor of Philosophy</span><span class='edu-time'>Dec. 2016</span><br>
+    <span style="font-weight:700;">Ph.D. - Doctor of Philosophy</span><span class='edu-time'>December 2016</span><br>
   Computer Science, <a href="http://www.umd.edu/" target="_blank">University of Maryland, College Park</a>, MD, USA <br>
   Thesis: <b style='font-weight: 500'>A Systematic and Minimalist Approach to Lower Barriers in Visual Data Exploration</b><br>
   Advisors: <a href="https://sites.umiacs.umd.edu/elm/" target='_blank'>Niklas Elmqvist</a>, <a href="http://www.cs.umd.edu/~bederson/" target="_blank">Ben Bederson</a></span>
@@ -386,14 +404,19 @@ $(document).ready( function(){
     <span class="skill-area">Data Processing / Back End</span>
     <span class="skill-list">Node.js, SQL, Python, Java, Matlab</span>
     </span>
-  <span class='skill-item'>
+  <!-- <span class='skill-item'>
     <span class="skill-feel fa fa-thumbs-up"></span>
     <span class="skill-area">Computer Graphics, Simulation</span>
     <span class="skill-list">C++, C, OpenGL / GLSL, OpenCL / Cuda, Lua</span>
-    </span>
+    </span> -->
 </div>
 
-<span>
+<h3 class="myHeader"><a name="section_workexperience" class="anchor" href="#section_workexperience"></a>
+  <i class='fa fa-briefcase'></i> Consulting Exprience</h3>
+  <div id="consultingList"style='page-break-after: always'><ul></ul></div>
+
+
+<span style='page-break-before: always'>
   <h3 class="myHeader"><a name="section_publications" class="anchor" href="#section_publications"></a>
     <i class='fa fa-file-text'></i> Publications</h3>
     <!-- <a href="http://scholar.google.com/citations?user=KSDzKvIAAAAJ" target="_blank">Google Scholar</a>-->
@@ -401,7 +424,7 @@ $(document).ready( function(){
   </span>
 
 <h3 class="myHeader"><a name="section_workexperience" class="anchor" href="#section_workexperience"></a>
-  <i class='fa fa-briefcase'></i> Work Experience</h3>
+  <i class='fa fa-briefcase'></i> Employment</h3>
   <div id="workList">
     <ul></ul>
     <span class='lesserControl no-print' onClick="lesserControlMe('workList')"></span>
