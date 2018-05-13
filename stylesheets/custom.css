@@ -266,7 +266,6 @@ max-width:calc(100% - 10px);
 }
 ul {
   list-style-type: none;
-  height: 160px;
   overflow: hidden;
 }
 ul > .workItem {
@@ -421,6 +420,9 @@ img.projectImg {
 }
 .only-print {
   display: none;
+}
+#workList ul {
+  height: 160px;
 }
 @media print {
   #social_buttons {
