@@ -166,7 +166,9 @@ $(document).ready( function(){
         .append("div").attr("class","talkItem").append("div").attr("class","talkItem-in");
       d3talksDom.append("span").attr("class","talkType").html(function(d){
         if(d.data.Type==="Talk") return "<i class='fa fa-comment'></i> Talk";
-        if(d.data.Type==="Poster") return "<i class='fa fa-desktop'></i> Poster";
+        if(d.data.Type==="Poster") return "<i class='fa fa-file-o'></i> Poster";
+        if(d.data.Type==="Demo") return "<i class='fa fa-desktop'></i> Demo";
+        if(d.data.Type==="Pitch") return "<i class='fa fa-bullhorn'></i> Pitch";
       });
       d3talksDom.append("span").attr("class","talkDate").html(function(d){ 
         return d3.time.format("%d %B, %Y")(d.data.Date)+" "+"<i class='fa fa-calendar'></i>";
@@ -399,7 +401,7 @@ $(document).ready( function(){
 
 <span class="no-print"><a name="section_talks" class="anchor" href="#section_courses"></a>
   <h3 class="myHeader">
-    <i class='fa fa-comment'></i> Talks &amp; Posters</h3>  
+    <i class='fa fa-comment'></i> Talks, Demos &amp; Posters</h3>  
     <div id="talkList"></div>
   </span>
 
